@@ -34,12 +34,6 @@ public class RecipeController {
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 	
-	@GetMapping({"/", "/hello"})
-    public String hello(Model model, @RequestParam(value="name", required=false, defaultValue="World") String name) {
-        model.addAttribute("name", name);
-        return "hello";
-    }
-	
 	@GetMapping("/list")
 	public String listRecipes(Model theModel) {
 		List<Recipe> recipes = recipeService.findAll();
@@ -66,7 +60,7 @@ public class RecipeController {
 	
 	@GetMapping("/updateForm")
 	public String showFormForUpdate(@RequestParam("recipeId") int id, Model model) {
-		model.addAttribute("trick", recipeService.findById(id));
+		model.addAttribute("recipe", recipeService.findById(id));
 		return "recipe-form";
 	}
 	
@@ -76,48 +70,5 @@ public class RecipeController {
 		return "redirect:/recipe/list";
 	}
 	
-	
-//	@GetMapping("/recipes/{recipeId}")
-//	public Recipe getRecipe(@PathVariable int recipeId) {
-//		
-//		Recipe recipe = recipeService.findById(recipeId);
-//		
-//		if (recipe == null)
-//			throw new RuntimeException("Recipe id not found - " + recipeId);
-//		
-//		return recipe;
-//	}
-//	
-//	@PostMapping("/recipes")
-//	public Recipe addRecipe(@RequestBody Recipe recipe) {
-//		
-//		recipe.setId(0);
-//		
-//		recipeService.save(recipe);
-//		
-//		return recipe;
-//	}
-//	
-//	@PutMapping("/recipes")
-//	public Recipe updateRecipe(@RequestBody Recipe recipe) {
-//		
-//		recipeService.save(recipe);
-//		
-//		return recipe;
-//	}
-//	
-//	@DeleteMapping("/recipes/{recipeId}")
-//	public String deleteRecipe(@PathVariable int recipeId) {
-//		
-//		Recipe recipe = recipeService.findById(recipeId);
-//		
-//		if(recipe == null) {
-//			throw new RuntimeException("Recipe id not found - " + recipeId);
-//		}
-//		
-//		recipeService.deleteById(recipeId);
-//		
-//		return "Deleted recipe id = " + recipeId;
-//	}
 
 }
