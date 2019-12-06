@@ -50,5 +50,10 @@ public class RecipeServiceImpl implements RecipeService {
 		// TODO Auto-generated method stub
 		recipeRepository.deleteById(id);
 	}
+	
+	@Override
+	public Recipe findByTitle(String title) {
+		return recipeRepository.findByTitle(title);
+	}
 
 }

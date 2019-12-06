@@ -1,10 +1,15 @@
 package com.melearning.mealplanapp.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -22,12 +27,16 @@ public class Recipe {
 	@Column(name="description")
 	private String description;
 	
+	@OneToMany(mappedBy = "recipe", cascade = CascadeType.PERSIST)
+	private List<Ingredient> ingredients;
+	
+	@OneToMany(mappedBy = "recipe", cascade = CascadeType.PERSIST)
+	private List<Preparation> preparations;
+	
+	@Column(name="image")
+	private String image;
+	
 	public Recipe() {
-	}
-
-	public Recipe(String title, String description) {
-		this.title = title;
-		this.description = description;
 	}
 	
 	public int getId() {
@@ -57,6 +66,32 @@ public class Recipe {
 	@Override
 	public String toString() {
 		return "Recipe [id=" + id + ", title=" + title + ", description=" + description + "]";
+	}
+
+	public List<Ingredient> getIngredients() {
+		return ingredients;
+	}
+
+	public void setIngredients(List<Ingredient> ingredients) {
+		this.ingredients = ingredients;
+	}
+
+	public List<Preparation> getPreparations() {
+		return preparations;
+	}
+
+	public void setPreparations(List<Preparation> preparations) {
+		this.preparations = preparations;
+	}
+
+
+	public String getImage() {
+		return image;
+	}
+
+
+	public void setImage(String image) {
+		this.image = image;
 	}
 	
 	

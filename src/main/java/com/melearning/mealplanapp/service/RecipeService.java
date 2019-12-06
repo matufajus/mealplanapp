@@ -13,5 +13,7 @@ public interface RecipeService {
 	public void save(Recipe recipe);
 	
 	public void deleteById(int id);
+	
+	public Recipe findByTitle(String title);
 
 }
