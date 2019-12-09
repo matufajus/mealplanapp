@@ -6,17 +6,22 @@
   	<%@ include file="header.jsp" %>
 	<body>
 		<div class="container-fluid">
-		<input type="button" value="Pridėti receptą"
-		    onclick="window.location.href='showForm'; return false;"
-		    class="btn btn-primary" />
-		<br/><br/>
-	   <c:forEach var="recipe" items="${recipes}">
-		   <div class = container>
-		   		<img alt="${recipe.title}" src="${recipe.image}">
-		   </div>
-		  
-	        
-		  </c:forEach>
+			<div class="row">
+				<c:set var = "i" scope = "page" value = "0"/>
+			    <c:forEach var="recipe" items="${recipes}">
+				    <c:if test="${(i != 0) && (i % 4 == 0)}">
+		  		  		</div>
+		  		  		<div class="row">
+					</c:if>
+				   <div class = "col recipe-thmbnl">
+					   <a href="info?recipeId=${recipe.id}">
+					   		<img alt="${recipe.title} paveikslėlis" src="${recipe.image}">				   		
+					   		<h2>${recipe.title}</h2>
+					   </a>
+				   </div>
+				   <c:set var="i" value="${i + 1}" scope="page"/>
+				</c:forEach>
+			</div>
 		</div>
  		
 		<%@ include file="footer.jsp" %>
