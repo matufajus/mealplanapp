@@ -27,10 +27,10 @@ public class Recipe {
 	@Column(name="description")
 	private String description;
 	
-	@OneToMany(mappedBy = "recipe", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<Ingredient> ingredients;
 	
-	@OneToMany(mappedBy = "recipe", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
 	private List<Preparation> preparations;
 	
 	@Column(name="image")

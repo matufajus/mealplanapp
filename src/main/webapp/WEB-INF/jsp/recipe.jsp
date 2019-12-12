@@ -3,7 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!doctype html>
 <html lang="en">
-  	<%@ include file="header.jsp" %>
+  	<head>
+		<%@ include file="header.jsp" %>
+		<title></title>
+	</head>
 	<body>
 		<div class="container-fluid">
 			<h1>${recipe.title}</h1>

@@ -4,22 +4,41 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <!doctype html>
 <html lang="en">
-  <%@ include file="header.jsp" %>
+  <head>
+		<%@ include file="header.jsp" %>
+		<title></title>
+	</head>
   <body>
 	<div class="container">
 		<h1>Sukurti receptą</h1>
 	 	<form:form action="saveRecipe" cssClass="form-horizontal"
       method="post" modelAttribute="recipe">
       	<form:hidden path="id" />
+      	<form:hidden path="image" />
+      	<form:hidden path="preparations" />
+<!-- 	      	<div class=form-group> -->
+<!-- 	      		<input type = "file" class="form-control" path="image"/> -->
+<!-- 	        </div> -->
 		  <div class="form-group">
 		    <label for="title">Pavadinimas</label>
 	    	<form:input type="text" class="form-control" path="title" required="true"/>
 		  	<form:errors path="title" class="alert-danger"/>
 		  </div>
-		  <div class="form-group">
-    	  	<label for="description">Aprašymas</label>
-            <form:textarea class="form-control" path="description" rows="3" required="true"></form:textarea>
- 		 </div>
+		  <label for="ingredients">Ingredientai</label>
+		  <c:forEach var="ingredient" items="${recipe.ingredients}" varStatus="status">
+						<div id ="ingredient-${status.index}" class = "row form-group">
+							<div class = "col-2">
+								<form:input type="text"  class="form-control" path="ingredients[${status.index}].ammount"/>
+							</div>
+							<div class = "col-2">
+								<form:input type="text" class="form-control" path="ingredients[${status.index}].name"/>
+							</div>
+							<form:hidden path="ingredients[${status.index}].id" />
+							<form:hidden path="ingredients[${status.index}].recipe" />
+							<button class ="remove-ingredient">Pašalinti</button>
+						</div>
+			</c:forEach>
+		  
 		  <form:button type="submit" class="btn btn-primary">Išsaugoti</form:button>
 		</form:form>
 	</div>

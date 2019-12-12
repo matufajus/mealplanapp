@@ -79,6 +79,14 @@ public class Ingredient {
 	public String toString() {
 		return "Ingredient [id=" + id + ", name=" + name + ", ammount=" + ammount + ", recipe=" + recipe + "]";
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	
 	

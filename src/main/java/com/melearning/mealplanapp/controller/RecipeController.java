@@ -8,6 +8,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,29 +53,34 @@ public class RecipeController {
 		return "list-recipes";
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/showForm")
 	public String showFormForAdd(Model theModel) {
 		theModel.addAttribute("recipe", new Recipe());
 		return "recipe-form";
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/saveRecipe")
 	public String saveRecipe(@Valid @ModelAttribute("recipe") Recipe recipe, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			return "recipe-form";
 		}
 		else {
-			recipeService.save(recipe);;
+			recipe.getIngredients().removeIf(i -> (i.getId() == 0));
+			recipeService.save(recipe);
 			return "redirect:/recipe/list";
 		}
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/updateForm")
 	public String showFormForUpdate(@RequestParam("recipeId") int id, Model model) {
 		model.addAttribute("recipe", recipeService.findById(id));
 		return "recipe-form";
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/delete")
 	public String deleteTrick(@RequestParam("recipeId") int id) {
 		recipeService.deleteById(id);
@@ -83,7 +90,7 @@ public class RecipeController {
 	
 	@GetMapping("/uploadCSVToDatabase")
 	public String uploadCSV() {
-		CSVReader csvReader = new CSVReader("C:\\\\Users\\\\Admins\\\\Downloads\\\\lamaistas-karsti.csv");
+		CSVReader csvReader = new CSVReader("C:\\\\Users\\\\Admins\\\\Downloads\\\\lamaistas-vegetariski.csv");
 		try {
 			List<Record> records = csvReader.getRecords();
 			Recipe recipe = new Recipe();
@@ -135,5 +142,6 @@ public class RecipeController {
 		model.addAttribute("recipe", recipeService.findById(id));
 		return "recipe";
 	}
+	
 
 }

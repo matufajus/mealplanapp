@@ -12,8 +12,12 @@
 	<body>
 		<%@ include file="navbar.jsp" %>
 		<h1>Hello</h1>
-		<security:authorize access="isAnonymous()">
-			<a href="${pageContext.request.contextPath}/showLogin"> Login</a>
+		User: <security:authentication property="principal.username"/>
+		<br>
+		Role(s): <security:authentication property="principal.authorities"/>
+		<br>
+		<security:authorize access="hasRole('ADMIN')">
+		<p>We can see that you're an admin</p>
 		</security:authorize>
 		<%@ include file="footer.jsp" %>
 	</body>
