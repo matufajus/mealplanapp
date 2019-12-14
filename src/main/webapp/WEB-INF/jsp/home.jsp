@@ -12,10 +12,10 @@
 	<body>
 		<%@ include file="navbar.jsp" %>
 		<h1>Hello</h1>
-		User: <security:authentication property="principal.username"/>
-		<br>
-		Role(s): <security:authentication property="principal.authorities"/>
-		<br>
+<!-- 		User: <security:authentication property="principal.username"/> --%>
+<!-- 		<br> -->
+<!-- 		Role(s): <security:authentication property="principal.authorities"/> --%>
+<!-- 		<br> -->
 		<security:authorize access="hasRole('ADMIN')">
 		<p>We can see that you're an admin</p>
 		</security:authorize>
