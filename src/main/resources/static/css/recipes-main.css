@@ -1,5 +1,3 @@
-@charset "UTF-8";
-
 .recipe-thmbnl{
 	max-width: 100vw;
 	overflow: hidden;
@@ -25,4 +23,19 @@ h1{
 
 h2{
 	font-size: 2vw !important;
+}
+
+
+#login-container{
+	max-width: 400px;
+}
+
+#login-background{
+	background-image: url("/images/login-background.jpg");
+	background-size: cover;
+	background-position: center;
+}
+
+.form-control{
+	margin-bottom: 2vh;
 }

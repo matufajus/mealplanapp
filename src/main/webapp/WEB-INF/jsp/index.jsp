@@ -13,7 +13,7 @@
 		<%@ include file="navbar.jsp" %>
 		<h1>Hello</h1>
 		<security:authorize access="isAnonymous()">
-			<a href="${pageContext.request.contextPath}/showLogin"> Login</a>
+			<a href="${pageContext.request.contextPath}/showLogin"> Prisijungti</a>
 			<br>
 			<a href="${pageContext.request.contextPath}/register/showRegistrationForm">
 				Registruotis
