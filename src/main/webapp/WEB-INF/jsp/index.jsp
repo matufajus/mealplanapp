@@ -10,8 +10,7 @@
 		<title></title>
 	</head>
 	<body>
-		<%@ include file="navbar.jsp" %>
-		<h1>Hello</h1>
+		<h1>Sveiki</h1>
 		<security:authorize access="isAnonymous()">
 			<a href="${pageContext.request.contextPath}/showLogin"> Prisijungti</a>
 			<br>

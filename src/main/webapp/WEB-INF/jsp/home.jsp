@@ -11,13 +11,9 @@
 	</head>
 	<body>
 		<%@ include file="navbar.jsp" %>
-		<h1>Hello</h1>
-<!-- 		User: <security:authentication property="principal.username"/> --%>
-<!-- 		<br> -->
-<!-- 		Role(s): <security:authentication property="principal.authorities"/> --%>
-<!-- 		<br> -->
+		<h1>Sveiki</h1>
 		<security:authorize access="hasRole('ADMIN')">
-		<p>We can see that you're an admin</p>
+			<p>Jūs naudojatės administratoriaus teisėmis</p>
 		</security:authorize>
 		<%@ include file="footer.jsp" %>
 	</body>

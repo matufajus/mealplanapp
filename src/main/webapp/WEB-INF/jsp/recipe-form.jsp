@@ -10,15 +10,15 @@
 	</head>
   <body>
 	<div class="container">
-		<h1>Sukurti receptą</h1>
+		<h1>Redaguoti receptą</h1>
 	 	<form:form action="saveRecipe" cssClass="form-horizontal"
-      method="post" modelAttribute="recipe">
+      method="post" modelAttribute="recipe" enctype="multipart/form-data">
       	<form:hidden path="id" />
-      	<form:hidden path="image" />
       	<form:hidden path="preparations" />
-<!-- 	      	<div class=form-group> -->
-<!-- 	      		<input type = "file" class="form-control" path="image"/> -->
-<!-- 	        </div> -->
+	      	<div class=form-group>
+	      		<form:input type = "file" class="form-control" path="imageFile" id="recipe-image-input"/>
+	        </div>
+	        <img id="recipe-form-image" src="${recipe.image}" alt="Nuotrauka" />
 		  <div class="form-group">
 		    <label for="title">Pavadinimas</label>
 	    	<form:input type="text" class="form-control" path="title" required="true"/>
