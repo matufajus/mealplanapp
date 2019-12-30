@@ -12,6 +12,9 @@
 	<body>
 		<%@ include file="navbar.jsp" %>
 		<div class="container-fluid">
+			<security:authorize access="hasRole('ADMIN')">
+				<a href="showForm">Pridėti naują receptą</a>
+			</security:authorize>
 			<div class="row">
 				<c:set var = "i" scope = "page" value = "0"/>
 			    <c:forEach var="recipe" items="${recipes}">

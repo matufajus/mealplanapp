@@ -75,10 +75,16 @@ public class RecipeController {
 			return "recipe-form";
 		}
 		else {
-			recipeDTO.getIngredients().removeIf(i -> (i.getId() == 0));  	//check if still needed?
-			fileService.uploadFile(recipeDTO.getImageFile());
-			recipeDTO.setImage("/recipeImages/" + recipeDTO.getImageFile().getOriginalFilename());
-			recipeService.save(convertToEntity(recipeDTO));
+			if (!recipeDTO.getImageFile().isEmpty()) {
+				fileService.uploadFile(recipeDTO.getImageFile());
+				recipeDTO.setImage("/recipeImages/" + recipeDTO.getImageFile().getOriginalFilename());
+			}
+			Recipe recipe = convertToEntity(recipeDTO);
+			recipe.getIngredients().forEach(i -> i.setRecipe(recipe));
+			recipe.getPreparations().forEach(p -> p.setRecipe(recipe));
+//			recipeDTO.getIngredients().removeIf(i -> (i.getRecipe() == null));
+//			recipeDTO.getPreparations().removeIf(p -> (p.getRecipe() == null));
+			recipeService.save(recipe);
 			return "redirect:/recipe/list";
 		}
 	}
@@ -93,7 +99,7 @@ public class RecipeController {
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/delete")
-	public String deleteTrick(@RequestParam("recipeId") int id) {
+	public String deleteRecipe(@RequestParam("recipeId") int id) {
 		recipeService.deleteById(id);
 		return "redirect:/recipe/list";
 	}

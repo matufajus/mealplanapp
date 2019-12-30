@@ -30,7 +30,7 @@ public class Recipe {
 	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<Ingredient> ingredients;
 	
-	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<Preparation> preparations;
 	
 	@Column(name="image")

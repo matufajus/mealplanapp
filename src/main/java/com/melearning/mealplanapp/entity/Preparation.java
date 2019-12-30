@@ -23,6 +23,14 @@ public class Preparation {
 	
 	@Column(name="description")
 	private String description;
+	
+	public int getId(){
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public Recipe getRecipe() {
 		return recipe;
