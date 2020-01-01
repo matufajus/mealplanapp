@@ -9,7 +9,7 @@
 		<title></title>
 	</head>
   <body>
-	<div class="container">
+	<div class="container top-container">
 		<c:if test="${recipe.id eq 0}">
 			<h1>Sukurti receptą</h1>
 		</c:if>
@@ -42,7 +42,7 @@
 						</div>
 						<form:hidden path="ingredients[${status.index}].id" />
 						<form:hidden path="ingredients[${status.index}].recipe" />
-						<button class ="remove-ingredient" type="button">Pašalinti</button>
+						<a class ="remove-ingredient" type="button"><i class="fas fa-minus-circle fa-2x"></i></a>
 					</div>
 				</c:forEach>
 				<div id ="add-ingredient-container"></div>
@@ -57,7 +57,7 @@
 		  				<form:textarea class="preparation-area form-control col" path="preparations[${status.index}].description"/>
 		  				<form:hidden path="preparations[${status.index}].id" />
 						<form:hidden path="preparations[${status.index}].recipe" />
-						<button class ="remove-preparation" type="button">Pašalinti</button>
+						<a class ="remove-preparation" type="button"><i class="fas fa-minus-circle fa-2x"></i></a>
 		  			</div>
 		  		</c:forEach>
 		  		<div id ="add-preparation-container"></div>

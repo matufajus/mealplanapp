@@ -7,6 +7,24 @@ $( "#ingredient-container" ).on("click", ".remove-ingredient", function() {
 	$(this).parent().remove();
 });
 
+$( "#ingredient-container" ).on("mouseover", ".remove-ingredient", function() {
+	$(this).siblings().children("input").css("border", "3px solid #ced4da");
+});
+
+$( "#ingredient-container" ).on("mouseout", ".remove-ingredient", function() {
+	$(this).siblings().children("input").css("border", "1px solid #ced4da");
+});
+
+$( "#preparation-container" ).on("mouseover", ".remove-preparation", function() {
+	$(this).siblings("textarea").css("border", "3px solid #ced4da");
+});
+
+$( "#preparation-container" ).on("mouseout", ".remove-preparation", function() {
+	$(this).siblings("textarea").css("border", "1px solid #ced4da");
+});
+
+
+
 $( "#preparation-container" ).on("click", ".remove-preparation", function() {
 	var indexes = $(this).parent().nextAll().find("p.preparation-index");
 	indexes.each(function(){
@@ -64,10 +82,10 @@ $("#add-ingredient-button").click(function(){
 	rInput.setAttribute("value", recipeId);
 	ingredient.appendChild(rInput);
 	
-	var button = document.createElement("button");
+	var button = document.createElement("a");
 	button.setAttribute("class", "remove-ingredient");
 	button.setAttribute("type", "button");
-	button.innerHTML ="Pašalinti";
+	button.innerHTML = "<i class='fas fa-minus-circle fa-2x'>";
 	ingredient.appendChild(button);
 	
 	container.appendChild(ingredient);
@@ -119,10 +137,10 @@ $("#add-preparation-button").click(function(){
 	rInput.setAttribute("value", recipeId);
 	preparation.appendChild(rInput);
 	
-	var button = document.createElement("button");
+	var button = document.createElement("a");
 	button.setAttribute("class", "remove-preparation");
 	button.setAttribute("type", "button");
-	button.innerHTML ="Pašalinti";
+	button.innerHTML = "<i class='fas fa-minus-circle fa-2x'>";
 	preparation.appendChild(button);
 	
 	container.appendChild(preparation);
@@ -145,7 +163,12 @@ $("#recipe-image-input").change(function() {
 	});
 
 
-
+$('textarea').each(function () {
+	  this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+	}).on('input', function () {
+	  this.style.height = 'auto';
+	  this.style.height = (this.scrollHeight) + 'px';
+	});
 
 
 

@@ -11,9 +11,9 @@
 	</head>
 	<body>
 		<%@ include file="navbar.jsp" %>
-		<div class="container-fluid">
+		<div class="container-fluid top-container">
 			<security:authorize access="hasRole('ADMIN')">
-				<a href="showForm">Pridėti naują receptą</a>
+				<a id="add-recipe-link" href="showForm"><i class="fas fa-plus-circle fa-2x"></i> Pridėti naują receptą</a>
 			</security:authorize>
 			<div class="row">
 				<c:set var = "i" scope = "page" value = "0"/>
