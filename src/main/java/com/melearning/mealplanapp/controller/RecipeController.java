@@ -71,7 +71,7 @@ public class RecipeController {
 	@PostMapping("/saveRecipe")
 	public String saveRecipe(@Valid @ModelAttribute("recipe") RecipeFormDTO recipeDTO, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			System.out.println(bindingResult.getAllErrors());;
+			System.out.println(bindingResult.getAllErrors());
 			return "recipe-form";
 		}
 		else {

@@ -18,6 +18,7 @@ import com.melearning.mealplanapp.dao.UserRepository;
 import com.melearning.mealplanapp.dto.UserDTO;
 import com.melearning.mealplanapp.entity.Role;
 import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.security.CustomUserDetails;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -60,8 +61,9 @@ public class UserServiceImpl implements UserService {
 		if (user == null) {
 			throw new UsernameNotFoundException("Invalid username or password.");
 		}
-		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-				mapRolesToAuthorities(user.getRoles()));
+		return new CustomUserDetails(user, mapRolesToAuthorities(user.getRoles()));
+//				new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+//				mapRolesToAuthorities(user.getRoles()));
 	}
 
 	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {

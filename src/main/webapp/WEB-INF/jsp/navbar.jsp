@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+	
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
   <a class="navbar-brand" href="${pageContext.request.contextPath}/">MealPlanApp</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,6 +13,15 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/recipe/list">Receptai</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/kitchen/showProducts">Mano virtuvė</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/">Planuoti</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/">Valgyti dabar</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">

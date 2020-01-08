@@ -160,7 +160,7 @@ function readURL(input) {
 
 $("#recipe-image-input").change(function() {
 	  readURL(this);
-	});
+});
 
 
 $('textarea').each(function () {
