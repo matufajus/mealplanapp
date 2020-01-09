@@ -36,7 +36,7 @@ public class Ingredient {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
 	}
 
 	public String getAmmount() {
@@ -69,7 +69,7 @@ public class Ingredient {
 
 	public Ingredient(int id, String name, String ammount, String unit, Recipe recipe) {
 		this.id = id;
-		this.name = name;
+		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);;
 		this.ammount = ammount;
 //		this.unit = unit;
 		this.recipe = recipe;

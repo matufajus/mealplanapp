@@ -3,10 +3,12 @@ package com.melearning.mealplanapp.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.melearning.mealplanapp.dao.KitchenRepository;
 import com.melearning.mealplanapp.entity.KitchenProduct;
+import com.melearning.mealplanapp.exception.UniqueProductConstraintValidationException;
 
 @Service
 public class KitchenServiceImpl implements KitchenService {
@@ -21,6 +23,16 @@ public class KitchenServiceImpl implements KitchenService {
 
 	@Override
 	public void addProduct(KitchenProduct product) {
-		kitchenRepository.save(product);
+		try {
+			kitchenRepository.save(product);
+		} catch (DataIntegrityViolationException e) {
+			throw new UniqueProductConstraintValidationException(product.getName());
+		}
+		
+	}
+	
+	@Override
+	public void removeProduct(int id) {
+		kitchenRepository.deleteById(id);
 	}
 }

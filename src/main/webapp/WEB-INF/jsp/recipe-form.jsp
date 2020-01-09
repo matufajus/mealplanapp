@@ -32,6 +32,14 @@
 		  <div class="row">
 		  	<div id="ingredient-container" class ="col">
 		  	  <label for="ingredients">Ingredientai</label>
+		  	  <div class="row">
+		  	  	<div class="col-4">
+		  	  		Kiekis
+		  	  	</div>
+		  	  	<div class="col-4">
+		  	  		Pavadinimas
+		  	  	</div>
+		  	  </div>
 			  <c:forEach var="ingredient" items="${recipe.ingredients}" varStatus="status">
 					<div id ="ingredient-${status.index}" class = "ingredient-container row form-group">
 						<div class = "col-4">

@@ -12,9 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "kitchen_product")
+@Table(name = "kitchen_product", 
+	uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "name"}))
 public class KitchenProduct {
 	
 	@Id
@@ -38,6 +40,14 @@ public class KitchenProduct {
 	@Enumerated(EnumType.ORDINAL)
 	private FoodType foodType;
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public User getUser() {
 		return user;
 	}
@@ -51,7 +61,7 @@ public class KitchenProduct {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
 	}
 
 	public String getQuantity() {
@@ -85,9 +95,10 @@ public class KitchenProduct {
 	public KitchenProduct(User user, String name, String quantity, Date expirationDate, String location,
 			FoodType foodType) {
 		this.user = user;
-		this.name = name;
+		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
 		this.quantity = quantity;
 		this.expirationDate = expirationDate;
 		this.foodType = foodType;
 	}
+
 }

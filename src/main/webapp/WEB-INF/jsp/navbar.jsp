@@ -20,9 +20,6 @@
        <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/">Planuoti</a>
       </li>
-       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/">Valgyti dabar</a>
-      </li>
     </ul>
     <ul class="navbar-nav ml-auto">
     	<security:authorize access="isAuthenticated()">

@@ -9,5 +9,7 @@ public interface KitchenService {
 	public List<KitchenProduct> getAllProductsForUser(long id);
 	
 	public void addProduct(KitchenProduct product);
+	
+	public void removeProduct(int id);
 
 }

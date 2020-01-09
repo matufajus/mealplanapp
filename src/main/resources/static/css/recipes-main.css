@@ -64,3 +64,20 @@ h2{
  	align-items: center;
  	padding: 4vh 2vh;
 }
+
+.food-type-products{
+	border-color:#80ced6; 
+	border-style: solid; 
+	border-radius:10px; 
+	margin:10px 5px 0 5px; 
+	background-color:#d5f4e6; 
+	padding-bottom: 5px;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    /* Set the hr color */
+    color: #333; /* old IE */
+    background-color: #333; /* Modern Browsers */
+}
