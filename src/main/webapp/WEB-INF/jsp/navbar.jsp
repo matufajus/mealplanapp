@@ -24,7 +24,7 @@
     <ul class="navbar-nav ml-auto">
     	<security:authorize access="isAuthenticated()">
 		    <form:form class="form-inline" action="${pageContext.request.contextPath}/logout" method="POST">
-		       <input class="btn" type="submit" value="Log out"/>
+		       <input class="btn btn-primary" type="submit" value="Log out"/>
 		    </form:form>
     </security:authorize>
     </ul>

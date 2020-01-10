@@ -14,14 +14,14 @@ public class RecipeFormDTO {
 	
 	private int id;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "The title is required")
+	@Size(min = 1, message = "The title is required")
 	private String title;
 	
-	@NotNull(message = "is required")
+	@NotNull(message = "At least one ingredient must be added")
 	private List<Ingredient> ingredients;
 	
-	@NotNull(message = "is required")
+	@NotNull(message = "At least one instruction must be added")
 	private List<Preparation> preparations;
 	
 	private String image;

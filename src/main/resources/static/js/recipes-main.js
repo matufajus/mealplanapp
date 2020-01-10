@@ -53,6 +53,7 @@ $("#add-ingredient-button").click(function(){
 	aInput.setAttribute("name", "ingredients["+id+"].ammount");
 	aInput.setAttribute("type", "text");
 	aInput.setAttribute("class", "form-control");
+	aInput.setAttribute("required", "true");
 	ammount.appendChild(aInput);
 	ingredient.appendChild(ammount);
 	
@@ -63,6 +64,7 @@ $("#add-ingredient-button").click(function(){
 	nInput.setAttribute("name", "ingredients["+id+"].name");
 	nInput.setAttribute("type", "text");
 	nInput.setAttribute("class", "form-control");
+	nInput.setAttribute("required", "true");
 	name.appendChild(nInput);
 	ingredient.appendChild(name);
 	
@@ -119,6 +121,7 @@ $("#add-preparation-button").click(function(){
 	description.setAttribute("class", "preparation-area form-control col");
 	description.setAttribute("name", "preparations["+id+"].description");
 	description.setAttribute("id", "preparations"+id+".description");
+	description.setAttribute("required", "true");
 	preparation.appendChild(description);
 	
 	var iInput = document.createElement("input");

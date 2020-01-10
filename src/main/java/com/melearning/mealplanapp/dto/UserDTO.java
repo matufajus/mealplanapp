@@ -13,20 +13,20 @@ import com.melearning.mealplanapp.validation.ValidEmail;
 public class UserDTO {
 	
 	@ValidEmail
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Email is required")
+	@Size(min = 1, message = "Email is required")
 	private String email;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Username is required")
+	@Size(min = 1, message = "Username is required")
 	private String username;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "Password is required")
+	@Size(min = 1, message = "Password is required")
 	private String password;
 	
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+	@NotNull(message = "This field is required")
+	@Size(min = 1, message = "This field is required")
 	private String matchingPassword;
 
 	public String getEmail() {

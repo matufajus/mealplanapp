@@ -36,18 +36,18 @@
 			</c:forEach>
 		</div>
 		<br>
-		<label>Note: Product names should be in singular (e.g.: Apple, Banana, Cheese...)</label>
+		<label>Note: Product names should be singular (e.g.: Apple, Banana, Cheese...)</label>
 		<c:if test="${errorMessage != null}">
 			<p style="color:red">${errorMessage}</p>
 		</c:if>
 		<form:form method="POST" action="addProduct" modelAttribute="newProduct">
-			<form:input path="name" placeholder="Produktas"/>
-			<form:input path="quantity" placeholder="Kiekis"/>
+			<form:input path="name" placeholder="Product" required="true"/>
+			<form:input path="quantity" placeholder="Quantity" required="true"/>
 <%-- 			<form:input type="date" path="expirationDate" placeholder="Galiojimo data"/> --%>
 			<form:select path="foodType">
 				<form:options items="${foodTypes}" itemLabel="label"/>
 			</form:select>
-			<input type="submit" value="Pridėti"/>
+			<input type="submit" value="Add"/>
 		</form:form>
 		<br>
 		<hr>

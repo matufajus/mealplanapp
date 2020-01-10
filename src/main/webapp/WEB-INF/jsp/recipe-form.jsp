@@ -43,10 +43,10 @@
 			  <c:forEach var="ingredient" items="${recipe.ingredients}" varStatus="status">
 					<div id ="ingredient-${status.index}" class = "ingredient-container row form-group">
 						<div class = "col-4">
-							<form:input type="text"  class="form-control" path="ingredients[${status.index}].ammount"/>
+							<form:input type="text"  class="form-control" path="ingredients[${status.index}].ammount" required="true"/>
 						</div>
 						<div class = "col-4">
-							<form:input type="text" class="form-control" path="ingredients[${status.index}].name"/>
+							<form:input type="text" class="form-control" path="ingredients[${status.index}].name" required="true"/>
 						</div>
 						<form:hidden path="ingredients[${status.index}].id" />
 						<form:hidden path="ingredients[${status.index}].recipe" />
@@ -54,7 +54,9 @@
 					</div>
 				</c:forEach>
 				<div id ="add-ingredient-container"></div>
-				<button id="add-ingredient-button" type="button">Add new</button>
+				<form:errors path="ingredients" class="alert-info"/>
+				<br/>
+				<button id="add-ingredient-button" type="button">Add</button>
 			  	<br/><br/>
 		  	</div>
 		  	<div id="preparation-container" class ="col">
@@ -62,19 +64,25 @@
 		  		<c:forEach var="preparation" items="${recipe.preparations}" varStatus="status">
 		  			<div id ="preparation-${status.index}" class ="preparation-container row form-group">
 		  				<p class= "preparation-index col-1">${status.index+1}</p>
-		  				<form:textarea class="preparation-area form-control col" path="preparations[${status.index}].description"/>
+		  				<form:textarea class="preparation-area form-control col" path="preparations[${status.index}].description" required="true"/>
 		  				<form:hidden path="preparations[${status.index}].id" />
 						<form:hidden path="preparations[${status.index}].recipe" />
 						<a class ="remove-preparation" type="button"><i class="fas fa-minus-circle fa-2x"></i></a>
 		  			</div>
 		  		</c:forEach>
 		  		<div id ="add-preparation-container"></div>
-				<button id="add-preparation-button" type="button">Add new</button>
+		  		<form:errors path="preparations" class="alert-info"/>
+				<br/>
+				<button id="add-preparation-button" type="button">Add</button>
 		  	</div>
 		  </div>
 		  
 		  <form:button type="submit" class="btn btn-primary">Save</form:button>
-		  <a href="#deleteRecipeModal" class="btn btn-danger" data-toggle="modal">Delete</a>
+	  		<a href="list" class="btn btn-secondary">Cancel</a>
+		  <c:if test="${recipe.id ne 0 }">
+		  	<a href="#deleteRecipeModal" class="btn btn-danger" data-toggle="modal">Delete</a>
+		  </c:if>
+		  
 		</form:form>
 	</div>
 	
