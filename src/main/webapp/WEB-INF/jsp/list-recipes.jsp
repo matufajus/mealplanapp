@@ -13,7 +13,7 @@
 		<%@ include file="navbar.jsp" %>
 		<div class="container-fluid top-container">
 			<security:authorize access="hasRole('ADMIN')">
-				<a id="add-recipe-link" href="showForm"><i class="fas fa-plus-circle fa-2x"></i> Pridėti naują receptą</a>
+				<a id="add-recipe-link" href="showForm"><i class="fas fa-plus-circle fa-2x"></i> Add new recipe</a>
 			</security:authorize>
 			<div class="row">
 				<c:set var = "i" scope = "page" value = "0"/>
@@ -29,7 +29,7 @@
 						<security:authorize access="!hasRole('ADMIN')">
 							<a href="info?recipeId=${recipe.id}">
 						</security:authorize>
-						   		<img alt="${recipe.title} paveikslėlis" src="${recipe.image}">				   		
+						   		<img alt="${recipe.title} image" src="${recipe.image}">				   		
 						   		<h2>${recipe.title}</h2>
 					  		 </a>
 				   </div>

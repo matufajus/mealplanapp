@@ -9,22 +9,22 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="${pageContext.request.contextPath}/home">Pagrindinis <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/home">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/recipe/list">Receptai</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/recipe/list">Recipes</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/kitchen/showProducts">Mano virtuvė</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/kitchen/showProducts">My kitchen</a>
       </li>
        <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/">Planuoti</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/">Plan my meals</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">
     	<security:authorize access="isAuthenticated()">
 		    <form:form class="form-inline" action="${pageContext.request.contextPath}/logout" method="POST">
-		       <input class="btn" type="submit" value="Atsijungti"/>
+		       <input class="btn" type="submit" value="Log out"/>
 		    </form:form>
     </security:authorize>
     </ul>

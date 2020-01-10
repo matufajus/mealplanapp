@@ -13,9 +13,9 @@
 <body>
 	<%@ include file="navbar.jsp"%>
 	<div class="top-container">
-		<h1>Sveiki</h1>
+		<h1>Hello</h1>
 		<security:authorize access="hasRole('ADMIN')">
-			<p>Jūs naudojatės administratoriaus teisėmis</p>
+			<p>You are authorized as an admin</p>
 		</security:authorize>
 	</div>
 	<%@ include file="footer.jsp"%>

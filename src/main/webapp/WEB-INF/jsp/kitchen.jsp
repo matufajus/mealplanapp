@@ -14,7 +14,7 @@
 	<%@ include file="navbar.jsp"%>
 	<div class="container-fluid top-container">
 		<br>
-		<h2>Maisto produktai, kuriuos turiu savo virtuvėje:</h2>
+		<h2>Food products which are in my kitchen:</h2>
 		<div class="row">
 			<c:forEach var="type" items="${foodTypes}">
 				<div class="col food-type-products">
@@ -36,7 +36,7 @@
 			</c:forEach>
 		</div>
 		<br>
-		<label>Pastaba: Pavadinimus rašykite vardininko linksniu daugiskaita (pvz.: Agurkai, Bananai, Ryžiai...)</label>
+		<label>Note: Product names should be in singular (e.g.: Apple, Banana, Cheese...)</label>
 		<c:if test="${errorMessage != null}">
 			<p style="color:red">${errorMessage}</p>
 		</c:if>
@@ -52,28 +52,31 @@
 		<br>
 		<hr>
 		<br>
-		<h3>Ką galiu pasigaminti iš turimų produktų?</h3>
+		<h3>What can I make from the products that I have?</h3>
 		<div class="row">
-				<c:set var = "i" scope = "page" value = "0"/>
-			    <c:forEach var="recipe" items="${recipes}">
-				    <c:if test="${(i != 0) && (i % 4 == 0)}">
-		  		  		</div>
-		  		  		<div class="row">
-					</c:if>
-				   <div class = "col recipe-thmbnl">
-					    <security:authorize access="hasRole('ADMIN')">
-							<a href="${pageContext.request.contextPath}/recipe/updateForm?recipeId=${recipe.id}">
-						</security:authorize>
-						<security:authorize access="!hasRole('ADMIN')">
-							<a href="${pageContext.request.contextPath}/recipe/info?recipeId=${recipe.id}">
-						</security:authorize>
-						   		<img alt="${recipe.title} paveikslėlis" src="${recipe.image}">				   		
-						   		<h2>${recipe.title}</h2>
-					  		 </a>
-				   </div>
-				   <c:set var="i" value="${i + 1}" scope="page"/>
-				</c:forEach>
-			</div>
+			<c:if test="${recipes.size() eq 0 }">
+				<p>Unfortunately, there are no suitable recipes for your products..</p>
+			</c:if>
+			<c:set var = "i" scope = "page" value = "0"/>
+		    <c:forEach var="recipe" items="${recipes}">
+			    <c:if test="${(i != 0) && (i % 4 == 0)}">
+	  		  		</div>
+	  		  		<div class="row">
+				</c:if>
+			   <div class = "col recipe-thmbnl">
+				    <security:authorize access="hasRole('ADMIN')">
+						<a href="${pageContext.request.contextPath}/recipe/updateForm?recipeId=${recipe.id}">
+					</security:authorize>
+					<security:authorize access="!hasRole('ADMIN')">
+						<a href="${pageContext.request.contextPath}/recipe/info?recipeId=${recipe.id}">
+					</security:authorize>
+					   		<img alt="${recipe.title} paveikslėlis" src="${recipe.image}">				   		
+					   		<h2>${recipe.title}</h2>
+				  		 </a>
+			   </div>
+			   <c:set var="i" value="${i + 1}" scope="page"/>
+			</c:forEach>
+		</div>
 	</div>
 	<%@ include file="footer.jsp"%>
 </body>
