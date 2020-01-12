@@ -14,7 +14,7 @@
 	<%@ include file="navbar.jsp"%>
 	<div class="container-fluid top-container">
 		<br>
-		<h2>Food products which are in my kitchen:</h2>
+		<h2>Food products that are in my kitchen:</h2>
 		<div class="row">
 			<c:forEach var="type" items="${foodTypes}">
 				<div class="col food-type-products">
@@ -22,12 +22,9 @@
 					<c:forEach var="product" items="${products}">
 						<c:if test="${product.foodType eq type }">
 							<div class="row">
-								<div class="col-7">
+								<div class="col">
 									<a href="removeProduct?productId=${product.id}">x </a>
 									${product.name}
-								</div>
-								<div class="col-5">
-									${product.quantity}
 								</div>
 							</div>
 						</c:if>
@@ -42,7 +39,7 @@
 		</c:if>
 		<form:form method="POST" action="addProduct" modelAttribute="newProduct">
 			<form:input path="name" placeholder="Product" required="true"/>
-			<form:input path="quantity" placeholder="Quantity" required="true"/>
+<%-- 			<form:input path="quantity" placeholder="Quantity" required="true"/> --%>
 <%-- 			<form:input type="date" path="expirationDate" placeholder="Galiojimo data"/> --%>
 			<form:select path="foodType">
 				<form:options items="${foodTypes}" itemLabel="label"/>

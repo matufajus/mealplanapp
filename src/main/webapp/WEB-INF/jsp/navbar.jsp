@@ -18,7 +18,7 @@
         <a class="nav-link" href="${pageContext.request.contextPath}/kitchen/showProducts">My kitchen</a>
       </li>
        <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/">Plan my meals</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/plan">Plan my meals</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto">

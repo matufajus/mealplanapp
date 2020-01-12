@@ -1,6 +1,6 @@
 package com.melearning.mealplanapp.entity;
 
-public enum Unit {
+public enum UnitType {
 	KILOGRAM,
 	GRAM,
 	LITRE,
