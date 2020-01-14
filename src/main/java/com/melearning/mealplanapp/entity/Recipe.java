@@ -4,11 +4,15 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -32,6 +36,13 @@ public class Recipe {
 	
 	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval=true)
 	private List<Preparation> preparations;
+	
+	@ElementCollection(targetClass = MealType.class)
+	@JoinTable(name = "recipe_meal_Type", 
+	joinColumns = @JoinColumn(name = "recipe_id"))
+	@Column(name = "meal_type")
+	@Enumerated(EnumType.ORDINAL)
+	private List<MealType> mealTypes;
 	
 	@Column(name="image")
 	private String image;
@@ -92,6 +103,14 @@ public class Recipe {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public List<MealType> getMealTypes() {
+		return mealTypes;
+	}
+
+	public void setMealTypes(List<MealType> mealTypes) {
+		this.mealTypes = mealTypes;
 	}
 	
 	

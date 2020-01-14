@@ -27,6 +27,7 @@ import com.melearning.mealplanapp.demodata.CSVReader;
 import com.melearning.mealplanapp.demodata.Record;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.Ingredient;
+import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.service.FileService;
@@ -54,7 +55,7 @@ public class RecipeController {
 	}
 	
 	@GetMapping("/list")
-	public String listRecipes(Model theModel) {
+	public String listRecipes(@RequestParam(name = "mealTypes", required = false) List<MealType> mealTypes, Model theModel) {
 		List<Recipe> recipes = recipeService.findAll();
 		theModel.addAttribute("recipes", recipes);
 		return "list-recipes";
@@ -62,16 +63,20 @@ public class RecipeController {
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/showForm")
-	public String showFormForAdd(Model theModel) {
-		theModel.addAttribute("recipe", new RecipeFormDTO());
+	public String showFormForAdd(Model model) {
+		model.addAttribute("recipe", new RecipeFormDTO());
+		model.addAttribute("mealTypes", MealType.values());
 		return "recipe-form";
 	}
 	
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/saveRecipe")
-	public String saveRecipe(@Valid @ModelAttribute("recipe") RecipeFormDTO recipeDTO, BindingResult bindingResult) {
+	public String saveRecipe(@Valid @ModelAttribute("recipe") RecipeFormDTO recipeDTO, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			System.out.println(bindingResult.getAllErrors());
+			System.out.println(recipeDTO.getPreparations());
+			System.out.println(recipeDTO.getMealTypes());
+			model.addAttribute("mealTypes", MealType.values());
 			return "recipe-form";
 		}
 		else {
@@ -94,6 +99,7 @@ public class RecipeController {
 	public String showFormForUpdate(@RequestParam("recipeId") int id, Model model) {
 		Recipe recipe = recipeService.findById(id);
 		model.addAttribute("recipe", convertToDTO(recipe));
+		model.addAttribute("mealTypes", MealType.values());
 		return "recipe-form";
 	}
 	

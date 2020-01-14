@@ -23,11 +23,20 @@
 	      	<div class=form-group>
 	      		<form:input type = "file" class="form-control" path="imageFile" id="recipe-image-input"/>
 	        </div>
-	        <img id="recipe-form-image" src="${recipe.image}" alt="Image has not been chosen" />
+	        <c:if test="${recipe.image ne null}">
+	        	<img id="recipe-form-image" src="${recipe.image}" alt="Image cannot be loaded"/>
+	        </c:if>
 		  <div class="form-group">
 		    <label for="title">Title</label>
 	    	<form:input type="text" class="form-control" path="title" required="true"/>
 		  	<form:errors path="title" class="alert-danger"/>
+		  </div>
+		  <div class="form-group">
+		  	Meal type:
+            <form:select path="mealTypes" class="selectpicker" multiple="multiple" data-live-search="true" required="true">
+			  <form:options items="${mealTypes}" itemLabel="label"/>
+			</form:select>
+			<form:errors path="mealTypes" class="alert-info"/>
 		  </div>
 		  <div class="row">
 		  	<div id="ingredient-container" class ="col">

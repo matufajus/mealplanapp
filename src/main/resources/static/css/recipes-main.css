@@ -6,8 +6,8 @@
 }
 
 .recipe-thmbnl img{
-	width: 20vw;
-	height: 20vw;
+	width: 15vw;
+	height: 15vw;
 	object-fit: cover;
 }
 
@@ -47,7 +47,7 @@ h2{
 }
 
 .top-container{
-	margin: 56px 0;
+	margin-top: 56px;
 }
 
 .remove-preparation{

@@ -174,4 +174,4 @@ $('textarea').each(function () {
 	});
 
 
-
+$('select').selectpicker();

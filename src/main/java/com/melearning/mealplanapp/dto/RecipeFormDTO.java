@@ -1,5 +1,6 @@
 package com.melearning.mealplanapp.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.melearning.mealplanapp.entity.Ingredient;
+import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
 
 public class RecipeFormDTO {
@@ -23,6 +25,10 @@ public class RecipeFormDTO {
 	
 	@NotNull(message = "At least one instruction must be added")
 	private List<Preparation> preparations;
+	
+	@NotNull(message = "At least one meal type must be chosen")
+	@Size(min = 1, message = "At least one meal type must be chosen")
+	private List<MealType> mealTypes;
 	
 	private String image;
 	
@@ -76,5 +82,22 @@ public class RecipeFormDTO {
 	public void setId(int id) {
 		this.id = id;
 	}
+
+	public List<MealType> getMealTypes() {
+		return mealTypes;
+	}
+
+	public void setMealTypes(List<MealType> mealTypes) {
+		this.mealTypes = mealTypes;
+	}
+
+	public RecipeFormDTO() {
+		this.ingredients = new ArrayList<Ingredient>();
+		this.ingredients.add(new Ingredient());
+		this.preparations = new ArrayList<Preparation>();
+		this.preparations.add(new Preparation());
+	}
+	
+	
 	
 }
