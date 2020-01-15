@@ -1,6 +1,7 @@
 package com.melearning.mealplanapp.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import com.melearning.mealplanapp.dao.RecipeRepository;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.KitchenProduct;
+import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
 
 @Service
@@ -85,6 +87,13 @@ public class RecipeServiceImpl implements RecipeService {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public List<Recipe> getRecipesByMealTypes(List<MealType> mealTypes) {
+		List<Recipe> listWithDuplicates = recipeRepository.getRecipesByMealTypesIn(mealTypes);
+		List<Recipe> listWithoutDuplicates = new ArrayList<Recipe>(new HashSet<Recipe>(listWithDuplicates));
+		return listWithoutDuplicates;
 	}
 
 }

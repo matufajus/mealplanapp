@@ -67,7 +67,7 @@
 					<security:authorize access="!hasRole('ADMIN')">
 						<a href="${pageContext.request.contextPath}/recipe/info?recipeId=${recipe.id}">
 					</security:authorize>
-					   		<img alt="${recipe.title} paveikslėlis" src="${recipe.image}">				   		
+					   		<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${recipe.image}">				   		
 					   		<h2>${recipe.title}</h2>
 				  		 </a>
 			   </div>

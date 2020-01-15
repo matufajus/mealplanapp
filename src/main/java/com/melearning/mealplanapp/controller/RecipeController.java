@@ -2,6 +2,7 @@ package com.melearning.mealplanapp.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.melearning.mealplanapp.demodata.CSVReader;
 import com.melearning.mealplanapp.demodata.Record;
@@ -55,9 +57,14 @@ public class RecipeController {
 	}
 	
 	@GetMapping("/list")
-	public String listRecipes(@RequestParam(name = "mealTypes", required = false) List<MealType> mealTypes, Model theModel) {
+	public String listRecipes(@RequestParam(name = "type", required = false) List<MealType> selectedMealtypes, Model model) {
 		List<Recipe> recipes = recipeService.findAll();
-		theModel.addAttribute("recipes", recipes);
+		if (selectedMealtypes != null) {
+			model.addAttribute("selectedMealTypes", selectedMealtypes);
+			recipes = recipeService.getRecipesByMealTypes(selectedMealtypes);
+		}
+		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("recipes", recipes);
 		return "list-recipes";
 	}
 	
@@ -114,6 +121,11 @@ public class RecipeController {
 	public String showRecipe(@RequestParam("recipeId") int id, Model model) {
 		model.addAttribute("recipe", recipeService.findById(id));
 		return "recipe";
+	}
+	
+	@GetMapping("/getRecipes")
+	public @ResponseBody List<Recipe> getRecipes(){
+		return recipeService.findAll();
 	}
 	
 	private RecipeFormDTO convertToDTO(Recipe recipe) {

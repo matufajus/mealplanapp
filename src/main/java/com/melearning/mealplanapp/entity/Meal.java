@@ -14,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "meal")
 public class Meal {
@@ -28,6 +30,7 @@ public class Meal {
 	
 	@ManyToOne
 	@JoinColumn(name = "recipe_id")
+	@JsonIgnore
 	private Recipe recipe;
 	
 	@Column(name = "meal_type")

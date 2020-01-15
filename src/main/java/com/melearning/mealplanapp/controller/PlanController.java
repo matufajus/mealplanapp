@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealType;
+import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.security.CustomUserDetails;
 import com.melearning.mealplanapp.service.MealService;
+import com.melearning.mealplanapp.service.RecipeService;
 
 @Controller
 @RequestMapping("/plan")

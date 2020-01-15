@@ -87,7 +87,7 @@
 		  </div>
 		  
 		  <form:button type="submit" class="btn btn-primary">Save</form:button>
-	  		<a href="list" class="btn btn-secondary">Cancel</a>
+	  		<a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
 		  <c:if test="${recipe.id ne 0 }">
 		  	<a href="#deleteRecipeModal" class="btn btn-danger" data-toggle="modal">Delete</a>
 		  </c:if>

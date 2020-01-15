@@ -1,7 +1,27 @@
+
+
 $(document).ready(function() {
   $('li.active').removeClass('active');
   $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
+  
+  if (location.pathname.startsWith("/recipe/list")){
+	  var selectedTypes = $(".selectedMealType");
+	  var checkBoxes = $("input[name='type'");
+	  	
+	  checkBoxes.each(function( index ) {
+		  var checkBox = this;
+		  selectedTypes.each(function( index ) {
+			  if(checkBox.value == this.value) 
+				  checkBox.setAttribute("checked", "checked");
+			});
+		 
+		});	
+  }
+		  
+
 });
+
+
 
 $( "#ingredient-container" ).on("click", ".remove-ingredient", function() {
 	$(this).parent().remove();
@@ -175,3 +195,33 @@ $('textarea').each(function () {
 
 
 $('select').selectpicker();
+
+$(".add-meal-button").click(function(){
+	$.ajax({
+		type: "GET",
+		url: "recipe/getRecipes",
+		success: function (data) {
+			var container = $("#meal-recipes-container");
+			container.attr("class", "col-6");
+			var html = "<div class='row'>";
+	        $.each(data, function(i, recipe) {
+	        	if ((i != 0) && (i % 4 == 0)){
+	        		console.log(i);
+	        		html += "</div><div class='row'>";
+	        	}
+	            if (recipe.image == null)
+	            	recipe.image = "/recipeImages/default.png";
+	            html += "<div class='col-3'><a href='${pageContext.request.contextPath}/recipe/info?recipeId="+recipe.id+"'>" +
+	             		"<img class='img-thumbnail' src='"+recipe.image+"'>" +
+	             		"<span>"+recipe.title+"</span>" +
+	             		" </a></div>";
+	             
+	         });
+	        html +="</div>";
+	        container.append(html);
+	        },
+	    erroe: function(){
+	    	console.log("Failed to retrieve recipes");
+	    }
+	})
+});
