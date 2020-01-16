@@ -30,7 +30,7 @@
 					<tbody>
 						<c:forEach var="date" items="${dates}" varStatus="status">
 							 <tr class="d-flex">
-							 	<td class="col-sm-1 text-center"><h3><fmt:formatDate value="${date}" pattern="MMMM dd (EEE)" /></h3></td>
+							 	<td class="col-sm-1 text-center"><h3>${date }</h3></td>
 							 	<c:forEach var="mealType" items="${mealTypes}">
 							 		<c:set var="hasMeal" value="false"/>
 									<c:forEach var="meal" items="${meals}">	

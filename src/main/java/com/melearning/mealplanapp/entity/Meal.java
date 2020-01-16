@@ -1,5 +1,6 @@
 package com.melearning.mealplanapp.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -38,7 +39,7 @@ public class Meal {
 	private MealType mealType;
 	
 	@Column(name = "date")
-	private Date date;
+	private LocalDate date;
 
 	public int getId() {
 		return id;
@@ -68,15 +69,15 @@ public class Meal {
 		this.mealType = mealType;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 
-	public Meal(int id, User user, Recipe recipe, MealType mealType, Date date) {
+	public Meal(int id, User user, Recipe recipe, MealType mealType, LocalDate date) {
 		this.id = id;
 		this.user = user;
 		this.recipe = recipe;

@@ -3,6 +3,8 @@ package com.melearning.mealplanapp.controller;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -61,15 +63,8 @@ public class PlanController {
 		Recipe recipe = recipeService.findById(recipeId);
 		MealType type = MealType.valueOf(mealType);
 		System.out.println(date);
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		format.setTimeZone(TimeZone.getTimeZone("GMT"));
-		Date mealDate = null;
-		try {
-			mealDate = format.parse(date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		LocalDate mealDate = LocalDate.parse(date);
+	
 		System.out.println(mealDate);
 		Meal meal = new Meal(0, currentUser.getUser(), recipe, type, mealDate);
 		mealService.saveMeal(meal);

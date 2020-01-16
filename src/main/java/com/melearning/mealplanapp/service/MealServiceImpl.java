@@ -1,9 +1,12 @@
 package com.melearning.mealplanapp.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,11 +28,11 @@ public class MealServiceImpl implements MealService{
 		return mealRepository.findAllByUserId(userId);
 	}
 	
-	public List<Date> extractDatesFromMeals(List<Meal> meals){
+	public List<LocalDate> extractDatesFromMeals(List<Meal> meals){
 		
-		List<Date> dates = new ArrayList<Date>();
+		List<LocalDate> dates = new ArrayList<LocalDate>();
 		for (Meal meal : meals) {
-			Date date = meal.getDate();
+			LocalDate date = meal.getDate();
 			if (!dates.contains(date))
 				dates.add(date);
 		}
@@ -41,6 +44,11 @@ public class MealServiceImpl implements MealService{
 	
 	public void saveMeal(Meal meal) {
 		mealRepository.save(meal);
+	}
+
+	@Override
+	public List<LocalDate> getDatesForMealPlan() {
+		return null;
 	}
 	
 	
