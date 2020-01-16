@@ -197,24 +197,34 @@ $('textarea').each(function () {
 $('select').selectpicker();
 
 $(".add-meal-button").click(function(){
+	var date = $(this).parent().data("date");
+	var mealType = $(this).parent().data("meal-type");
+	var formattedDate = new Date(date);
+	var d = formattedDate.getDate();
+	var m =  formattedDate.getMonth();
+	var month = getNameOfTheMonth(m);
+	m += 1;  // JavaScript months are 0-11
+	var y = formattedDate.getFullYear();
+
 	$.ajax({
 		type: "GET",
 		url: "recipe/getRecipes",
 		success: function (data) {
 			var container = $("#meal-recipes-container");
+			container.empty();
 			container.attr("class", "col-6");
-			var html = "<div class='row'>";
+			var html = "<h2>Select meal for "+mealType.toLowerCase()+" on "+month + " " + d +":</h2>" +
+					"<div class='row'>";
 	        $.each(data, function(i, recipe) {
 	        	if ((i != 0) && (i % 4 == 0)){
-	        		console.log(i);
 	        		html += "</div><div class='row'>";
 	        	}
 	            if (recipe.image == null)
 	            	recipe.image = "/recipeImages/default.png";
-	            html += "<div class='col-3'><a href='${pageContext.request.contextPath}/recipe/info?recipeId="+recipe.id+"'>" +
-	             		"<img class='img-thumbnail' src='"+recipe.image+"'>" +
-	             		"<span>"+recipe.title+"</span>" +
-	             		" </a></div>";
+	            html += "<div class='col-3 choose-meal' data-recipe-id="+recipe.id+" data-date='"+date+"' data-meal-type="+mealType+">"+
+			             		"<img class='img-thumbnail' src='"+recipe.image+"'>" +
+			             		"<span>"+recipe.title+"</span>" +
+		             		"</div>";
 	             
 	         });
 	        html +="</div>";
@@ -225,3 +235,32 @@ $(".add-meal-button").click(function(){
 	    }
 	})
 });
+
+$( "#meal-recipes-container" ).on("click", ".choose-meal", function() {
+	var recipeId = $(this).data("recipe-id");
+	var date = $(this).data("date");
+	var mealType = $(this).data("meal-type");
+	
+	$("input[name='recipeId']").attr("value", recipeId);
+	$("input[name='date']").attr("value", date);
+	$("input[name='mealType']").attr("value", mealType);
+	
+	$("form[name='saveMeal']").submit();
+});
+
+function getNameOfTheMonth(d){
+	var month = new Array();
+	month[0] = "January";
+	month[1] = "February";
+	month[2] = "March";
+	month[3] = "April";
+	month[4] = "May";
+	month[5] = "June";
+	month[6] = "July";
+	month[7] = "August";
+	month[8] = "September";
+	month[9] = "October";
+	month[10] = "November";
+	month[11] = "December";
+	return month[d];
+}

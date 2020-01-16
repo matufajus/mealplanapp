@@ -39,5 +39,9 @@ public class MealServiceImpl implements MealService{
 		return dates;
 	}
 	
+	public void saveMeal(Meal meal) {
+		mealRepository.save(meal);
+	}
+	
 	
 }

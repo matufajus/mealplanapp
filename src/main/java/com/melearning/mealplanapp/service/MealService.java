@@ -11,5 +11,7 @@ public interface MealService {
 	public List<Meal> getAllUserMeals(long userId);
 	
 	public List<Date> extractDatesFromMeals(List<Meal> meals);
+	
+	public void saveMeal(Meal meal);
 
 }
