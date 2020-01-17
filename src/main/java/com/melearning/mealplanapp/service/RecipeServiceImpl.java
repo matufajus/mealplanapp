@@ -7,6 +7,9 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,6 +97,12 @@ public class RecipeServiceImpl implements RecipeService {
 		List<Recipe> listWithDuplicates = recipeRepository.getRecipesByMealTypesIn(mealTypes);
 		List<Recipe> listWithoutDuplicates = new ArrayList<Recipe>(new HashSet<Recipe>(listWithDuplicates));
 		return listWithoutDuplicates;
+	}
+	
+	@Override
+	public Page<Recipe> getRecipesByPage(int pageId, int pageSize){
+		Pageable pageable = PageRequest.of(pageId, pageSize);
+		return recipeRepository.findAll(pageable);
 	}
 
 }

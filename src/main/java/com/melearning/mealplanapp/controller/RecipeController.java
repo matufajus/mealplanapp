@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -124,8 +125,8 @@ public class RecipeController {
 	}
 	
 	@GetMapping("/getRecipes")
-	public @ResponseBody List<Recipe> getRecipes(){
-		return recipeService.findAll();
+	public @ResponseBody Page<Recipe> getRecipes(@RequestParam(name = "pageId", defaultValue = "0") int pageId, @RequestParam(name = "pageSize", defaultValue = "16") int pageSize){
+		return recipeService.getRecipesByPage(pageId, pageSize);
 	}
 	
 	private RecipeFormDTO convertToDTO(Recipe recipe) {
@@ -135,62 +136,5 @@ public class RecipeController {
 	private Recipe convertToEntity(RecipeFormDTO recipeDTO) {
 		return mapper.map(recipeDTO, Recipe.class);
 	}
-	
-	
-	
-	
-	
-	
-	
-//	@GetMapping("/uploadCSVToDatabase")
-//	public String uploadCSV() {
-//		CSVReader csvReader = new CSVReader("C:\\\\Users\\\\Admins\\\\Downloads\\\\lamaistas-vegetariski.csv");
-//		try {
-//			List<Record> records = csvReader.getRecords();
-//			Recipe recipe = new Recipe();
-//			List<Ingredient> ingredients = new ArrayList<Ingredient>();
-//			List<Preparation> preparations = new ArrayList<Preparation>();
-//			int ingredientCounter = 0;
-//			for (Record record : records) {
-//				if (recipeService.findByTitle(record.getTitle()) != null)
-//					continue;
-//				if (!record.getTitle().equals(recipe.getTitle())) {
-//					if (recipe.getTitle() != null)
-//						recipeService.save(recipe);
-//					recipe = new Recipe();
-//					ingredients = new ArrayList<Ingredient>();
-//					preparations = new ArrayList<Preparation>();
-//					recipe.setTitle(record.getTitle());
-//					recipe.setImage(record.getImage());
-//					ingredientCounter = 0;
-//				}
-//				if (!record.getAmmountUnits().isEmpty()) {
-//					Ingredient ingredient = new Ingredient(); 
-//					ingredient.setRecipe(recipe);
-//					ingredient.setAmmount(record.getAmmountUnits());
-//					ingredients.add(ingredient);
-//				}else if (!record.getIngredients().isEmpty()) {
-//					Ingredient ingredient = ingredients.get(ingredientCounter);
-//					ingredient.setName(record.getIngredients());
-//					ingredients.set(ingredientCounter, ingredient);
-//					ingredientCounter++;
-//				}else if (!record.getPreparation().isEmpty()) {
-//					Preparation preparation = new Preparation();
-//					preparation.setRecipe(recipe);
-//					preparation.setDescription(record.getPreparation());
-//					preparations.add(preparation);
-//				}	
-//				recipe.setIngredients(ingredients);
-//				recipe.setPreparations(preparations);
-//			}
-//			recipeService.save(recipe);
-//			
-//		} catch (IOException e) {
-//			System.out.println("Couldn't read the file. Exception: " + e);
-//		}
-//		return null;
-//	}
-	
-
 
 }

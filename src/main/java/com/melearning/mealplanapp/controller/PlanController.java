@@ -51,7 +51,7 @@ public class PlanController {
 		List<Meal> meals = mealService.getAllUserMeals(currentUser.getUserId());
 		Meal meal = new Meal();
 		model.addAttribute("meals", meals);
-		model.addAttribute("dates", mealService.extractDatesFromMeals(meals));
+		model.addAttribute("dates", mealService.getDatesForMealPlan(7));
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("newMeal", meal);
 		return "meal-plan";
@@ -62,10 +62,7 @@ public class PlanController {
 		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
 		Recipe recipe = recipeService.findById(recipeId);
 		MealType type = MealType.valueOf(mealType);
-		System.out.println(date);
 		LocalDate mealDate = LocalDate.parse(date);
-	
-		System.out.println(mealDate);
 		Meal meal = new Meal(0, currentUser.getUser(), recipe, type, mealDate);
 		mealService.saveMeal(meal);
 		

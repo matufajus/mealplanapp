@@ -15,6 +15,6 @@ public interface MealService {
 	
 	public void saveMeal(Meal meal);
 
-	public List<LocalDate> getDatesForMealPlan();
+	public List<LocalDate> getDatesForMealPlan(int days);
 
 }

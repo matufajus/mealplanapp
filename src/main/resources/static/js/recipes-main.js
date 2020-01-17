@@ -1,7 +1,7 @@
 
 
 $(document).ready(function() {
-  $('li.active').removeClass('active');
+  $('li.nav-item.active').removeClass('active');
   $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
   
   if (location.pathname.startsWith("/recipe/list")){
@@ -199,29 +199,45 @@ $('select').selectpicker();
 $(".add-meal-button").click(function(){
 	var date = $(this).parent().data("date");
 	var mealType = $(this).parent().data("meal-type");
+	$("#pagination-nav").removeClass("d-none");
+	$("#meal-recipes-container").attr("data-date", date);
+	$("#meal-recipes-container").attr("data-meal-type", mealType);
+	
+	loadRecipes();
+});
+
+function loadRecipes(page, size){
+	var container = $("#meal-recipes-container");
+	var date = container.data("date");
+	var mealType = container.data("meal-type");
 	var formattedDate = new Date(date);
 	var d = formattedDate.getDate();
 	var m =  formattedDate.getMonth();
 	var month = getNameOfTheMonth(m);
-	m += 1;  // JavaScript months are 0-11
+	m += 1; 
 	var y = formattedDate.getFullYear();
-
+	if ((typeof page == "undefined") && (typeof page == "undefined")){
+		var page = 0;
+		var size = 16 
+	}
+	var urlString = "recipe/getRecipes?pageId="+page+"&pageSize="+size;
+	
 	$.ajax({
 		type: "GET",
-		url: "recipe/getRecipes",
+		url: urlString,
 		success: function (data) {
-			var container = $("#meal-recipes-container");
+			showPageNumbers(data.totalPages, page);
 			container.empty();
-			container.attr("class", "col-6");
+			container.parent().attr("class", "col-6");
 			var html = "<h2>Select meal for "+mealType.toLowerCase()+" on "+month + " " + d +":</h2>" +
 					"<div class='row'>";
-	        $.each(data, function(i, recipe) {
+	        $.each(data.content, function(i, recipe) {
 	        	if ((i != 0) && (i % 4 == 0)){
 	        		html += "</div><div class='row'>";
 	        	}
 	            if (recipe.image == null)
 	            	recipe.image = "/recipeImages/default.png";
-	            html += "<div class='col-3 choose-meal' data-recipe-id="+recipe.id+" data-date='"+date+"' data-meal-type="+mealType+">"+
+	            html += "<div class='col-3 choose-meal' data-recipe-id="+recipe.id+">"+
 			             		"<img class='img-thumbnail' src='"+recipe.image+"'>" +
 			             		"<span>"+recipe.title+"</span>" +
 		             		"</div>";
@@ -234,12 +250,12 @@ $(".add-meal-button").click(function(){
 	    	console.log("Failed to retrieve recipes");
 	    }
 	})
-});
+}
 
 $( "#meal-recipes-container" ).on("click", ".choose-meal", function() {
 	var recipeId = $(this).data("recipe-id");
-	var date = $(this).data("date");
-	var mealType = $(this).data("meal-type");
+	var date = $("#meal-recipes-container").data("date");
+	var mealType = $("#meal-recipes-container").data("meal-type");
 	
 	$("input[name='recipeId']").attr("value", recipeId);
 	$("input[name='date']").attr("value", date);
@@ -264,3 +280,25 @@ function getNameOfTheMonth(d){
 	month[11] = "December";
 	return month[d];
 }
+
+function showPageNumbers(n, current){
+	var nav = $("#pagination-nav").children("ul");
+	nav.empty();
+	var i;
+	var html = "";
+	for(i=0;i<n;i++){
+		if (i==current){
+			html += "<li class='active page-item'><a class='page-link'>"+(parseInt(i)+1)+"</a></li>";
+		}else{
+			html += "<li class='page-item'><a class='page-link'>"+(parseInt(i)+1)+"</a></li>"
+		}
+		
+	}
+	nav.append(html);
+}
+
+$("#pagination-nav").on("click", ".page-link", function() {
+	var page = $(this).text()-1;
+	var size = 16;
+	loadRecipes(page, size);
+})

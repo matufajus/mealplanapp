@@ -19,9 +19,9 @@
 				<table class="table table-bordered">
 					<thead class="thead-light">
 						<tr class="d-flex">
-							<th scope="col" class="col-sm-1"></th>
+							<th scope="col" class="w-20"></th>
 							<c:forEach var="mealType" items="${mealTypes}">
-								<th scope="col" class="col-sm-2 text-center">
+								<th scope="col" class="w-20 text-center">
 									${mealType.label}
 								</th>
 							</c:forEach>
@@ -30,13 +30,13 @@
 					<tbody>
 						<c:forEach var="date" items="${dates}" varStatus="status">
 							 <tr class="d-flex">
-							 	<td class="col-sm-1 text-center"><h3>${date }</h3></td>
+							 	<td class="w-20 text-center"><h3>${date }</h3></td>
 							 	<c:forEach var="mealType" items="${mealTypes}">
 							 		<c:set var="hasMeal" value="false"/>
 									<c:forEach var="meal" items="${meals}">	
 								 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
 								 			<c:set var="hasMeal" value="true"/>
-								 			<td class="col-sm-2 text-center" data-meal-type="${mealType}" data-date="${date}">
+								 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}">
 									 			${meal.recipe.title}
 									 			<div>
 									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;">
@@ -45,7 +45,7 @@
 								 		</c:if> 		
 							 		</c:forEach>
 							 		<c:if test="${hasMeal == false}">
-							 			<td class="col-sm-2 text-center" data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><i class="fas fa-plus-circle fa-3x py-4"></i></a></td>
+							 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><i class="fas fa-plus-circle fa-3x py-4"></i></a></td>
 							 		</c:if>
 								</c:forEach>
 						    </tr>
@@ -53,13 +53,21 @@
 					</tbody>
 				</table>
 			</div>
-			<div id="meal-recipes-container">	
+			<div id="plan-side-container">
+				<div id="meal-recipes-container">
+				</div>
+				<br/>
+				<nav id="pagination-nav" aria-label="Page navigation" class="d-none">
+				  <ul class="pagination justify-content-center">				    
+				  </ul>
+				</nav>
 			</div>
 			<form:form name="saveMeal" action="plan/createMeal" method="POST" modelAttribute="newMeal">
 				<input type="hidden" name="recipeId"/>		
 				<input type="hidden" name="date"/>		
 				<input type="hidden" name="mealType"/>		
 			</form:form>
+				
 		</div>
 	</div>
 	<%@ include file="footer.jsp"%>

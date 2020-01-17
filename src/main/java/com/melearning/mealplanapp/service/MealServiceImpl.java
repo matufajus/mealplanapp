@@ -2,6 +2,7 @@ package com.melearning.mealplanapp.service;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -10,6 +11,8 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,9 +50,17 @@ public class MealServiceImpl implements MealService{
 	}
 
 	@Override
-	public List<LocalDate> getDatesForMealPlan() {
-		return null;
+	public List<LocalDate> getDatesForMealPlan(int days) {
+		LocalDate startDate = LocalDate.now();
+		return getSpecificNumberOfDatesFrom(startDate, days);
 	}
 	
+	public static List<LocalDate> getSpecificNumberOfDatesFrom(LocalDate startDate, int days) { 
+			   
+	    return IntStream.iterate(0, i -> i + 1)
+	      .limit(days)
+	      .mapToObj(i -> startDate.plusDays(i))
+	      .collect(Collectors.toList()); 
+	}
 	
 }
