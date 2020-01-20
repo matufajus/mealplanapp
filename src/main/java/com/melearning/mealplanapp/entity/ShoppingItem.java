@@ -22,8 +22,8 @@ public class ShoppingItem {
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	@JoinColumn(name = "meal_id")
+	private Meal meal;
 	
 	@Column(name = "name")
 	private String name;
@@ -34,8 +34,6 @@ public class ShoppingItem {
 	@Column(name = "is_done")
 	private boolean done;
 	
-	@Column(name = "date")
-	private LocalDate date;
 
 	public int getId() {
 		return id;
@@ -45,9 +43,6 @@ public class ShoppingItem {
 		this.id = id;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	public String getName() {
 		return name;
@@ -73,27 +68,27 @@ public class ShoppingItem {
 		this.done = done;
 	}
 
-	public ShoppingItem(int id, User user, String name, String ammount, boolean isDone, LocalDate date) {
+
+	public ShoppingItem(int id, Meal meal, String name, String ammount, boolean done) {
 		this.id = id;
-		this.user = user;
+		this.meal = meal;
 		this.name = name;
 		this.ammount = ammount;
-		this.done = isDone;
-		this.date = date;
+		this.done = done;
 	}
 
 	public ShoppingItem() {
 	
 	}
 
-	public LocalDate getDate() {
-		return date;
+	public Meal getMeal() {
+		return meal;
 	}
 
-	public void setDate(LocalDate date) {
-		this.date = date;
+	public void setMeal(Meal meal) {
+		this.meal = meal;
 	}
-	
+
 	
 	
 	

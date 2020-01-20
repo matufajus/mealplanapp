@@ -55,7 +55,7 @@ public class PlanController {
 	public String showPlan(Model model, Authentication authentication) {
 		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
 		List<Meal> meals = mealService.getUserMealsFromToday(currentUser.getUserId());
-		List<ShoppingItem> shoppingList = shoppingService.getShoppingListFromToday(currentUser.getUserId());
+		List<ShoppingItem> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		Meal meal = new Meal();
 		model.addAttribute("meals", meals);
 		model.addAttribute("dates", mealService.getDatesForMealPlan(7));
@@ -73,14 +73,15 @@ public class PlanController {
 		LocalDate mealDate = LocalDate.parse(date);
 		Meal meal = new Meal(0, currentUser.getUser(), recipe, type, mealDate);
 		mealService.saveMeal(meal);
-		shoppingService.addMealIngredientsToShoppingList(currentUser.getUser(), recipe.getIngredients(), mealDate);
+		shoppingService.addMealIngredientsToShoppingList(meal);
 		return "redirect:/plan";
 	}
 	
 	@PostMapping("/updateShoppingItem")
 	public @ResponseBody String updateShoppingItem(@RequestParam(name = "name") String name, Authentication authentication){
 		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
-		shoppingService.updateShoppingItem(currentUser.getUserId(), name);
+		List<Meal> meals = mealService.getUserMealsFromToday(currentUser.getUserId());
+		shoppingService.updateShoppingItem(meals, name);
 		return "updated";
 	}
 }
