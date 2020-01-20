@@ -197,12 +197,14 @@ $('textarea').each(function () {
 $('select').selectpicker();
 
 $(".add-meal-button").click(function(){
+	$("td.table-success").removeClass("table-success");
+	$(this).parent().addClass("table-success");
 	var date = $(this).parent().data("date");
 	var mealType = $(this).parent().data("meal-type");
 	$("#pagination-nav").removeClass("d-none");
-	$("#meal-recipes-container").attr("data-date", date);
-	$("#meal-recipes-container").attr("data-meal-type", mealType);
-	
+	$("#meal-recipes-container").data("date", date);
+	$("#meal-recipes-container").data("meal-type", mealType);
+	$("#shopping-list-container").addClass("d-none");
 	loadRecipes();
 });
 
@@ -210,6 +212,8 @@ function loadRecipes(page, size){
 	var container = $("#meal-recipes-container");
 	var date = container.data("date");
 	var mealType = container.data("meal-type");
+	console.log(date);
+	console.log(mealType);
 	var formattedDate = new Date(date);
 	var d = formattedDate.getDate();
 	var m =  formattedDate.getMonth();

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.melearning.mealplanapp.dao.MealRepository;
 import com.melearning.mealplanapp.entity.Meal;
+import com.melearning.mealplanapp.entity.ShoppingItem;
 
 @Service
 public class MealServiceImpl implements MealService{
@@ -31,6 +32,7 @@ public class MealServiceImpl implements MealService{
 		return mealRepository.findAllByUserId(userId);
 	}
 	
+	@Override
 	public List<LocalDate> extractDatesFromMeals(List<Meal> meals){
 		
 		List<LocalDate> dates = new ArrayList<LocalDate>();
@@ -45,6 +47,7 @@ public class MealServiceImpl implements MealService{
 		return dates;
 	}
 	
+	@Override
 	public void saveMeal(Meal meal) {
 		mealRepository.save(meal);
 	}
@@ -55,12 +58,17 @@ public class MealServiceImpl implements MealService{
 		return getSpecificNumberOfDatesFrom(startDate, days);
 	}
 	
-	public static List<LocalDate> getSpecificNumberOfDatesFrom(LocalDate startDate, int days) { 
-			   
+	public static List<LocalDate> getSpecificNumberOfDatesFrom(LocalDate startDate, int days) { 		   
 	    return IntStream.iterate(0, i -> i + 1)
 	      .limit(days)
 	      .mapToObj(i -> startDate.plusDays(i))
 	      .collect(Collectors.toList()); 
 	}
+	
+	@Override
+	public List<Meal> getUserMealsFromToday(long userId) {
+		return mealRepository.findByUserIdAndDateAfter(userId, LocalDate.now().minusDays(1));
+	}
+
 	
 }

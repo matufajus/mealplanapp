@@ -1,5 +1,7 @@
 package com.melearning.mealplanapp.entity;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name ="shopping_item")
@@ -29,6 +33,9 @@ public class ShoppingItem {
 	
 	@Column(name = "is_done")
 	private boolean isDone;
+	
+	@Column(name = "date")
+	private LocalDate date;
 
 	public int getId() {
 		return id;
@@ -66,16 +73,25 @@ public class ShoppingItem {
 		this.isDone = isDone;
 	}
 
-	public ShoppingItem(int id, User user, String name, String ammount, boolean isDone) {
+	public ShoppingItem(int id, User user, String name, String ammount, boolean isDone, LocalDate date) {
 		this.id = id;
 		this.user = user;
 		this.name = name;
 		this.ammount = ammount;
 		this.isDone = isDone;
+		this.date = date;
 	}
 
 	public ShoppingItem() {
 	
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDate date) {
+		this.date = date;
 	}
 	
 	

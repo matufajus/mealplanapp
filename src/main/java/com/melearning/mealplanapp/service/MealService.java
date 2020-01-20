@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.melearning.mealplanapp.entity.Meal;
+import com.melearning.mealplanapp.entity.ShoppingItem;
 
 public interface MealService {
 	
@@ -17,4 +18,6 @@ public interface MealService {
 
 	public List<LocalDate> getDatesForMealPlan(int days);
 
+	List<Meal> getUserMealsFromToday(long userId);
+	
 }

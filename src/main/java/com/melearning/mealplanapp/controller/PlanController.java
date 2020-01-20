@@ -25,9 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
+import com.melearning.mealplanapp.entity.ShoppingItem;
 import com.melearning.mealplanapp.security.CustomUserDetails;
 import com.melearning.mealplanapp.service.MealService;
 import com.melearning.mealplanapp.service.RecipeService;
+import com.melearning.mealplanapp.service.ShoppingService;
 
 @Controller
 @RequestMapping("/plan")
@@ -39,6 +41,9 @@ public class PlanController {
 	@Autowired
 	RecipeService recipeService;
 	
+	@Autowired
+	ShoppingService shoppingService;
+	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
@@ -48,12 +53,14 @@ public class PlanController {
 	@GetMapping("")
 	public String showPlan(Model model, Authentication authentication) {
 		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
-		List<Meal> meals = mealService.getAllUserMeals(currentUser.getUserId());
+		List<Meal> meals = mealService.getUserMealsFromToday(currentUser.getUserId());
+		List<ShoppingItem> shoppingList = shoppingService.getShoppingListFromToday(currentUser.getUserId());
 		Meal meal = new Meal();
 		model.addAttribute("meals", meals);
 		model.addAttribute("dates", mealService.getDatesForMealPlan(7));
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("newMeal", meal);
+		model.addAttribute("shoppingList", shoppingList);
 		return "meal-plan";
 	}
 	
@@ -65,8 +72,9 @@ public class PlanController {
 		LocalDate mealDate = LocalDate.parse(date);
 		Meal meal = new Meal(0, currentUser.getUser(), recipe, type, mealDate);
 		mealService.saveMeal(meal);
-		
+		shoppingService.addMealIngredientsToShoppingList(currentUser.getUser(), recipe.getIngredients(), mealDate);
 		return "redirect:/plan";
 	}
+	
 
 }

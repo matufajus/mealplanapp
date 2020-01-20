@@ -16,7 +16,7 @@
 	<div class="container-fluid top-container">
 		<div class="row">
 			<div class="col">
-				<table class="table table-bordered">
+				<table class="table table-bordered table-striped">
 					<thead class="thead-light">
 						<tr class="d-flex">
 							<th scope="col" class="w-20"></th>
@@ -30,7 +30,7 @@
 					<tbody>
 						<c:forEach var="date" items="${dates}" varStatus="status">
 							 <tr class="d-flex">
-							 	<td class="w-20 text-center"><h3>${date }</h3></td>
+							 	<td class="w-20 text-center"><h3 class="py-4">${date }</h3></td>
 							 	<c:forEach var="mealType" items="${mealTypes}">
 							 		<c:set var="hasMeal" value="false"/>
 									<c:forEach var="meal" items="${meals}">	
@@ -53,7 +53,15 @@
 					</tbody>
 				</table>
 			</div>
-			<div id="plan-side-container">
+			<div id="plan-side-container" class="col-2">
+				<div id="shopping-list-container">
+					<h3>Shopping list:</h3>
+					<hr/>
+					<c:forEach var="item" items="${shoppingList}">
+						<div><i class="far fa-square"></i><span> ${item.name}: ${item.ammount }</span></div>
+<!-- 						<i class="far fa-check-square"></i> -->
+					</c:forEach>
+				</div>
 				<div id="meal-recipes-container">
 				</div>
 				<br/>
