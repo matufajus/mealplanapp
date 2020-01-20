@@ -1,4 +1,10 @@
-
+$(function () {
+  var token = $("meta[name='_csrf']").attr("content");
+  var header = $("meta[name='_csrf_header']").attr("content");
+  $(document).ajaxSend(function(e, xhr, options) {
+    xhr.setRequestHeader(header, token);
+  });
+});
 
 $(document).ready(function() {
   $('li.nav-item.active').removeClass('active');
@@ -305,4 +311,24 @@ $("#pagination-nav").on("click", ".page-link", function() {
 	var page = $(this).text()-1;
 	var size = 16;
 	loadRecipes(page, size);
+})
+
+$("#shopping-not-done").on("click", ".check-item", function(){
+	var item = $(this).parent("div");
+	var name = item.data("name");
+	$.post("plan/updateShoppingItem",{name: name}, function(){
+		item.children("i").removeClass("fa-square check-item").addClass("fa-check-square uncheck-item");
+		item.remove();
+		$("#shopping-done").append(item);
+	})
+})
+
+$("#shopping-done").on("click", ".uncheck-item", function(){
+	var item = $(this).parent("div");
+	var name = item.data("name");
+	$.post("plan/updateShoppingItem",{name: name}, function(){
+		item.children("i").removeClass("fa-check-square uncheck-item").addClass("fa-square check-item");
+		item.remove();
+		$("#shopping-not-done").append(item);
+	})
 })

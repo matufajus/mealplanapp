@@ -10,5 +10,7 @@ import com.melearning.mealplanapp.entity.ShoppingItem;
 public interface ShoppingRepository extends JpaRepository<ShoppingItem, Integer> {
 	
 	List<ShoppingItem> findByUserIdAndDateAfterOrderByName(long userId, LocalDate date);
+	
+	List<ShoppingItem> findByUserIdAndName(long userId, String name);
 
 }

@@ -50,6 +50,20 @@ public class ShoppingServiceImpl implements ShoppingService{
 		}
 		
 	}
+
+
+
+	@Override
+	public void updateShoppingItem(long userId, String name) {
+		List<ShoppingItem> items = shoppingRepository.findByUserIdAndName(userId, name);
+		for (ShoppingItem shoppingItem : items) {
+			if (!shoppingItem.isDone())
+				shoppingItem.setDone(true);
+			else shoppingItem.setDone(false);
+		}
+		shoppingRepository.saveAll(items);
+		
+	}
 	
 	
 }

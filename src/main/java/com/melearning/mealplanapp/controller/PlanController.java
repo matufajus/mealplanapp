@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealType;
@@ -76,5 +77,10 @@ public class PlanController {
 		return "redirect:/plan";
 	}
 	
-
+	@PostMapping("/updateShoppingItem")
+	public @ResponseBody String updateShoppingItem(@RequestParam(name = "name") String name, Authentication authentication){
+		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+		shoppingService.updateShoppingItem(currentUser.getUserId(), name);
+		return "updated";
+	}
 }

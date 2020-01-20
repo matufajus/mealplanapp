@@ -10,6 +10,9 @@
 <head>
 <%@ include file="header.jsp"%>
 <title></title>
+<meta name="_csrf" content="${_csrf.token}"/>
+<!-- default header name is X-CSRF-TOKEN -->
+<meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
@@ -57,10 +60,21 @@
 				<div id="shopping-list-container">
 					<h3>Shopping list:</h3>
 					<hr/>
-					<c:forEach var="item" items="${shoppingList}">
-						<div><i class="far fa-square"></i><span> ${item.name}: ${item.ammount }</span></div>
-<!-- 						<i class="far fa-check-square"></i> -->
-					</c:forEach>
+					<div id="shopping-not-done">				
+						<c:forEach var="item" items="${shoppingList}">
+							<c:if test="${!item.done}">
+								<div data-name="${item.name}"><i class="far fa-square check-item"></i> ${item.name}: ${item.ammount }</div>
+							</c:if>
+						</c:forEach>
+					</div>
+					<hr/>
+					<div id="shopping-done">
+						<c:forEach var="item" items="${shoppingList}">
+							<c:if test="${item.done}">
+								<div data-name="${item.name}"><i class="far fa-check-square uncheck-item"></i> ${item.name}: ${item.ammount }</div>
+							</c:if>
+						</c:forEach>
+					</div>				
 				</div>
 				<div id="meal-recipes-container">
 				</div>

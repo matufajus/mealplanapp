@@ -32,7 +32,7 @@ public class ShoppingItem {
 	private String ammount;
 	
 	@Column(name = "is_done")
-	private boolean isDone;
+	private boolean done;
 	
 	@Column(name = "date")
 	private LocalDate date;
@@ -66,11 +66,11 @@ public class ShoppingItem {
 	}
 
 	public boolean isDone() {
-		return isDone;
+		return done;
 	}
 
-	public void setDone(boolean isDone) {
-		this.isDone = isDone;
+	public void setDone(boolean done) {
+		this.done = done;
 	}
 
 	public ShoppingItem(int id, User user, String name, String ammount, boolean isDone, LocalDate date) {
@@ -78,7 +78,7 @@ public class ShoppingItem {
 		this.user = user;
 		this.name = name;
 		this.ammount = ammount;
-		this.isDone = isDone;
+		this.done = isDone;
 		this.date = date;
 	}
 

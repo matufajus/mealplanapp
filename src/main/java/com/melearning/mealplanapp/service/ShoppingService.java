@@ -14,6 +14,8 @@ public interface ShoppingService {
 
 	public List<ShoppingItem> getShoppingListFromToday(long userId);
 
+	public void updateShoppingItem(long userId, String name);
+
 	
 
 }
