@@ -5,8 +5,11 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +21,6 @@ import com.melearning.mealplanapp.dao.UserRepository;
 import com.melearning.mealplanapp.dto.UserDTO;
 import com.melearning.mealplanapp.entity.Role;
 import com.melearning.mealplanapp.entity.User;
-import com.melearning.mealplanapp.security.CustomUserDetails;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(userDTO.getUsername());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setEmail(userDTO.getEmail());
+		user.setPlanDays(7);
 
 		// give user default role of "user"
 		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
@@ -53,26 +56,23 @@ public class UserServiceImpl implements UserService {
 	public User findByUsername(String username) {
 		return userRepository.findByUsername(username);
 	}
-	
-	@Override
-	@Transactional
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		User user = userRepository.findByUsername(userName);
-		if (user == null) {
-			throw new UsernameNotFoundException("Invalid username or password.");
-		}
-		return new CustomUserDetails(user, mapRolesToAuthorities(user.getRoles()));
-//				new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-//				mapRolesToAuthorities(user.getRoles()));
-	}
-
-	private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-	}
 
 	@Override
 	public void save(User user) {
 		userRepository.save(user);
+	}
+	
+	@Override
+	public User getCurrentUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		return userRepository.findByUsername(currentPrincipalName);
+	}
+
+	@Override
+	public long getCurrentUserId() {
+		User user = getCurrentUser();
+		return user.getId();
 	}
 
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.melearning.mealplanapp.entity.User;
-import com.melearning.mealplanapp.security.CustomUserDetails;
 import com.melearning.mealplanapp.service.UserService;
 
 @Controller
@@ -21,18 +20,18 @@ public class SettingsController {
 	UserService userService;
 	
 	@GetMapping("")
-	public String displaySettings(Model model, Authentication authentication) {
-		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
-		int planDays = currentUser.getUser().getPlanDays();
+	public String displaySettings(Model model) {
+		int planDays = userService.getCurrentUser().getPlanDays();
 		model.addAttribute("planDays", planDays);
 		return "settings";
 	}
 	
 	@PostMapping("/changePlanDays")
-	public void changePlanDays(@RequestParam("planDays") int planDays, Authentication authentication) {
-		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
-		currentUser.getUser().setPlanDays(planDays);
-		userService.save(currentUser.getUser());
+	public String changePlanDays(@RequestParam("quantity") int planDays) {
+		User currentUser = userService.getCurrentUser();
+		currentUser.setPlanDays(planDays);
+		userService.save(currentUser);
+		return "redirect:/settings/";
 	}
 
 }

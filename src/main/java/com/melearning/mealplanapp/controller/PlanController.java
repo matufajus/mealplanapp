@@ -27,10 +27,10 @@ import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
-import com.melearning.mealplanapp.security.CustomUserDetails;
 import com.melearning.mealplanapp.service.MealService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.ShoppingService;
+import com.melearning.mealplanapp.service.UserService;
 
 @Controller
 @RequestMapping("/plan")
@@ -45,6 +45,9 @@ public class PlanController {
 	@Autowired
 	ShoppingService shoppingService;
 	
+	@Autowired
+	UserService userService;
+	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
@@ -52,9 +55,8 @@ public class PlanController {
 	}
 	
 	@GetMapping("")
-	public String showPlan(Model model, Authentication authentication) {
-		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
-		List<Meal> meals = mealService.getUserMealsFromToday(currentUser.getUserId());
+	public String showPlan(Model model) {
+		List<Meal> meals = mealService.getUserMealsFromToday(userService.getCurrentUserId());
 		List<ShoppingItem> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		Meal meal = new Meal();
 		model.addAttribute("meals", meals);
@@ -66,21 +68,19 @@ public class PlanController {
 	}
 	
 	@PostMapping("/createMeal")
-	public String createMeal(int recipeId, String date, String mealType, Authentication authentication) {
-		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
+	public String createMeal(int recipeId, String date, String mealType) {
 		Recipe recipe = recipeService.findById(recipeId);
 		MealType type = MealType.valueOf(mealType);
 		LocalDate mealDate = LocalDate.parse(date);
-		Meal meal = new Meal(0, currentUser.getUser(), recipe, type, mealDate);
+		Meal meal = new Meal(0, userService.getCurrentUser(), recipe, type, mealDate);
 		mealService.saveMeal(meal);
 		shoppingService.addMealIngredientsToShoppingList(meal);
 		return "redirect:/plan";
 	}
 	
 	@PostMapping("/updateShoppingItem")
-	public @ResponseBody String updateShoppingItem(@RequestParam(name = "name") String name, Authentication authentication){
-		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
-		List<Meal> meals = mealService.getUserMealsFromToday(currentUser.getUserId());
+	public @ResponseBody String updateShoppingItem(@RequestParam(name = "name") String name){
+		List<Meal> meals = mealService.getUserMealsFromToday(userService.getCurrentUserId());
 		shoppingService.updateShoppingItem(meals, name);
 		return "updated";
 	}

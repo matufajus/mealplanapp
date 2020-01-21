@@ -30,7 +30,6 @@ import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.KitchenProduct;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.exception.UniqueProductConstraintValidationException;
-import com.melearning.mealplanapp.security.CustomUserDetails;
 import com.melearning.mealplanapp.service.KitchenService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.UserService;
@@ -55,9 +54,8 @@ public class KitchenController {
 	}
 
 	@GetMapping("/showProducts")
-	public String showKitchen(@ModelAttribute("errorMessage") String errorMessage, Model model, Authentication authentication) {
-		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
-		List<KitchenProduct> products =  kitchenService.getAllProductsForUser(currentUser.getUserId());
+	public String showKitchen(@ModelAttribute("errorMessage") String errorMessage, Model model) {
+		List<KitchenProduct> products =  kitchenService.getAllProductsForUser(userService.getCurrentUserId());
 		model.addAttribute("products", products);
 		model.addAttribute("recipes", recipeService.getRecipesForUserProducts(products));
 		model.addAttribute("foodTypes", FoodType.values());
@@ -70,13 +68,12 @@ public class KitchenController {
 	
 	@PostMapping("/addProduct")
 	public String addProduct(@Valid @ModelAttribute("newProduct") KitchenProduct product, BindingResult bindingResult,
-			Authentication authentication, RedirectAttributes redirectAttrs) {
+			RedirectAttributes redirectAttrs) {
 		if (bindingResult.hasErrors()) {
 			System.err.println(bindingResult.toString());
 			return "kitchen";
 		}
-		CustomUserDetails currentUser = (CustomUserDetails) authentication.getPrincipal();
-		product.setUser(currentUser.getUser());
+		product.setUser(userService.getCurrentUser());
 		try {
 			kitchenService.addProduct(product);
 		} catch (UniqueProductConstraintValidationException e) {
