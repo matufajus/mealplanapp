@@ -59,6 +59,12 @@ public class ShoppingServiceImpl implements ShoppingService{
 		shoppingRepository.saveAll(items);
 		
 	}
+
+	@Override
+	public void removeMealIngredientsFromShoppingList(int mealId) {
+		shoppingRepository.deleteByMealId(mealId);
+		
+	}
 	
 	
 }

@@ -44,6 +44,7 @@
 									 			<div>
 									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;">
 									 			</div>
+									 			<a href="plan/deleteMeal?mealId=${meal.id}" class="btn btn-danger mt-1" style="font-size:100%;">Remove</a>
 								 			</td>
 								 		</c:if> 		
 							 		</c:forEach>

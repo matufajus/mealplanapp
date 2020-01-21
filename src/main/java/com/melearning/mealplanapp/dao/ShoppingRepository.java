@@ -14,4 +14,6 @@ public interface ShoppingRepository extends JpaRepository<ShoppingItem, Integer>
 	
 	List<ShoppingItem> findByNameAndMealIn(String name, List<Meal> meals);
 
+	public void deleteByMealId(int mealId);
+
 }

@@ -70,5 +70,10 @@ public class MealServiceImpl implements MealService{
 		return mealRepository.findByUserIdAndDateAfter(userId, LocalDate.now().minusDays(1));
 	}
 
+	@Override
+	public void deleteMeal(int mealId) {
+		mealRepository.deleteById(mealId);
+	}
+
 	
 }

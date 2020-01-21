@@ -84,4 +84,11 @@ public class PlanController {
 		shoppingService.updateShoppingItem(meals, name);
 		return "updated";
 	}
+	
+	@GetMapping("/deleteMeal")
+	public String deleteMeal(@RequestParam("mealId") int mealId) {
+		mealService.deleteMeal(mealId);
+		shoppingService.removeMealIngredientsFromShoppingList(mealId);
+		return "redirect:/plan";
+	}
 }

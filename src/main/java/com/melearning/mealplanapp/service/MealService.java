@@ -20,4 +20,6 @@ public interface MealService {
 
 	List<Meal> getUserMealsFromToday(long userId);
 	
+	public void deleteMeal(int mealId);
+	
 }

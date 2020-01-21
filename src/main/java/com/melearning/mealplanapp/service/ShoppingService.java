@@ -16,6 +16,6 @@ public interface ShoppingService {
 
 	public List<ShoppingItem> getShoppingListForMeals(List<Meal> meals);
 
-	
+	public void removeMealIngredientsFromShoppingList(int mealId);
 
 }
