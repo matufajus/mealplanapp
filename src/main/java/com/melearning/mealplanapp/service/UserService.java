@@ -7,8 +7,10 @@ import com.melearning.mealplanapp.entity.User;
 
 public interface UserService extends UserDetailsService{
 	
-	User findByUsername(String username);
+	public User findByUsername(String username);
 	
-	void save(UserDTO userDTO);
+	public void save(UserDTO userDTO);
+	
+	public void save(User user);
 
 }

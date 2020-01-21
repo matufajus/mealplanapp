@@ -23,9 +23,19 @@
     </ul>
     <ul class="navbar-nav ml-auto">
     	<security:authorize access="isAuthenticated()">
-		    <form:form class="form-inline" action="${pageContext.request.contextPath}/logout" method="POST">
-		       <input class="btn btn-primary" type="submit" value="Log out"/>
-		    </form:form>
+    		<li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          Account
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/settings/">Settings</a>
+		          <div class="dropdown-divider"></div>
+		          <form:form class="form-inline" action="${pageContext.request.contextPath}/logout" method="POST">
+			      	<input class="btn" type="submit" value="Log out"/>
+			  	  </form:form>
+		        </div>
+		      </li>
+		    
     </security:authorize>
     </ul>
   </div>

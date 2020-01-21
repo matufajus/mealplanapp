@@ -90,8 +90,9 @@
 				<input type="hidden" name="date"/>		
 				<input type="hidden" name="mealType"/>		
 			</form:form>
-				
 		</div>
+		<form:form action="">
+		</form:form>
 	</div>
 	<%@ include file="footer.jsp"%>
 </body>

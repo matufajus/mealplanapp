@@ -27,6 +27,9 @@ public class User {
 	joinColumns = @JoinColumn(name = "user_id"), 
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<Role> roles;
+	
+	@Column(name="plan_days")
+	private int planDays;
 
 	public User() {
 	}
@@ -83,6 +86,14 @@ public class User {
 
 	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
+	}
+
+	public int getPlanDays() {
+		return planDays;
+	}
+
+	public void setPlanDays(int planDays) {
+		this.planDays = planDays;
 	}
 
 }
