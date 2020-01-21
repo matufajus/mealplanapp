@@ -34,7 +34,6 @@ import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.service.FileService;
-import com.melearning.mealplanapp.service.IngredientService;
 import com.melearning.mealplanapp.service.RecipeService;
 
 
