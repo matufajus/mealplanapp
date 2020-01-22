@@ -27,6 +27,7 @@ import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
+import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.service.MealService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.ShoppingService;
@@ -56,11 +57,12 @@ public class PlanController {
 	
 	@GetMapping("")
 	public String showPlan(Model model) {
-		List<Meal> meals = mealService.getUserMealsFromToday(userService.getCurrentUserId());
+		User user = userService.getCurrentUser();
+		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), user.getPlanDays());
 		List<ShoppingItem> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		Meal meal = new Meal();
 		model.addAttribute("meals", meals);
-		model.addAttribute("dates", mealService.getDatesForMealPlan(7));
+		model.addAttribute("dates", mealService.getDatesForMealPlan(user.getPlanDays()));
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("newMeal", meal);
 		model.addAttribute("shoppingList", shoppingList);
@@ -80,7 +82,8 @@ public class PlanController {
 	
 	@PostMapping("/updateShoppingItem")
 	public @ResponseBody String updateShoppingItem(@RequestParam(name = "name") String name){
-		List<Meal> meals = mealService.getUserMealsFromToday(userService.getCurrentUserId());
+		User user = userService.getCurrentUser();
+		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), user.getPlanDays());
 		shoppingService.updateShoppingItem(meals, name);
 		return "updated";
 	}

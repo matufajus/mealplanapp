@@ -18,7 +18,7 @@ public interface MealService {
 
 	public List<LocalDate> getDatesForMealPlan(int days);
 
-	List<Meal> getUserMealsFromToday(long userId);
+	List<Meal> getUserMealsFromTodayUntil(long userId, int planDays);
 	
 	public void deleteMeal(int mealId);
 	

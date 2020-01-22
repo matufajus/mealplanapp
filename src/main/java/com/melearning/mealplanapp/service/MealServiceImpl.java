@@ -66,8 +66,8 @@ public class MealServiceImpl implements MealService{
 	}
 	
 	@Override
-	public List<Meal> getUserMealsFromToday(long userId) {
-		return mealRepository.findByUserIdAndDateAfter(userId, LocalDate.now().minusDays(1));
+	public List<Meal> getUserMealsFromTodayUntil(long userId, int planDays) {
+		return mealRepository.findByUserIdAndDateAfterAndDateBefore(userId, LocalDate.now().minusDays(1), LocalDate.now().plusDays(planDays));
 	}
 
 	@Override

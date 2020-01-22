@@ -25,7 +25,7 @@
     	<security:authorize access="isAuthenticated()">
     		<li class="nav-item dropdown">
 		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-		          Account
+		          <security:authentication property="name"/>
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 		          <a class="dropdown-item" href="${pageContext.request.contextPath}/settings/">Settings</a>

@@ -56,6 +56,9 @@
 						</c:forEach>
 					</tbody>
 				</table>
+				<div class="m-4">
+					Want to make a plan for less or even more days? <a href="${pageContext.request.contextPath}/settings/">Click here</a>.
+				</div>
 			</div>
 			<div id="plan-side-container" class="col-2">
 				<div id="shopping-list-container">
@@ -91,8 +94,6 @@
 				<input type="hidden" name="mealType"/>		
 			</form:form>
 		</div>
-		<form:form action="">
-		</form:form>
 	</div>
 	<%@ include file="footer.jsp"%>
 </body>

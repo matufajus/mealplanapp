@@ -11,6 +11,6 @@ public interface MealRepository extends JpaRepository<Meal, Integer>{
 	
 	List<Meal> findAllByUserId(long userId);
 	
-	List<Meal> findByUserIdAndDateAfter(long userId, LocalDate date);
+	List<Meal> findByUserIdAndDateAfterAndDateBefore(long userId, LocalDate startDate, LocalDate endDate);
 
 }
