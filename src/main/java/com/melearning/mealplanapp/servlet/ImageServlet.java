@@ -15,12 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 @WebServlet("/recipeImages/*")
 public class ImageServlet extends HttpServlet{
 	
-	@Value("${app.upload.dir}")
-	public String fileDir;
-	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String filename = request.getPathInfo().substring(1);
-        File file = new File("fileDir", filename);
+        File file = new File("/mealPlanApp/recipeImages/", filename);
         response.setHeader("Content-Type", getServletContext().getMimeType(filename));
         response.setHeader("Content-Length", String.valueOf(file.length()));
         response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
