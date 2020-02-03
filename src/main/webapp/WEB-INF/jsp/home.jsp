@@ -13,7 +13,7 @@
 <body>
 	<%@ include file="navbar.jsp"%>
 	<div class="top-container">
-		<h1>Hello</h1>
+		<h1>Sveiki</h1>
 		<security:authorize access="hasRole('ADMIN')">
 			<p>You are authorized as an admin</p>
 		</security:authorize>

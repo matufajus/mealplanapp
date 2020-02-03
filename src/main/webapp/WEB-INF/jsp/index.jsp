@@ -10,12 +10,12 @@
 		<title></title>
 	</head>
 	<body>
-		<h1>Hello</h1>
+		<h1>Sveiki</h1>
 		<security:authorize access="isAnonymous()">
-			<a href="${pageContext.request.contextPath}/showLogin"> Login</a>
+			<a href="${pageContext.request.contextPath}/showLogin"> Prisijungti</a>
 			<br>
 			<a href="${pageContext.request.contextPath}/register/showRegistrationForm">
-				Register
+				Registruotis
 			</a>
 		</security:authorize>
 		<%@ include file="footer.jsp" %>

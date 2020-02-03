@@ -1,10 +1,10 @@
 package com.melearning.mealplanapp.entity;
 
 public enum MealType {
-	BREAKFAST("Breakfast"),
-	LUNCH("Lunch"),
-	DINNER("Dinner"),
-	SNACKS("Snacks");
+	BREAKFAST("Pusryčiai"),
+	LUNCH("Pietūs"),
+	DINNER("Vakarienė"),
+	SNACKS("Užkandžiai");
 	
 	public final String label;
 	

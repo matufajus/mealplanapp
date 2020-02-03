@@ -15,40 +15,40 @@
 				  <div class="card-header">
 				    <ul class="nav nav-tabs card-header-tabs">
 				      <li class="nav-item">
-				        <a class="nav-link active" href="${pageContext.request.contextPath}/showLogin">Login</a>
+				        <a class="nav-link active" href="${pageContext.request.contextPath}/showLogin">Prisijungti</a>
 				      </li>
 				      <li class="nav-item">
 				        <a class="nav-link" href="${pageContext.request.contextPath}/register/showRegistrationForm">
-				        Register</a>
+				        Registruotis</a>
 				      </li>
 				    </ul>
 				  </div>
 				  <div class="card-body">
 				  		<c:if test="${param.error == null && param.logout == null}">
-				    		<h5 class="card-title">Hello!</h5>
+				    		<h5 class="card-title">Sveiki!</h5>
 				    	</c:if>
 				    	<form:form action="${pageContext.request.contextPath}/authenticateUser"
 						method="POST">
 						
 						<c:if test="${param.error != null}">
-							<h5 class="card-title">Incorrect username or password</h5>
+							<h5 class="card-title">Neteisingas vartotojo vardas arba slaptažodis</h5>
 						</c:if>
 						<c:if test="${param.logout != null}">
-							<h5 class="card-title">You have been logged out</h5>
+							<h5 class="card-title">Atsijungėte.</h5>
 						</c:if>
 						<div class="form-group">
-							<label for="usernameInput">Username</label>
+							<label for="usernameInput">Vartotojo vardas</label>
 							<input type="text" name ="username" class="form-control" 
-							id="usernameInput" placeholder="Enter username"
+							id="usernameInput" placeholder="Įveskite vartotojo vardą"
 							required>
 						</div>
 						<div class="form-group">
-							<label for="passwordInput">Password</label>
+							<label for="passwordInput">Slaptažodis</label>
 							<input type="password" name="password" class="form-control" 
-							id="passwordInput" placeholder="Enter password"
+							id="passwordInput" placeholder="Įveskite slaptažodį"
 							required>
 						</div>
-						<input class="btn btn-primary"  type="submit" value="Log in"/>
+						<input class="btn btn-primary"  type="submit" value="Prisijungti"/>
 					</form:form>
 				  </div>
 				</div>	

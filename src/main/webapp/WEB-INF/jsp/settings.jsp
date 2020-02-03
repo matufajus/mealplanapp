@@ -17,12 +17,12 @@
 <body>
 	<%@ include file="navbar.jsp"%>
 	<div class="container-fluid top-container">
-		<h2>Settings:</h2>
+		<h2>Nustatymai:</h2>
 		<div class="row p-5">
 			<form:form action="changePlanDays" method="POST">
-				<label>Choose the number of how many days in advance you want to plan your meals:</label>
+				<label>Pasirinkite kelių dienų maisto planą norite sudaryti:</label>
 				<input type="number" name="quantity" min="1" max="31" value="${planDays}">
-  				<button class="btn btn-primary"  type="submit">Save</button>
+  				<button class="btn btn-primary"  type="submit">Išsaugoti</button>
 			</form:form>
 		</div>
 	</div>

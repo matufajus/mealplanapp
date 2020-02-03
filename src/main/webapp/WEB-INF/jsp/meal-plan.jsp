@@ -44,7 +44,7 @@
 									 			<div>
 									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;">
 									 			</div>
-									 			<a href="plan/deleteMeal?mealId=${meal.id}" class="btn btn-danger mt-1" style="font-size:100%;">Remove</a>
+									 			<a href="plan/deleteMeal?mealId=${meal.id}" class="btn btn-danger mt-1" style="font-size:100%;">Pašalinti</a>
 								 			</td>
 								 		</c:if> 		
 							 		</c:forEach>
@@ -57,12 +57,12 @@
 					</tbody>
 				</table>
 				<div class="m-4">
-					Want to make a plan for less or even more days? <a href="${pageContext.request.contextPath}/settings/">Click here</a>.
+					Nori sudaryti planą mažiau arba daugiau dienų? <a href="${pageContext.request.contextPath}/settings/">Nustatymai</a>.
 				</div>
 			</div>
 			<div id="plan-side-container" class="col-2">
 				<div id="shopping-list-container">
-					<h3>Shopping list:</h3>
+					<h3>Pirkinių sąrašas:</h3>
 					<hr/>
 					<div id="shopping-not-done">				
 						<c:forEach var="item" items="${shoppingList}">

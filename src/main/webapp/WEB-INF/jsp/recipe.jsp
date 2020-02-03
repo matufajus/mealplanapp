@@ -8,6 +8,7 @@
 		<title></title>
 	</head>
 	<body>
+		<%@ include file="navbar.jsp"%>
 		<div class="container-fluid">
 			<h1>${recipe.title}</h1>
 			<div class="row">

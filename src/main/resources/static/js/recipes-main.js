@@ -10,6 +10,10 @@ $(document).ready(function() {
   $('li.nav-item.active').removeClass('active');
   $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
   
+  if (location.pathname.startsWith("/recipe/")){
+	  $('a[href="/recipe/list"]').closest('li').addClass('active'); 
+  }
+  
   if (location.pathname.startsWith("/recipe/list")){
 	  var selectedTypes = $(".selectedMealType");
 	  var checkBoxes = $("input[name='type'");
@@ -239,7 +243,7 @@ function loadRecipes(page, size){
 			showPageNumbers(data.totalPages, page);
 			container.empty();
 			container.parent().attr("class", "col-6");
-			var html = "<h2>Select meal for "+mealType.toLowerCase()+" on "+month + " " + d +":</h2>" +
+			var html = "<h2>Pasirinkti patiekalą " +month + " " + d +" dienai (" +translateMealType(mealType.toLowerCase())+"):</h2>" +
 					"<div class='row'>";
 	        $.each(data.content, function(i, recipe) {
 	        	if ((i != 0) && (i % 4 == 0)){
@@ -257,7 +261,7 @@ function loadRecipes(page, size){
 	        container.append(html);
 	        },
 	    erroe: function(){
-	    	console.log("Failed to retrieve recipes");
+	    	console.log("Nepavyko įkelti receptų");
 	    }
 	})
 }
@@ -276,19 +280,34 @@ $( "#meal-recipes-container" ).on("click", ".choose-meal", function() {
 
 function getNameOfTheMonth(d){
 	var month = new Array();
-	month[0] = "January";
-	month[1] = "February";
-	month[2] = "March";
-	month[3] = "April";
-	month[4] = "May";
-	month[5] = "June";
-	month[6] = "July";
-	month[7] = "August";
-	month[8] = "September";
-	month[9] = "October";
-	month[10] = "November";
-	month[11] = "December";
+	month[0] = "Sausio";
+	month[1] = "Vasario";
+	month[2] = "Kovo";
+	month[3] = "Balandžio";
+	month[4] = "Gegužės";
+	month[5] = "Birželio";
+	month[6] = "Liepos";
+	month[7] = "Rugpjūčio";
+	month[8] = "Rugsėjo";
+	month[9] = "Spalio";
+	month[10] = "Lapkričio";
+	month[11] = "Gruodžio";
 	return month[d];
+}
+
+function translateMealType(eng){
+	switch(eng) {
+	  case "breakfast":
+	    return "pusryčiams";;
+	  case "lunch":
+	    return "pietums";;
+	  case "dinner":
+		return "vakarienei";;
+	  case "snacks":
+		return "užkandžiams";
+	  default:
+	    return "";
+	}
 }
 
 function showPageNumbers(n, current){

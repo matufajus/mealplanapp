@@ -9,30 +9,31 @@
 		<title></title>
 	</head>
   <body>
+  <%@ include file="navbar.jsp"%>
 	<div class="container top-container">
 		<c:if test="${recipe.id eq 0}">
-			<h1>Create recipe</h1>
+			<h1>Sukurti receptą</h1>
 		</c:if>
 		<c:if test="${recipe.id ne 0}">
-			<h1>Edit recipe</h1>
+			<h1>Redaguoti receptą</h1>
 		</c:if>
 	 	<form:form action="saveRecipe" cssClass="form-horizontal"
       method="post" modelAttribute="recipe" enctype="multipart/form-data">
       	<form:hidden path="id" />
       	<form:hidden path="image" />
 	      	<div class=form-group>
+	      	  	 <label for="imageFile">Paveikslėlis turi būti nedidesnis nei 128KB</label>
 	      		<form:input type = "file" class="form-control" path="imageFile" id="recipe-image-input"/>
 	        </div>
 	        <c:if test="${recipe.image ne null}">
-	        	<img id="recipe-form-image" src="${recipe.image}" alt="Image cannot be loaded"/>
+	        	<img id="recipe-form-image" src="${recipe.image}" alt="Paveikėlėlis nerastas"/>
 	        </c:if>
 		  <div class="form-group">
-		    <label for="title">Title</label>
 	    	<form:input type="text" class="form-control" path="title" required="true"/>
 		  	<form:errors path="title" class="alert-danger"/>
 		  </div>
 		  <div class="form-group">
-		  	Meal type:
+		  	Patiekalo tipas:
             <form:select path="mealTypes" class="selectpicker" multiple="multiple" data-live-search="true" required="true">
 			  <form:options items="${mealTypes}" itemLabel="label"/>
 			</form:select>
@@ -40,13 +41,13 @@
 		  </div>
 		  <div class="row">
 		  	<div id="ingredient-container" class ="col">
-		  	  <label for="ingredients">Ingredients</label>
+		  	  <label for="ingredients">Ingredientai</label>
 		  	  <div class="row">
 		  	  	<div class="col-4">
-		  	  		Quantity
+		  	  		Kiekis
 		  	  	</div>
 		  	  	<div class="col-4">
-		  	  		Name
+		  	  		Pavadinimas
 		  	  	</div>
 		  	  </div>
 			  <c:forEach var="ingredient" items="${recipe.ingredients}" varStatus="status">
@@ -65,11 +66,11 @@
 				<div id ="add-ingredient-container"></div>
 				<form:errors path="ingredients" class="alert-info"/>
 				<br/>
-				<button id="add-ingredient-button" type="button">Add</button>
+				<button id="add-ingredient-button" type="button">Pridėti</button>
 			  	<br/><br/>
 		  	</div>
 		  	<div id="preparation-container" class ="col">
-		  		<label for="preparations">Preparation:</label>
+		  		<label for="preparations">Paruošimo būdas:</label>
 		  		<c:forEach var="preparation" items="${recipe.preparations}" varStatus="status">
 		  			<div id ="preparation-${status.index}" class ="preparation-container row form-group">
 		  				<p class= "preparation-index col-1">${status.index+1}</p>
@@ -82,14 +83,14 @@
 		  		<div id ="add-preparation-container"></div>
 		  		<form:errors path="preparations" class="alert-info"/>
 				<br/>
-				<button id="add-preparation-button" type="button">Add</button>
+				<button id="add-preparation-button" type="button">Pridėti</button>
 		  	</div>
 		  </div>
 		  
-		  <form:button type="submit" class="btn btn-primary">Save</form:button>
-	  		<a href="javascript:history.back()" class="btn btn-secondary">Cancel</a>
+		  <form:button type="submit" class="btn btn-primary">Išsaugoti</form:button>
+	  		<a href="javascript:history.back()" class="btn btn-secondary">Atšaukti</a>
 		  <c:if test="${recipe.id ne 0 }">
-		  	<a href="#deleteRecipeModal" class="btn btn-danger" data-toggle="modal">Delete</a>
+		  	<a href="#deleteRecipeModal" class="btn btn-danger" data-toggle="modal">Ištrinti</a>
 		  </c:if>
 		  
 		</form:form>
@@ -100,17 +101,17 @@
 	  <div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <h5 class="modal-title">Confirm</h5>
+	        <h5 class="modal-title">Ištrynimo patvirtinimas</h5>
 	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 	          <span aria-hidden="true">&times;</span>
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	        <p>Are you sure you want to delete this recipe?</p>
+	        <p>Ar tikrai norite ištrinti šį receptą?</p>
 	      </div>
 	      <div class="modal-footer">
-	        <a href="delete?recipeId=${recipe.id}" class="btn btn-danger">Delete</a>
-	        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+	        <a href="delete?recipeId=${recipe.id}" class="btn btn-danger">Ištrinti</a>
+	        <button type="button" class="btn btn-primary" data-dismiss="modal">Atgal</button>
 	      </div>
 	    </div>
 	  </div>

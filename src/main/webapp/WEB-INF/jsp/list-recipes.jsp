@@ -24,14 +24,14 @@
 	                    		<c:forEach var="mealType" items="${mealTypes}">
 	                    			<input type="checkbox" name="type" value="${mealType}"> <label class="text-light">${mealType.label}</label> <br/>
 	                    		</c:forEach>
-                    			<input type="submit" class = "btn btn-primary" value="Search" />
+                    			<input type="submit" class = "btn btn-primary" value="Ieškoti" />
 	                    	</form>
 		                </div>
 		            </div>
 	        	</div>
 				<div class="col bg-light top-container pl-5">
 					<security:authorize access="hasRole('ADMIN')">
-						<a id="add-recipe-link" href="showForm"><i class="fas fa-plus-circle fa-2x"></i> Add new recipe</a>
+						<a id="add-recipe-link" href="showForm"><i class="fas fa-plus-circle fa-2x"></i> Pridėti naują receptą</a>
 					</security:authorize>
 					<div class="row">
 						<c:set var = "i" scope = "page" value = "0"/>
