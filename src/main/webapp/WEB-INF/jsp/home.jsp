@@ -12,10 +12,13 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div class="top-container">
+	<div class="top-container mx-auto" style="width:80%;">
+	  	<img src="/images/calendar.jpg" style="width:100%;">
+		
 		<h1>Sveiki</h1>
+		
 		<security:authorize access="hasRole('ADMIN')">
-			<p>You are authorized as an admin</p>
+			<p>Jūs naudojatės administratoriaus teisėmis</p>
 		</security:authorize>
 	</div>
 	<%@ include file="footer.jsp"%>

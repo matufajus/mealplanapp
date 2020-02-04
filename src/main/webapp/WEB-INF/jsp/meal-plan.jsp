@@ -19,7 +19,7 @@
 	<div class="container-fluid top-container">
 		<div class="row">
 			<div class="col">
-				<table class="table table-bordered table-striped">
+				<table id="plan" class="table table-bordered table-striped">
 					<thead class="thead-light">
 						<tr class="d-flex">
 							<th scope="col" class="w-20"></th>
@@ -33,30 +33,38 @@
 					<tbody>
 						<c:forEach var="date" items="${dates}" varStatus="status">
 							 <tr class="d-flex">
-							 	<td class="w-20 text-center"><h3 class="py-4">${date }</h3></td>
+							 	<td class="w-20 text-center"><h3 class="py-0">
+							 		<fmt:parseDate  value="${date}"  type="date" pattern="yyyy-MM-dd" var="parsedDate" />
+									<fmt:formatDate value="${parsedDate}" type="date" pattern="MM.dd E" var="stdDatum" />
+									${stdDatum}
+							 	</h3></td>
 							 	<c:forEach var="mealType" items="${mealTypes}">
 							 		<c:set var="hasMeal" value="false"/>
 									<c:forEach var="meal" items="${meals}">	
 								 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
 								 			<c:set var="hasMeal" value="true"/>
 								 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}">
-									 			${meal.recipe.title}
-									 			<div>
-									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;">
-									 			</div>
-									 			<a href="plan/deleteMeal?mealId=${meal.id}" class="btn btn-danger mt-1" style="font-size:100%;">Pašalinti</a>
+								 				<a class="remove-recipe" href="plan/deleteMeal?mealId=${meal.id}" style="font-size:100%;">&#10006;</a>
+									 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" 
+									 				data-content="<div class='recipe-thmbnl'><img src='${meal.recipe.image}'></div>">
+													${meal.recipe.title}
+												</p>
+<!-- 									 			<div> -->
+<%-- 									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;"> --%>
+<!-- 									 			</div> -->
 								 			</td>
 								 		</c:if> 		
 							 		</c:forEach>
 							 		<c:if test="${hasMeal == false}">
-							 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><i class="fas fa-plus-circle fa-3x py-4"></i></a></td>
+							 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><i class="fas fa-plus-circle fa-2x py-0"></i></a></td>
 							 		</c:if>
 								</c:forEach>
 						    </tr>
 						</c:forEach>
 					</tbody>
 				</table>
-				<div class="m-4">
+				<button class="btn btn-primary m-2" onclick="printPlan()">Spausdinti planą</button>
+				<div class="link-to-settings m-4">
 					Nori sudaryti planą mažiau arba daugiau dienų? <a href="${pageContext.request.contextPath}/settings/">Nustatymai</a>.
 				</div>
 			</div>
@@ -78,7 +86,8 @@
 								<div data-name="${item.name}"><i class="far fa-check-square uncheck-item"></i> ${item.name}: ${item.ammount }</div>
 							</c:if>
 						</c:forEach>
-					</div>				
+					</div>
+					<button class="btn btn-primary m-2" onclick="printShoppingList()">Spausdinti pirkinių sąrašą</button>				
 				</div>
 				<div id="meal-recipes-container">
 				</div>

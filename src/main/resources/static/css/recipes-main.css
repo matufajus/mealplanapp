@@ -30,6 +30,10 @@ h2{
 	font-size: 2vw !important;
 }
 
+h3{
+	font-size: 2vw !important;
+}
+
 
 #login-container{
 	max-width: 400px;
@@ -98,4 +102,106 @@ hr {
 
 #plan-side-container{
 	background-color:#B6BFC4;
+}
+
+.remove-recipe{
+  display: block;
+  float: right;
+  margin-left: 5px;
+  text-align: center;
+  vertical-align: top;
+  font-style: normal;
+  background-color: #eee;
+  color: #888;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+
+}
+
+#landing-cover{
+	background-image: url("/images/fridge.jpg");
+	height: 100vh;
+	background-size: cover;
+	background-position: left top;
+}
+
+#scroll-down-link{
+	width: 100%;
+	position: absolute; 
+	bottom: 3%;
+	text-align: center;
+	-webkit-animation:bounce 1s infinite;
+}
+
+ @-webkit-keyframes bounce {
+      0%       { bottom:5px; }
+      25%, 75% { bottom:15px; }
+      50%      { bottom:20px; }
+      100%     {bottom: 2px;}
+    }
+
+#scroll-down-link img{
+	width: 50px;
+	fill:white;
+}
+
+html{
+	scroll-behavior: smooth;
+}
+
+#landing-page-login{
+	position: absolute; 
+	margin-left:70vw;
+	margin-top:30vh;
+	background: rgba(255, 255, 255, 0.3);
+	border-radius:10px; 
+	padding: 10px;
+	width: 20vw;
+}
+
+#landing-page-login span{
+	font-size: 3vh;
+	
+}
+
+#landing-page-login a:hover{
+	font-weight: bold;
+	text-decoration:none;
+}
+
+#landing-page-title{
+	position: absolute; 
+	margin-left:5vw;
+	margin-top:4vh;
+	color:white;
+/* 	background: rgba(76, 175, 80, 0.3); */
+	border-radius:10px; 
+	padding:10px;
+}
+#landing-page-title h2{
+	margin-top:5vh;
+	line-height:15vh;
+}
+#reasonsToPlan{
+	background-image:url("/images/notebook-croped-top.jpg");
+	height:100vh;
+	background-size: contain;
+	background-position: center;
+}
+
+#reasonsToPlan div{
+	font-family: 'Caveat', cursive;
+	position: absolute; 
+	margin-left:32vw;
+	margin-top:7vh;
+	width: 20vw;
+}
+
+#reasonsToPlan div h2{
+	font-weight: bold;
+}
+
+#reasonsToPlan div a h2{
+	color:black;
 }

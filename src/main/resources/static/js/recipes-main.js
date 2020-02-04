@@ -1,3 +1,18 @@
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();   
+});
+
+//$(document).on('click', function (e) {
+//    $('[data-toggle="popover"],[data-original-title]').each(function () {
+//        //the 'is' for buttons that trigger popups
+//        //the 'has' for icons within a button that triggers a popup
+//        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {                
+//            (($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false  // fix for BS 3.3.6
+//        }
+//
+//    });
+//});
+
 $(function () {
   var token = $("meta[name='_csrf']").attr("content");
   var header = $("meta[name='_csrf_header']").attr("content");
@@ -351,3 +366,33 @@ $("#shopping-done").on("click", ".uncheck-item", function(){
 		$("#shopping-not-done").append(item);
 	})
 })
+
+function printPlan()
+{       
+        //hide unnecessary stuff
+        $("#plan-side-container").hide();
+        $(".remove-recipe").hide();
+        $(".link-to-settings").hide();
+        $(".btn").hide();
+        //Print Page
+        window.print();
+        //Restore orignal HTML
+        location.reload();
+}
+
+function printShoppingList()
+{       
+        //hide unnecessary stuff
+        $("#plan").hide();
+        $(".remove-recipe").hide();
+        $(".link-to-settings").hide();
+        $(".btn").hide();
+        
+        $("#plan-side-container").removeClass("col-2");
+        $("#plan-side-container").css("position", "absolute");
+        
+        //Print Page
+        window.print();
+        //Restore orignal HTML
+        location.reload();
+}
