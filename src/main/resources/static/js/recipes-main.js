@@ -396,3 +396,4 @@ function printShoppingList()
         //Restore orignal HTML
         location.reload();
 }
+

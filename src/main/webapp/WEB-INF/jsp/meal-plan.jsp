@@ -20,11 +20,11 @@
 		
 		<div class="row">
 			<div class="col">
-			<div class="link-to-settings m-4">
-			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settingsModal">
-				Nustatymai
-			</button>
-		</div>
+				<div class="link-to-settings m-4">
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settingsModal">
+						Nustatymai
+					</button>
+				</div>
 				<c:if test="${planStyle == 'table' }">
 					<%@ include file="plan-table.jsp"%>
 				</c:if>

@@ -12,7 +12,7 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div class="top-container mx-auto" style="width:80%;">
+	<div class="top-container mx-auto" style="width:70%;">
 	  	<img src="/images/calendar.jpg" style="width:100%;">
 		
 		<h1>Sveiki</h1>

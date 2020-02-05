@@ -28,8 +28,8 @@
 		          <security:authentication property="name"/>
 		        </a>
 		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/settings/">Nustatymai</a>
-		          <div class="dropdown-divider"></div>
+<%-- 		          <a class="dropdown-item" href="${pageContext.request.contextPath}/settings/">Nustatymai</a> --%>
+<!-- 		          <div class="dropdown-divider"></div> -->
 		          <form:form class="form-inline" action="${pageContext.request.contextPath}/logout" method="POST">
 			      	<input class="btn" type="submit" value="Atsijungti"/>
 			  	  </form:form>

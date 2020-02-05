@@ -9,12 +9,13 @@
 	</head>
 	<body>
 		<%@ include file="navbar.jsp"%>
-		<div class="container-fluid">
-			<h1>${recipe.title}</h1>
+		<div id="recipe-container" class="container top-container">			
 			<div class="row">
-				<div class="col-4">
-					<img id = "recipe-image" src = ${recipe.image}>
-					<br><br>
+				<div class="col-6">
+					<img id="recipe-image" src="${recipe.image}">
+				</div>
+				<div class="col-6">
+					<h2>${recipe.title}</h2>
 					<c:forEach var="ingredient" items="${recipe.ingredients}">
 						<div class = "row">
 							<div class = "col">
@@ -26,22 +27,26 @@
 						</div>
 					</c:forEach>
 		 		</div>
+		 	</div>
+		 	<div class="row">
 		 		<div class="col">
-		 			<c:set var = "i" scope = "page" value = "1"/>
 		 			<br>
-		 			<c:forEach var="preparation" items="${recipe.preparations}">
+		 			<c:forEach var="preparation" items="${recipe.preparations}" varStatus="i">
 		 				<div class = "row">
 		 					<div class = "col-1">
-		 						<c:out value="${i}"/>
+		 						<c:out value="${i.index+1}"/>
 		 					</div>
-		 					<div class = "col-8">
+		 					<div class = "col-11">
 		 						${preparation.description}
 		 					</div>
-		 					<c:set var="i" value="${i + 1}" scope="page"/>
 		 				</div>
 		 			</c:forEach>
 		 		</div>
 	 		</div>
+	 		<br>
+			<security:authorize access="hasRole('ADMIN')">
+				<a class="btn btn-primary" href="updateForm?recipeId=${recipe.id}">Redaguoti</a>
+			</security:authorize>
  		</div>
 		<%@ include file="footer.jsp" %>
 	</body>

@@ -15,7 +15,12 @@
 			<div class="row">
 				<div class="col-sm-auto px-5 bg-secondary min-vh-100">
 		            <div class="py-2 sticky-top flex-grow-1">
-		                <div class="nav flex-sm-column top-container pt-2">		                 
+		                <div class="nav flex-sm-column top-container pt-2">	
+		                
+		                	<security:authorize access="hasRole('ADMIN')">
+								<a id="add-recipe-link" href="showForm"><i class="fas fa-plus-circle fa-2x mr-2"></i> Pridėti naują receptą</a>
+							</security:authorize>
+		                	                 
 		                    <c:forEach var="selectedMealType" items="${selectedMealTypes}">
 		                   	 <input type="hidden" class="selectedMealType" value="${selectedMealType}">
 		                    </c:forEach>
@@ -29,31 +34,20 @@
 		                </div>
 		            </div>
 	        	</div>
-				<div class="col bg-light top-container pl-5">
-					<security:authorize access="hasRole('ADMIN')">
-						<a id="add-recipe-link" href="showForm"><i class="fas fa-plus-circle fa-2x"></i> Pridėti naują receptą</a>
-					</security:authorize>
-					<div class="row">
-						<c:set var = "i" scope = "page" value = "0"/>
-					    <c:forEach var="recipe" items="${recipes}">
-						    <c:if test="${(i != 0) && (i % 4 == 0)}">
-				  		  		</div>
-				  		  		<div class="row">
-							</c:if>
-						   <div class = "col-auto recipe-thmbnl">
-							    <security:authorize access="hasRole('ADMIN')">
-									<a href="updateForm?recipeId=${recipe.id}">
-								</security:authorize>
-								<security:authorize access="!hasRole('ADMIN')">
-									<a href="info?recipeId=${recipe.id}">
-								</security:authorize>
-										<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${recipe.image}" >	
-								   		<h2>${recipe.title}</h2>
-							  		 </a>
-						   </div>
-						   <c:set var="i" value="${i + 1}" scope="page"/>
-						</c:forEach>
-					</div>
+				<div class="col bg-light top-container">
+					<c:if test="${recipes.size() == 0}">
+						<h2 class="m-3">Deja, nepavyko rasti receptų.</h2>
+					</c:if>	
+				    <c:forEach var="recipe" items="${recipes}">
+					   
+					   <div class = "recipe-thmbnl">
+								<a href="info?recipeId=${recipe.id}">
+									<img class="zoom" onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${recipe.image}" >	
+							   		<h2>${recipe.title}</h2>
+						  		 </a>
+					   </div>
+					</c:forEach>
+				
 				</div>
 			</div>
 		</div>
