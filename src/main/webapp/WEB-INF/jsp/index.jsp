@@ -7,7 +7,6 @@
 <html lang="en">
 	<head>
 		<%@ include file="header.jsp" %>
-		<link href="https://fonts.googleapis.com/css?family=Caveat&display=swap" rel="stylesheet">
 		<title></title>
 	</head>
 	<body>

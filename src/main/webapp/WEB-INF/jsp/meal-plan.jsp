@@ -16,59 +16,24 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div class="container-fluid top-container">
+	<div id="plan-container" class="container-fluid top-container">
+		
 		<div class="row">
 			<div class="col">
-				<table id="plan" class="table table-bordered table-striped">
-					<thead class="thead-light">
-						<tr class="d-flex">
-							<th scope="col" class="w-20"></th>
-							<c:forEach var="mealType" items="${mealTypes}">
-								<th scope="col" class="w-20 text-center">
-									${mealType.label}
-								</th>
-							</c:forEach>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach var="date" items="${dates}" varStatus="status">
-							 <tr class="d-flex">
-							 	<td class="w-20 text-center"><h3 class="py-0">
-							 		<fmt:parseDate  value="${date}"  type="date" pattern="yyyy-MM-dd" var="parsedDate" />
-									<fmt:formatDate value="${parsedDate}" type="date" pattern="MM.dd E" var="stdDatum" />
-									${stdDatum}
-							 	</h3></td>
-							 	<c:forEach var="mealType" items="${mealTypes}">
-							 		<c:set var="hasMeal" value="false"/>
-									<c:forEach var="meal" items="${meals}">	
-								 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
-								 			<c:set var="hasMeal" value="true"/>
-								 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}">
-								 				<a class="remove-recipe" href="plan/deleteMeal?mealId=${meal.id}" style="font-size:100%;">&#10006;</a>
-									 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" 
-									 				data-content="<div class='recipe-thmbnl'><img src='${meal.recipe.image}'></div>">
-													${meal.recipe.title}
-												</p>
-<!-- 									 			<div> -->
-<%-- 									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;"> --%>
-<!-- 									 			</div> -->
-								 			</td>
-								 		</c:if> 		
-							 		</c:forEach>
-							 		<c:if test="${hasMeal == false}">
-							 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><i class="fas fa-plus-circle fa-2x py-0"></i></a></td>
-							 		</c:if>
-								</c:forEach>
-						    </tr>
-						</c:forEach>
-					</tbody>
-				</table>
+			<div class="link-to-settings m-4">
+			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settingsModal">
+				Nustatymai
+			</button>
+		</div>
+				<c:if test="${planStyle == 'table' }">
+					<%@ include file="plan-table.jsp"%>
+				</c:if>
+				<c:if test="${planStyle == 'list' }">
+					<%@ include file="plan-list.jsp"%>
+				</c:if>
 				<button class="btn btn-primary m-2" onclick="printPlan()">Spausdinti planą</button>
-				<div class="link-to-settings m-4">
-					Nori sudaryti planą mažiau arba daugiau dienų? <a href="${pageContext.request.contextPath}/settings/">Nustatymai</a>.
-				</div>
 			</div>
-			<div id="plan-side-container" class="col-2">
+			<div id="plan-side-container" class="col-3">
 				<div id="shopping-list-container">
 					<h3>Pirkinių sąrašas:</h3>
 					<hr/>
@@ -104,6 +69,46 @@
 			</form:form>
 		</div>
 	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Plano nustatymai:</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+		        <div class="row pl-3">
+				<form:form action="plan/changePlanSettings" method="POST">
+					<label>Pasirinkite kelių dienų maisto planą norite sudaryti:</label>
+					<input type="number" name="quantity" min="1" max="31" value="${planDays}">
+					<br>
+					<label>Pasirinkite norimą plano atvaizdavimo būdą:</label>
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="planStyle" id="plan-table" value="table" ${planStyle == 'table' ? 'checked' : '' }>
+					  <label class="form-check-label" for="plan-table">
+					    Lentelė
+					  </label>
+					</div>
+					<div class="form-check">
+					  <input class="form-check-input" type="radio" name="planStyle" id="plan-list" value="list" ${planStyle == 'list' ? 'checked' : '' }>
+					  <label class="form-check-label" for="plan-list">
+					    Sąrašas
+					  </label>
+					</div>
+					<br>
+	  				<button class="btn btn-primary"  type="submit">Išsaugoti</button>
+	  				<button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
+				</form:form>
+			</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
 	<%@ include file="footer.jsp"%>
 </body>
 </html>

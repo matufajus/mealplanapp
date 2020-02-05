@@ -30,6 +30,9 @@ public class User {
 	
 	@Column(name="plan_days")
 	private int planDays;
+	
+	@Column(name="plan_style")
+	private String planStyle;
 
 	public User() {
 	}
@@ -94,6 +97,14 @@ public class User {
 
 	public void setPlanDays(int planDays) {
 		this.planDays = planDays;
+	}
+
+	public String getPlanStyle() {
+		return planStyle;
+	}
+
+	public void setPlanStyle(String planStyle) {
+		this.planStyle = planStyle;
 	}
 
 }

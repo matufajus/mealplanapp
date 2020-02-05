@@ -100,10 +100,6 @@ hr {
 	width:20%;
 }
 
-#plan-side-container{
-	background-color:#B6BFC4;
-}
-
 .remove-recipe{
   display: block;
   float: right;
@@ -116,7 +112,7 @@ hr {
   width: 16px;
   height: 16px;
   cursor: pointer;
-
+  font-size:100%;
 }
 
 #landing-cover{
@@ -204,4 +200,46 @@ html{
 
 #reasonsToPlan div a h2{
 	color:black;
+}
+
+#shopping-list-container{
+	background-image: url("/images/shopping-list-bg.jpg");
+	background-size: contain;
+	padding-left:3vw;
+	padding-right:3vw;
+	font-family: 'Amatic SC', cursive;
+	font-weight: 700;
+	font-size: 1.5vw;
+}
+
+#shopping-list-container h3{
+	font-size: 3vw !important;
+}
+
+#plan-side-container{
+	padding:0;
+}
+
+#plan{
+	width:80%;
+}
+#plan.list h2{
+	font-family: 'Sacramento', cursive;
+	font-weight:700;
+	font-size:3vw !important;
+}
+
+#plan.list h4{
+	font-family: 'Caveat', cursive;
+}
+
+#plan-container{
+	background-image: linear-gradient(to left, #81b1ef , #E0E8F3);
+}
+
+#plan.table{
+	margin-top:5vh;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:white;
 }

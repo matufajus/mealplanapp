@@ -61,11 +61,16 @@ public class PlanController {
 		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), user.getPlanDays());
 		List<ShoppingItem> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		Meal meal = new Meal();
+		int planDays = user.getPlanDays();
+		String planStyle = user.getPlanStyle();
 		model.addAttribute("meals", meals);
-		model.addAttribute("dates", mealService.getDatesForMealPlan(user.getPlanDays()));
+		model.addAttribute("dates", mealService.getDatesForMealPlan(planDays));
+		model.addAttribute("planStyle", user.getPlanStyle());
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("newMeal", meal);
 		model.addAttribute("shoppingList", shoppingList);
+		model.addAttribute("planDays", planDays);
+		model.addAttribute("planStyle", planStyle);
 		return "meal-plan";
 	}
 	
@@ -92,6 +97,15 @@ public class PlanController {
 	public String deleteMeal(@RequestParam("mealId") int mealId) {
 		mealService.deleteMeal(mealId);
 		shoppingService.removeMealIngredientsFromShoppingList(mealId);
+		return "redirect:/plan";
+	}
+	
+	@PostMapping("/changePlanSettings")
+	public String changePlanSettings(@RequestParam("quantity") int planDays, @RequestParam("planStyle") String planStyle) {
+		User currentUser = userService.getCurrentUser();
+		currentUser.setPlanDays(planDays);
+		currentUser.setPlanStyle(planStyle);
+		userService.save(currentUser);
 		return "redirect:/plan";
 	}
 }

@@ -223,7 +223,7 @@ $('select').selectpicker();
 
 $(".add-meal-button").click(function(){
 	$("td.table-success").removeClass("table-success");
-	$(this).parent().addClass("table-success");
+	$(this).parent("td").addClass("table-success");
 	var date = $(this).parent().data("date");
 	var mealType = $(this).parent().data("meal-type");
 	$("#pagination-nav").removeClass("d-none");
