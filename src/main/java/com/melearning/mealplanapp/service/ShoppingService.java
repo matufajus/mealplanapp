@@ -10,12 +10,14 @@ import com.melearning.mealplanapp.entity.User;
 
 public interface ShoppingService {
 
-	public void updateShoppingItem(List<Meal> meals, String name);
+	public void updateShoppingItem(int id);
 
 	public void addMealIngredientsToShoppingList(Meal meal);
 
 	public List<ShoppingItem> getShoppingListForMeals(List<Meal> meals);
 
 	public void removeMealIngredientsFromShoppingList(int mealId);
+
+
 
 }

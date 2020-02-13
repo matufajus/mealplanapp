@@ -75,21 +75,19 @@ public class PlanController {
 	}
 	
 	@PostMapping("/createMeal")
-	public String createMeal(int recipeId, String date, String mealType) {
+	public String createMeal(int recipeId, String date, String mealType, int servings) {
 		Recipe recipe = recipeService.findById(recipeId);
 		MealType type = MealType.valueOf(mealType);
 		LocalDate mealDate = LocalDate.parse(date);
-		Meal meal = new Meal(0, userService.getCurrentUser(), recipe, type, mealDate);
+		Meal meal = new Meal(0, userService.getCurrentUser(), recipe, type, mealDate, servings);
 		mealService.saveMeal(meal);
 		shoppingService.addMealIngredientsToShoppingList(meal);
 		return "redirect:/plan";
 	}
 	
 	@PostMapping("/updateShoppingItem")
-	public @ResponseBody String updateShoppingItem(@RequestParam(name = "name") String name){
-		User user = userService.getCurrentUser();
-		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), user.getPlanDays());
-		shoppingService.updateShoppingItem(meals, name);
+	public @ResponseBody String updateShoppingItem(@RequestParam(name = "id") int id){
+		shoppingService.updateShoppingItem(id);
 		return "updated";
 	}
 	

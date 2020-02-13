@@ -43,6 +43,10 @@ public class Meal {
 	
 	@Column(name = "date")
 	private LocalDate date;
+	
+	@Column(name = "servings")
+	private int servings;
+	
 
 	public int getId() {
 		return id;
@@ -80,16 +84,25 @@ public class Meal {
 		this.date = date;
 	}
 
-	public Meal(int id, User user, Recipe recipe, MealType mealType, LocalDate date) {
+	public Meal(int id, User user, Recipe recipe, MealType mealType, LocalDate date, int servings) {
 		this.id = id;
 		this.user = user;
 		this.recipe = recipe;
 		this.mealType = mealType;
 		this.date = date;
+		this.servings = servings;
 	}
 	
 	public Meal() {
 		
+	}
+
+	public int getServings() {
+		return servings;
+	}
+
+	public void setServings(int servings) {
+		this.servings = servings;
 	}
 
 }

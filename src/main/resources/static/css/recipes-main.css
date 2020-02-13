@@ -99,8 +99,12 @@ h3{
 	display: flex;
  	align-items: center;
  	max-width: 10vw;
- 	color:white;
  	margin-bottom:2vw;
+ 	color:black;
+}
+
+#add-recipe-link i{
+	color: #007BFF;
 }
 
 #add-recipe-link:hover{
@@ -238,7 +242,8 @@ html{
 	padding-right:3vw;
 	font-family: 'Amatic SC', cursive;
 	font-weight: 700;
-	font-size: 1.5vw;
+	font-size: 1.2vw;
+	min-height: 500px;
 }
 
 #shopping-list-container h3{
@@ -247,6 +252,11 @@ html{
 
 #plan-side-container{
 	padding:0;
+	 -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    transition: all 0.2s linear;
+    
 }
 
 #plan{
@@ -271,4 +281,48 @@ html{
 	margin-left:auto;
 	margin-right:auto;
 	background-color:white;
+}
+
+#recipes-side-nav{
+	background-image: linear-gradient(to right, #81b1ef , #F8F9FA);
+	color: black;
+}
+
+.img-thmbnl{
+	padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+	width: 10vw;
+	height: 10vw;
+	object-fit: cover;
+}
+
+.img-modal{
+	padding: .25rem;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: .25rem;
+	width: 15vw;
+	height: 15vw;
+	object-fit: cover;
+	margin-bottom:2vw;
+}
+
+#hide-meal-recipes-container-icon{
+ 	display: block;
+	float: right;
+	margin: 5px;
+	text-align: center;
+	vertical-align: top;
+	font-style: normal;
+	color: #888;
+	width: 1.5vw;
+	height: 1.5vw;
+	cursor: pointer;
+	font-size: 1.5vw;
+}
+
+#meal-recipes-container{
+	overflow:hidden;
 }

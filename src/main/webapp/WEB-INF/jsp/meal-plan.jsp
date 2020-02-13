@@ -10,9 +10,6 @@
 <head>
 <%@ include file="header.jsp"%>
 <title></title>
-<meta name="_csrf" content="${_csrf.token}"/>
-<!-- default header name is X-CSRF-TOKEN -->
-<meta name="_csrf_header" content="${_csrf.headerName}"/>
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
@@ -37,10 +34,13 @@
 				<div id="shopping-list-container">
 					<h3>Pirkinių sąrašas:</h3>
 					<hr/>
+					<c:if test="${shoppingList.size() == 0 }">
+						Tuščia
+					</c:if>
 					<div id="shopping-not-done">				
 						<c:forEach var="item" items="${shoppingList}">
 							<c:if test="${!item.done}">
-								<div data-name="${item.name}"><i class="far fa-square check-item"></i> ${item.name}: ${item.ammount }</div>
+								<div data-id="${item.id}"><i class="far fa-square check-item"></i> ${item.name}: ${item.ammount } ${item.unit.label }</div>
 							</c:if>
 						</c:forEach>
 					</div>
@@ -48,13 +48,14 @@
 					<div id="shopping-done">
 						<c:forEach var="item" items="${shoppingList}">
 							<c:if test="${item.done}">
-								<div data-name="${item.name}"><i class="far fa-check-square uncheck-item"></i> ${item.name}: ${item.ammount }</div>
+								<div data-id="${item.id}"><i class="far fa-check-square uncheck-item"></i> ${item.name}: ${item.ammount } ${item.unit.label }</div>
 							</c:if>
 						</c:forEach>
 					</div>
 					<button class="btn btn-primary m-2" onclick="printShoppingList()">Spausdinti pirkinių sąrašą</button>				
 				</div>
-				<div id="meal-recipes-container">
+				<div id ="hide-meal-recipes-container-icon" class="d-none">&#10006;</div>
+				<div id="meal-recipes-container" class="d-none">
 				</div>
 				<br/>
 				<nav id="pagination-nav" aria-label="Page navigation" class="d-none">
@@ -66,6 +67,7 @@
 				<input type="hidden" name="recipeId"/>		
 				<input type="hidden" name="date"/>		
 				<input type="hidden" name="mealType"/>		
+				<input type="hidden" name="servings"/>		
 			</form:form>
 		</div>
 	</div>
@@ -109,6 +111,22 @@
 	  </div>
 	</div>
 	
+	<div class="modal fade" id="editMealModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel"></h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	 
+	      </div>
+	    </div>
+	  </div>
+	</div>
+		
 	<%@ include file="footer.jsp"%>
 </body>
 </html>

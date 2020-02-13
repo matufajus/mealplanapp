@@ -52,8 +52,13 @@
 		  	  </div>
 			  <c:forEach var="ingredient" items="${recipe.ingredients}" varStatus="status">
 					<div id ="ingredient-${status.index}" class = "ingredient-container row form-group">
-						<div class = "col-4">
-							<form:input type="text"  class="form-control" path="ingredients[${status.index}].ammount" required="true"/>
+						<div class = "col-2">
+							<form:input type="number"  class="form-control" path="ingredients[${status.index}].ammount" required="true"/>
+						</div>
+						<div class = "col-2">
+							<form:select class="form-control" path="ingredients[${status.index}].unit" required="true">
+							    <form:options items="${unitTypes}" itemLabel="label" />
+							</form:select>
 						</div>
 						<div class = "col-4">
 							<form:input type="text" class="form-control" path="ingredients[${status.index}].name" required="true"/>

@@ -14,8 +14,8 @@
 		 			<div data-meal-type="${mealType}" data-date="${date}">
 <%-- 		 				<a class="remove-recipe" href="plan/deleteMeal?mealId=${meal.id}">&#10006;</a> --%>
 			 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" 
-			 				data-content="<div class='recipe-thmbnl'><img src='${meal.recipe.image}'></div>">
-							${meal.recipe.title}
+			 				data-content="<div><img class='img-thmbnl' src='${meal.recipe.image}'></div>">
+								<a class="open-edit-meal-modal" data-toggle="modal" href="#editMealModal" data-recipe-id="${meal.recipe.id }" data-meal-id="${meal.id }">${meal.recipe.title}</a>
 						</p>
 	<!-- 									 			<div> -->
 	<%-- 									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;"> --%>

@@ -13,7 +13,7 @@
 		<%@ include file="navbar.jsp" %>
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-auto px-5 bg-secondary min-vh-100">
+				<div id="recipes-side-nav" class="col-sm-auto px-5 min-vh-100">
 		            <div class="py-2 sticky-top flex-grow-1">
 		                <div class="nav flex-sm-column top-container pt-2">	
 		                
@@ -27,7 +27,7 @@
 		                    
 	                    	<form action="list" method="GET">
 	                    		<c:forEach var="mealType" items="${mealTypes}">
-	                    			<input type="checkbox" name="type" value="${mealType}"> <label class="text-light">${mealType.label}</label> <br/>
+	                    			<input type="checkbox" name="type" value="${mealType}"> <label>${mealType.label}</label> <br/>
 	                    		</c:forEach>
                     			<input type="submit" class = "btn btn-primary" value="Ieškoti" />
 	                    	</form>

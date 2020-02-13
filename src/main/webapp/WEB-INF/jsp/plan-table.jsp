@@ -22,11 +22,11 @@
 					<c:forEach var="meal" items="${meals}">	
 				 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
 				 			<c:set var="hasMeal" value="true"/>
-				 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}">
+				 			<td class="w-20 text-center" data-test="${meal }" data-meal-type="${mealType}" data-date="${date}">
 <%-- 				 				<a class="remove-recipe" href="plan/deleteMeal?mealId=${meal.id}" style="font-size:100%;">&#10006;</a> --%>
 					 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" 
-					 				data-content="<div class='recipe-thmbnl'><img src='${meal.recipe.image}'></div>">
-									${meal.recipe.title}
+					 				data-content="<div><img class='img-thmbnl' src='${meal.recipe.image}'></div>">
+									<a class="open-edit-meal-modal" data-toggle="modal" href="#editMealModal" data-recipe-id="${meal.recipe.id }" data-meal-id="${meal.id }">${meal.recipe.title}</a>
 								</p>
 <!-- 									 			<div> -->
 <%-- 									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;"> --%>

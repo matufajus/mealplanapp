@@ -33,6 +33,7 @@ import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
 import com.melearning.mealplanapp.entity.Recipe;
+import com.melearning.mealplanapp.entity.UnitType;
 import com.melearning.mealplanapp.service.FileService;
 import com.melearning.mealplanapp.service.RecipeService;
 
@@ -107,6 +108,7 @@ public class RecipeController {
 		Recipe recipe = recipeService.findById(id);
 		model.addAttribute("recipe", convertToDTO(recipe));
 		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
 		return "recipe-form";
 	}
 	
@@ -134,6 +136,16 @@ public class RecipeController {
 	
 	private Recipe convertToEntity(RecipeFormDTO recipeDTO) {
 		return mapper.map(recipeDTO, Recipe.class);
+	}
+	
+	@GetMapping("/getRecipe")
+	public @ResponseBody Recipe getRecipe(@RequestParam("recipeId") int id) {
+		return recipeService.findById(id);
+	}
+
+	@GetMapping("/getUnitTypes")
+	public @ResponseBody UnitType[] getUnitTypes() {
+		return UnitType.values();
 	}
 
 }

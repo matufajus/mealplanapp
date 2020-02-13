@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +31,11 @@ public class ShoppingItem {
 	private String name;
 	
 	@Column(name = "ammount")
-	private String ammount;
+	private float ammount;
+	
+	@Column(name = "unit")
+	@Enumerated(EnumType.ORDINAL)
+	private UnitType unit;
 	
 	@Column(name = "is_done")
 	private boolean done;
@@ -52,11 +58,11 @@ public class ShoppingItem {
 		this.name = name;
 	}
 
-	public String getAmmount() {
+	public float getAmmount() {
 		return ammount;
 	}
 
-	public void setAmmount(String ammount) {
+	public void setAmmount(float ammount) {
 		this.ammount = ammount;
 	}
 
@@ -69,11 +75,12 @@ public class ShoppingItem {
 	}
 
 
-	public ShoppingItem(int id, Meal meal, String name, String ammount, boolean done) {
+	public ShoppingItem(int id, Meal meal, String name, float ammount, UnitType unit, boolean done) {
 		this.id = id;
 		this.meal = meal;
 		this.name = name;
 		this.ammount = ammount;
+		this.unit = unit;
 		this.done = done;
 	}
 
@@ -87,6 +94,14 @@ public class ShoppingItem {
 
 	public void setMeal(Meal meal) {
 		this.meal = meal;
+	}
+
+	public UnitType getUnit() {
+		return unit;
+	}
+
+	public void setUnit(UnitType unit) {
+		this.unit = unit;
 	}
 
 	
