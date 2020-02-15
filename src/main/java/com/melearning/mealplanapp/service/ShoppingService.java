@@ -10,7 +10,7 @@ import com.melearning.mealplanapp.entity.User;
 
 public interface ShoppingService {
 
-	public void updateShoppingItem(int id);
+	public void updateShoppingItems(List<Integer> ids);
 
 	public void addMealIngredientsToShoppingList(Meal meal);
 

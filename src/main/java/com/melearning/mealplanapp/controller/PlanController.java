@@ -86,8 +86,8 @@ public class PlanController {
 	}
 	
 	@PostMapping("/updateShoppingItem")
-	public @ResponseBody String updateShoppingItem(@RequestParam(name = "id") int id){
-		shoppingService.updateShoppingItem(id);
+	public @ResponseBody String updateShoppingItem(@RequestParam(name = "ids") List<Integer> ids){
+		shoppingService.updateShoppingItems(ids);
 		return "updated";
 	}
 	
@@ -105,5 +105,13 @@ public class PlanController {
 		currentUser.setPlanStyle(planStyle);
 		userService.save(currentUser);
 		return "redirect:/plan";
+	}
+	
+	@GetMapping("/getShoppingItems")
+	public @ResponseBody List<ShoppingItem> getShoppingItems() {
+		User user = userService.getCurrentUser();
+		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), user.getPlanDays());
+		List<ShoppingItem> shoppingList = shoppingService.getShoppingListForMeals(meals);
+		return shoppingList;
 	}
 }

@@ -24,7 +24,7 @@
 		 		</c:if> 		
 	 		</c:forEach>
 	 		<c:if test="${hasMeal == false}">
-	 			<div data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><i class="fas fa-plus-circle fa-2x py-0"></i></a></div>
+	 			<div data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><img class="icon-m" src="/images/plus-sign.svg"></a></div>
 	 		</c:if>
 
 		</c:forEach>

@@ -56,15 +56,17 @@ public class ShoppingServiceImpl implements ShoppingService{
 
 
 	@Override
-	public void updateShoppingItem(int id) {
-		Optional<ShoppingItem> result = shoppingRepository.findById(id);
-		if (result.isPresent()) {
-			ShoppingItem shoppingItem = result.get();
-			if (!shoppingItem.isDone())
-				shoppingItem.setDone(true);
-			else shoppingItem.setDone(false);
-		shoppingRepository.save(shoppingItem);
-		}
+	public void updateShoppingItems(List<Integer> ids) {
+		for (Integer id : ids) {
+			Optional<ShoppingItem> result = shoppingRepository.findById(id);
+			if (result.isPresent()) {
+				ShoppingItem shoppingItem = result.get();
+				if (!shoppingItem.isDone())
+					shoppingItem.setDone(true);
+				else shoppingItem.setDone(false);
+			shoppingRepository.save(shoppingItem);
+			}
+		}	
 	}
 
 	@Override

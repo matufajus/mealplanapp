@@ -100,6 +100,7 @@ $("#add-ingredient-button").click(function(){
 	aInput.setAttribute("type", "number");
 	aInput.setAttribute("required", "true");
 	aInput.setAttribute("value", 0);
+	aInput.setAttribute("step", "0.1");
 	ammount.appendChild(aInput);
 	ingredient.appendChild(ammount);
 	
@@ -380,23 +381,19 @@ $("#pagination-nav").on("click", ".page-link", function() {
 	loadRecipes(page, size);
 })
 
-$("#shopping-not-done").on("click", ".check-item", function(){
+$("#shopping-list-container").on("click", ".check-item", function(){
 	var item = $(this).parent("div");
-	var id = item.data("id");
-	$.post("plan/updateShoppingItem",{id: id}, function(){
-		item.children("i").removeClass("fa-square check-item").addClass("fa-check-square uncheck-item");
-		item.remove();
-		$("#shopping-done").append(item);
-	})
-})
-
-$("#shopping-done").on("click", ".uncheck-item", function(){
-	var item = $(this).parent("div");
-	var id = item.data("id");
-	$.post("plan/updateShoppingItem",{id: id}, function(){
-		item.children("i").removeClass("fa-check-square uncheck-item").addClass("fa-square check-item");
-		item.remove();
-		$("#shopping-not-done").append(item);
+	var ids = item.data("ids");
+	console.log(ids);
+	$.post("plan/updateShoppingItem",{ids: ids}, function(){
+//		item.children("i").toggleClass("fa-square fa-check-square");
+//		item.remove();
+//		if (item.children("i").hasClass("fa-square")){
+//			$("#shopping-not-done").append(item);
+//		}else{
+//			$("#shopping-done").append(item);
+//		}
+		loadShoppingItems();
 	})
 })
 
@@ -462,10 +459,94 @@ $(document).on("click", ".open-edit-meal-modal", function () {
          });   	
     	
     	if (mealId != 0) {
+    		//var servings = $("#numberOfServings").val();
         	$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='plan/deleteMeal?mealId="+mealId+"'>Pašalinti iš plano</a>");
+        	//$("#editMealModal .modal-body #buttons").append("<a class='btn btn-success' href='plan/updateMeal?mealId="+mealId+"&servings="+servings+">Išsaugoti</a>");
+        	$("#numberOfServings").prop( "disabled", true );
     	} else {
         	$("#editMealModal .modal-body #buttons").append("<a class='add-meal btn btn-success' data-recipe-id="+recipeId+">Pridėti prie plano</a>");
     	}
     	
 	})
 });
+
+$(document).ready(function() {
+	  if (location.pathname.startsWith("/plan")){
+		   loadShoppingItems();
+	  }
+});
+
+function loadShoppingItems(){
+	$("#shopping-not-done").empty();
+	$("#shopping-done").empty();
+	 $.get("plan/getShoppingItems", function(shoppingList){
+		 shoppingList = removeDuplicateShoppingItems(shoppingList);
+		 $.each(shoppingList, function(i, shoppingItem){
+			 var html = "";
+			 if (!shoppingItem.done){
+				 html = "<div data-id="+shoppingItem.id+" data-ids="+shoppingItem.ids+">"+
+							"<img class='icon-sm check-item mr-1' src='/images/rectangular.svg'>" +
+							shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unit.label +
+						"</div>";
+				 $("#shopping-not-done").append(html);
+			 }else{
+				 html = "<div data-id="+shoppingItem.id+" data-ids="+shoppingItem.ids+">"+
+							"<img class='icon-sm check-item mr-1' src='/images/rectangular-checked.svg'>"+
+							shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unit.label +
+						"</div>";
+				 $("#shopping-done").append(html);
+			 }
+		 });
+	 });
+}
+//function removeDuplicateShoppingItems(){
+//	var shoppingList = [];
+//	$(".shopping-item").each(function (i, item){
+//		var name = $(item).children(".shopping-item-name").text();
+//		var ammount = $(item).children(".shopping-item-ammount").text();
+//		var unit = $(item).children(".shopping-item-unit").text();
+//		var isDone = $(item).data("done");
+//		var shoppingItem = {name: name, ammount: ammount, unit: unit, isDone: isDone};
+//		shoppingList.push(shoppingItem);
+//	});
+//	for(i = shoppingList.length-1; i >= 0; i--) {
+//		if (i != 0) {
+//			var item1 = shoppingList[i];
+//			var item2 = shoppingList[i-1];
+//			 if (item1.name == item2.name) {
+//				if ((item1.unit == item2.unit) && (item1.isDone == item2.isDone)) {
+//					item2.ammount = parseFloat(item1.ammount) + parseFloat(item2.ammount);
+//					item2.ammount = Math.round( item2.ammount * 10) / 10;
+//					shoppingList.splice(i, 1);
+//				}
+//			}	
+//		}
+//	}
+//	
+//}
+
+
+function removeDuplicateShoppingItems(shoppingList){
+	$.each(shoppingList, function(i, shoppingItem){
+		shoppingItem.ids = [shoppingItem.id];
+	});
+	console.dir(shoppingList);
+	for(i = shoppingList.length-1; i >= 0; i--) {
+		if (i != 0) {
+			var item1 = shoppingList[i];
+			var item2 = shoppingList[i-1];
+			 if (item1.name == item2.name) {
+				if ((item1.unit.name == item2.unit.name) && (item1.done == item2.done)) {
+					item2.ammount = parseFloat(item1.ammount) + parseFloat(item2.ammount);
+					item2.ammount = Math.round( item2.ammount * 10) / 10;
+					$.each(item1.ids, function(i, id){
+						item2.ids.push(id);
+					});
+					shoppingList.splice(i, 1);					
+				}
+			}	
+		}
+	}
+	console.log(shoppingList);
+	return shoppingList;
+}

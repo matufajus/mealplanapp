@@ -19,7 +19,7 @@
 			<div class="col">
 				<div class="link-to-settings m-4">
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settingsModal">
-						Nustatymai
+						<img class="icon-sm" src="/images/settings-white.svg"> Nustatymai
 					</button>
 				</div>
 				<c:if test="${planStyle == 'table' }">
@@ -37,21 +37,9 @@
 					<c:if test="${shoppingList.size() == 0 }">
 						Tuščia
 					</c:if>
-					<div id="shopping-not-done">				
-						<c:forEach var="item" items="${shoppingList}">
-							<c:if test="${!item.done}">
-								<div data-id="${item.id}"><i class="far fa-square check-item"></i> ${item.name}: ${item.ammount } ${item.unit.label }</div>
-							</c:if>
-						</c:forEach>
-					</div>
+					<div id="shopping-not-done"></div>
 					<hr/>
-					<div id="shopping-done">
-						<c:forEach var="item" items="${shoppingList}">
-							<c:if test="${item.done}">
-								<div data-id="${item.id}"><i class="far fa-check-square uncheck-item"></i> ${item.name}: ${item.ammount } ${item.unit.label }</div>
-							</c:if>
-						</c:forEach>
-					</div>
+					<div id="shopping-done"></div>
 					<button class="btn btn-primary m-2" onclick="printShoppingList()">Spausdinti pirkinių sąrašą</button>				
 				</div>
 				<div id ="hide-meal-recipes-container-icon" class="d-none">&#10006;</div>

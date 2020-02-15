@@ -35,7 +35,7 @@
 				 		</c:if> 		
 			 		</c:forEach>
 			 		<c:if test="${hasMeal == false}">
-			 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><i class="fas fa-plus-circle fa-2x py-0"></i></a></td>
+			 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button"><img class="icon-m" src="/images/plus-sign.svg"></a></td>
 			 		</c:if>
 				</c:forEach>
 		    </tr>

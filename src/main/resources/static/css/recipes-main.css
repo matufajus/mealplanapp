@@ -326,3 +326,11 @@ html{
 #meal-recipes-container{
 	overflow:hidden;
 }
+
+.icon-sm{
+	height:1.5vw;
+}
+
+.icon-m{
+	height:2vw;
+}

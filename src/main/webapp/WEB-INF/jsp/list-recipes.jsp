@@ -18,7 +18,7 @@
 		                <div class="nav flex-sm-column top-container pt-2">	
 		                
 		                	<security:authorize access="hasRole('ADMIN')">
-								<a id="add-recipe-link" href="showForm"><i class="fas fa-plus-circle fa-2x mr-2"></i> Pridėti naują receptą</a>
+								<a id="add-recipe-link" href="showForm"><img class="icon-m mr-2" src="/images/plus-sign.svg"> Pridėti naują receptą</a>
 							</security:authorize>
 		                	                 
 		                    <c:forEach var="selectedMealType" items="${selectedMealTypes}">
