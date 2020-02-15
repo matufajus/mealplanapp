@@ -17,6 +17,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.melearning.mealplanapp.demodata.CSVReader;
 import com.melearning.mealplanapp.demodata.Record;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
+import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
@@ -81,9 +83,6 @@ public class RecipeController {
 	@PostMapping("/saveRecipe")
 	public String saveRecipe(@Valid @ModelAttribute("recipe") RecipeFormDTO recipeDTO, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			System.out.println(bindingResult.getAllErrors());
-			System.out.println(recipeDTO.getPreparations());
-			System.out.println(recipeDTO.getMealTypes());
 			model.addAttribute("mealTypes", MealType.values());
 			return "recipe-form";
 		}
@@ -146,6 +145,16 @@ public class RecipeController {
 	@GetMapping("/getUnitTypes")
 	public @ResponseBody UnitType[] getUnitTypes() {
 		return UnitType.values();
+	}
+	
+	@GetMapping("/searchProducts")
+	public @ResponseBody List<String> search(@RequestParam("term") String keyword) {
+		return recipeService.getNamesLike(keyword);
+	}
+	
+	@GetMapping("/getFoodProduct")
+	public @ResponseBody FoodProduct getFoodProduct(@RequestParam("name") String name) {
+		return recipeService.getFoodProduct(name);
 	}
 
 }

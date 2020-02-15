@@ -334,3 +334,23 @@ html{
 .icon-m{
 	height:2vw;
 }
+
+.ui-helper-hidden-accessible { 
+	display:none; 
+}
+
+ul.ui-autocomplete {
+    list-style: none;
+    padding-left: 1vw;
+}
+
+.ui-state-active
+{
+    font-weight:700;
+    outline:none;
+}
+
+.ui-menu{
+    width: 20vw;
+    overflow: hidden;
+}

@@ -16,23 +16,25 @@ public class RecipeFormDTO {
 	
 	private int id;
 	
-	@NotNull(message = "The title is required")
-	@Size(min = 1, message = "The title is required")
+	@NotNull(message = "Įveskite recepto pavadinimą")
+	@Size(min = 1, message = "Įveskite recepto pavadinimą")
 	private String title;
 	
-	@NotNull(message = "At least one ingredient must be added")
+	@NotNull(message = "Recepte turi būti bent vienas ingredientas")
 	private List<Ingredient> ingredients;
 	
-	@NotNull(message = "At least one instruction must be added")
+	@NotNull(message = "Recepte turi būti paruošimo instrukcija")
 	private List<Preparation> preparations;
 	
-	@NotNull(message = "At least one meal type must be chosen")
-	@Size(min = 1, message = "At least one meal type must be chosen")
+	@NotNull(message = "Pasirinkite bent vieną patiekalo tipą")
+	@Size(min = 1, message = "Pasirinkite bent vieną patiekalo tipą")
 	private List<MealType> mealTypes;
 	
 	private String image;
 	
 	private MultipartFile imageFile;
+	
+	private String description;
 
 
 	public String getTitle() {
@@ -92,10 +94,14 @@ public class RecipeFormDTO {
 	}
 
 	public RecipeFormDTO() {
-		this.ingredients = new ArrayList<Ingredient>();
-		this.ingredients.add(new Ingredient());
-		this.preparations = new ArrayList<Preparation>();
-		this.preparations.add(new Preparation());
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	

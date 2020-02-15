@@ -29,8 +29,14 @@
 	        	<img id="recipe-form-image" src="${recipe.image}" alt="Paveikėlėlis nerastas"/>
 	        </c:if>
 		  <div class="form-group">
+		  	Pavadinimas
 	    	<form:input type="text" class="form-control" path="title" required="true"/>
 		  	<form:errors path="title" class="alert-danger"/>
+		  </div>
+		  <div class="form-group">
+		  	Aprašymas
+	    	<form:input type="text" class="form-control" path="description" required="true"/>
+		  	<form:errors path="description" class="alert-danger"/>
 		  </div>
 		  <div class="form-group">
 		  	Patiekalo tipas:
@@ -44,24 +50,27 @@
 		  	  <label for="ingredients">Ingredientai</label>
 		  	  <div class="row">
 		  	  	<div class="col-4">
+		  	  		Pavadinimas
+		  	  	</div>
+		  	  	<div class="col-2">
 		  	  		Kiekis
 		  	  	</div>
-		  	  	<div class="col-4">
-		  	  		Pavadinimas
+		  	  	<div class="col-2">
+		  	  		Vienetai
 		  	  	</div>
 		  	  </div>
 			  <c:forEach var="ingredient" items="${recipe.ingredients}" varStatus="status">
 					<div id ="ingredient-${status.index}" class = "ingredient-container row form-group">
-						<div class = "col-2">
-							<form:input type="number"  class="form-control" path="ingredients[${status.index}].ammount" required="true" step="0.01"/>
+						<div class = "col-4">
+							<form:input type="text" class="food-product-name form-control" path="ingredients[${status.index}].name" required="true"/>
 						</div>
 						<div class = "col-2">
-							<form:select class="form-control" path="ingredients[${status.index}].unit" required="true">
+							<form:input type="number"  class="form-control" path="ingredients[${status.index}].ammount" required="true" min="0.1" step="0.1"/>
+						</div>
+						<div class = "col-2">
+							<form:select class="food-product-unit form-control" path="ingredients[${status.index}].unit" required="true">
 							    <form:options items="${unitTypes}" itemLabel="label" />
 							</form:select>
-						</div>
-						<div class = "col-4">
-							<form:input type="text" class="form-control" path="ingredients[${status.index}].name" required="true"/>
 						</div>
 						<form:hidden path="ingredients[${status.index}].id" />
 						<form:hidden path="ingredients[${status.index}].recipe" />

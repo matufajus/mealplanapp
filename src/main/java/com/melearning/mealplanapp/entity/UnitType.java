@@ -10,10 +10,7 @@ public enum UnitType {
 	MILILITRE("ml."),
 	TABLE_SPOON("v.š."),
 	TEA_SPOON("a.š."),
-	LITTLE("truputis"),
-	SOME("šiek tiek"),
-	LOT("daug"),
-	UNIT("vnt.");
+	WHOLE("vnt.");
 	
 	public final String label;
 	

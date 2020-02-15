@@ -13,8 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.melearning.mealplanapp.dao.FoodProductRepository;
 import com.melearning.mealplanapp.dao.RecipeRepository;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
+import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.KitchenProduct;
 import com.melearning.mealplanapp.entity.MealType;
@@ -24,10 +26,13 @@ import com.melearning.mealplanapp.entity.Recipe;
 public class RecipeServiceImpl implements RecipeService {
 	
 	RecipeRepository recipeRepository;
+	
+	FoodProductRepository foodProductRepository;
 
 	@Autowired
-	public RecipeServiceImpl(RecipeRepository recipeRepository) {
+	public RecipeServiceImpl(RecipeRepository recipeRepository, FoodProductRepository foodProductRepository) {
 		this.recipeRepository = recipeRepository;
+		this.foodProductRepository = foodProductRepository;
 	}
 
 	@Override
@@ -103,6 +108,27 @@ public class RecipeServiceImpl implements RecipeService {
 	public Page<Recipe> getRecipesByPage(int pageId, int pageSize){
 		Pageable pageable = PageRequest.of(pageId, pageSize);
 		return recipeRepository.findAll(pageable);
+	}
+
+//	@Override
+//	public List<String> getNamesLike(String keyword) {
+//		List<FoodProduct> products = foodProductRepository.findByNameContaining(keyword);
+//		List<String> productNames = new ArrayList<String>();
+//		if (!products.isEmpty())
+//			for (FoodProduct foodProduct : products) {
+//				productNames.add(foodProduct.getName());
+//			}
+//		return productNames;
+//	}
+	
+	@Override
+	public List<String> getNamesLike(String keyword) {
+		return foodProductRepository.findByNameContaining(keyword);
+	}
+	
+	@Override
+	public FoodProduct getFoodProduct(String name) {
+		return foodProductRepository.findByName(name);
 	}
 
 }

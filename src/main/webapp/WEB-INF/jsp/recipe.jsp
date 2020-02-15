@@ -16,13 +16,17 @@
 				</div>
 				<div class="col-6">
 					<h2>${recipe.title}</h2>
+					<h3>${recipe.description }</h3>
 					<c:forEach var="ingredient" items="${recipe.ingredients}">
 						<div class = "row">
+							<div class = "col">
+								${ingredient.name}
+							</div>
 							<div class = "col">
 								${ingredient.ammount}
 							</div>
 							<div class = "col">
-								${ingredient.name}
+								${ingredient.unit}
 							</div>
 						</div>
 					</c:forEach>
