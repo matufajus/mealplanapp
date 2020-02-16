@@ -35,8 +35,13 @@
 			  	  </form:form>
 		        </div>
 		      </li>
-		    
-    </security:authorize>
+    	</security:authorize>
+    	<security:authorize access="!isAuthenticated()">
+    		<li class="nav-item active">
+		        <a class="nav-link" href="${pageContext.request.contextPath}/login/showLogin">Prisijungti</a>
+		      </li>
+   		</security:authorize>
+    	
     </ul>
   </div>
 </nav>

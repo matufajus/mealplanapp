@@ -21,6 +21,9 @@
 					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settingsModal">
 						<img class="icon-sm" src="/images/settings-white.svg"> Nustatymai
 					</button>
+					<button class="btn btn-primary m-2" onclick="printPlan()">
+						<img class="icon-sm" src="/images/printer-white.svg"> Spausdinti
+					</button>
 				</div>
 				<c:if test="${planStyle == 'table' }">
 					<%@ include file="plan-table.jsp"%>
@@ -28,7 +31,6 @@
 				<c:if test="${planStyle == 'list' }">
 					<%@ include file="plan-list.jsp"%>
 				</c:if>
-				<button class="btn btn-primary m-2" onclick="printPlan()">Spausdinti planą</button>
 			</div>
 			<div id="plan-side-container" class="col-3">
 				<div id="shopping-list-container">
@@ -40,7 +42,7 @@
 					<div id="shopping-not-done"></div>
 					<hr/>
 					<div id="shopping-done"></div>
-					<button class="btn btn-primary m-2" onclick="printShoppingList()">Spausdinti pirkinių sąrašą</button>				
+					<button class="btn btn-primary m-2" onclick="printShoppingList()"><img class="icon-sm" src="/images/printer-white.svg"> Spausdinti</button>				
 				</div>
 				<div id ="hide-meal-recipes-container-icon" class="d-none">&#10006;</div>
 				<div id="meal-recipes-container" class="d-none">

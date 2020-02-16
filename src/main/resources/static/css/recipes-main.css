@@ -148,10 +148,10 @@ hr {
 }
 
 #landing-cover{
-	background-image: url("/images/fridge.jpg");
+	background-image: url("/images/kitchen.jpg");
 	height: 100vh;
 	background-size: cover;
-	background-position: left top;
+	background-position: center;
 }
 
 
@@ -172,7 +172,6 @@ hr {
 
 #scroll-down-link img{
 	width: 50px;
-	fill:white;
 }
 
 html{
@@ -183,35 +182,13 @@ html{
 	position: absolute; 
 	margin-left:70vw;
 	margin-top:30vh;
-	background: rgba(255, 255, 255, 0.3);
+/* 	background: rgba(0, 0, 0, 0.2); */
 	border-radius:10px; 
 	padding: 10px;
 	width: 20vw;
 }
 
-#landing-page-login span{
-	font-size: 3vh;
-	
-}
 
-#landing-page-login a:hover{
-	font-weight: bold;
-	text-decoration:none;
-}
-
-#landing-page-title{
-	position: absolute; 
-	margin-left:5vw;
-	margin-top:4vh;
-	color:white;
-/* 	background: rgba(76, 175, 80, 0.3); */
-	border-radius:10px; 
-	padding:10px;
-}
-#landing-page-title h2{
-	margin-top:5vh;
-	line-height:15vh;
-}
 #reasonsToPlan{
 	background-image:url("/images/notebook-croped-top.jpg");
 	height:100vh;
@@ -329,10 +306,12 @@ html{
 
 .icon-sm{
 	height:1.5vw;
+	cursor: pointer;
 }
 
 .icon-m{
 	height:2vw;
+	cursor: pointer;
 }
 
 .ui-helper-hidden-accessible { 
@@ -354,3 +333,5 @@ ul.ui-autocomplete {
     width: 20vw;
     overflow: hidden;
 }
+
+

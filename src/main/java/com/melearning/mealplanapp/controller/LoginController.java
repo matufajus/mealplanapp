@@ -23,10 +23,10 @@ public class LoginController {
 	
 	@GetMapping("/")
 	public String showLandingPage(Authentication authentication) {
-		if (authentication != null) 
-			if (authentication.isAuthenticated())
-				return "home";
-	
+//		if (authentication != null) 
+//			if (authentication.isAuthenticated())
+//				return "home";
+//	
 		return "index";
 	}
 
