@@ -31,4 +31,8 @@ public interface RecipeService {
 	
 	public FoodProduct getFoodProduct(String name);
 
+	public List<Recipe> getRecipesForSearchProducts(List<String> products);
+
+	public List<Recipe> getRecipesByMealTypesAndSearchProducts(List<MealType> mealTypes, List<String> products);
+
 }

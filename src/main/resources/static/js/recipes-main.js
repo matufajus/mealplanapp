@@ -385,7 +385,6 @@ $("#pagination-nav").on("click", ".page-link", function() {
 $("#shopping-list-container").on("click", ".check-item", function(){
 	var item = $(this).parent("div");
 	var ids = item.data("ids");
-	console.log(ids);
 	$.post("plan/updateShoppingItem",{ids: ids}, function(){
 //		item.children("i").toggleClass("fa-square fa-check-square");
 //		item.remove();
@@ -551,7 +550,6 @@ function removeDuplicateShoppingItems(shoppingList){
 			}	
 		}
 	}
-	console.log(shoppingList);
 	return shoppingList;
 }
 
@@ -562,14 +560,50 @@ function enableFoodProductAutocomplete(){
 		source : '/recipe/searchProducts',
 		select: function( event, ui ) {
 	    	$.get("/recipe/getFoodProduct", {name: ui.item['value']}, function(foodProduct){
-	    		console.log(foodProduct);
 	    		var unit = $(event.target).parents().siblings().children(".food-product-unit");
 	    		unit.val(foodProduct.unitType.name);
-	    		console.log(unit.val());
 	    	});
 	    	
 	    }
 	});
 }
+
+$("#recipe-side-nav-form").submit(function(event){
+	
+	event.preventDefault(); // avoid to execute the actual submit of the form.
+	
+	var tagsInput = $("#recipe-side-nav-form input[name='products']");
+	if (tagsInput.val() == "")
+		$("#recipe-side-nav-form input[name='products']").attr("disabled", true);
+	
+	var form = $(this);
+    var url = form.attr('action');
+
+    $.ajax({
+           type: "GET",
+           url: url,
+           data: form.serialize(), // serializes the form's elements.
+           success: function(recipes)
+           {
+        	   var container = $("#recipes-list-container");
+        	   container.empty();
+        	   if (recipes.length == 0){
+        		   container.append("<h2 class='m-3'>Deja, nepavyko rasti receptų.</h2>");
+        	   }else{
+        		   $.each(recipes, function(i, recipe){
+        			   container.append("<div class = 'recipe-thmbnl'>"+
+											"<a href='info?recipeId="+recipe.id+"'>"+
+												"<img class='zoom' src='"+recipe.image+"' >"+	
+										   		"<h2>"+recipe.title+"</h2>"+
+									  		 "</a>"+
+							  		 	"</div>");
+                   })
+        	   }
+               
+           }
+         });
+    $("#recipe-side-nav-form input[name='products']").attr("disabled", false);
+	
+});
 
 

@@ -31,7 +31,7 @@ public class FoodProduct {
 	private UnitType unitType;
 	
 	@Column(name="kcal")
-	private int kcal;
+	private Integer kcal;
 
 	public int getId() {
 		return id;
@@ -57,15 +57,15 @@ public class FoodProduct {
 		this.foodType = foodType;
 	}
 
-	public int getKcal() {
+	public Integer getKcal() {
 		return kcal;
 	}
 
-	public void setKcal(int kcal) {
+	public void setKcal(Integer kcal) {
 		this.kcal = kcal;
 	}
 
-	public FoodProduct(int id, String name, FoodType foodType, int kcal) {
+	public FoodProduct(int id, String name, FoodType foodType, Integer kcal) {
 		super();
 		this.id = id;
 		this.name = name;

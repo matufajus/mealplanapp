@@ -130,5 +130,47 @@ public class RecipeServiceImpl implements RecipeService {
 	public FoodProduct getFoodProduct(String name) {
 		return foodProductRepository.findByName(name);
 	}
+	
+	@Override
+	public List<Recipe> getRecipesForSearchProducts(List<String> products) {
+		List<Recipe> recipes = recipeRepository.findAll();
+		List<Recipe> availableRecipes = new ArrayList<Recipe>();
+		for (Recipe recipe : recipes) {
+			if (areSearchProductsInIngredients(recipe.getIngredients(), products)) {
+				availableRecipes.add(recipe);
+			}
+		}
+		return availableRecipes;
+	}
+	
+	private boolean isSearchProductInIngredients(String product, List<Ingredient> ingredients) {
+		for(Ingredient ingredient: ingredients) {
+			if (ingredient.getName().toLowerCase().contains(product)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean areSearchProductsInIngredients(List<Ingredient> ingredients, List<String> products) {
+		for (String product : products) {
+			if (!isSearchProductInIngredients(product, ingredients)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public List<Recipe> getRecipesByMealTypesAndSearchProducts(List<MealType> mealTypes, List<String> products){
+		List<Recipe> recipesByMeal = getRecipesByMealTypes(mealTypes);
+		List<Recipe> availableRecipes = new ArrayList<Recipe>();
+		for (Recipe recipe : recipesByMeal) {
+			if (areSearchProductsInIngredients(recipe.getIngredients(), products)) {
+				availableRecipes.add(recipe);
+			}
+		}
+		return availableRecipes;
+	}
+
 
 }

@@ -265,6 +265,16 @@ html{
 	color: black;
 }
 
+.bootstrap-tagsinput{
+	width: 10vw;
+	margin-bottom: 10px;
+}
+
+.bootstrap-tagsinput .tag{
+	color:black !important;
+	background-color: #D3D3D3;
+}
+
 .img-thmbnl{
 	padding: .25rem;
     background-color: #fff;

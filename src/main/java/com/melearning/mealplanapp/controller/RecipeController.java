@@ -60,12 +60,8 @@ public class RecipeController {
 	}
 	
 	@GetMapping("/list")
-	public String listRecipes(@RequestParam(name = "type", required = false) List<MealType> selectedMealtypes, Model model) {
-		List<Recipe> recipes = recipeService.findAll();
-		if (selectedMealtypes != null) {
-			model.addAttribute("selectedMealTypes", selectedMealtypes);
-			recipes = recipeService.getRecipesByMealTypes(selectedMealtypes);
-		}
+	public String listRecipes(Model model) {
+		List<Recipe> recipes= recipeService.findAll();
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("recipes", recipes);
 		return "list-recipes";
@@ -90,6 +86,8 @@ public class RecipeController {
 			if (!recipeDTO.getImageFile().isEmpty()) {
 				fileService.uploadFile(recipeDTO.getImageFile());
 				recipeDTO.setImage("/recipeImages/" + recipeDTO.getImageFile().getOriginalFilename());
+			} else {
+				recipeDTO.setImage("/recipeImages/default.png");
 			}
 			Recipe recipe = convertToEntity(recipeDTO);
 			recipe.getIngredients().forEach(i -> i.setRecipe(recipe));
@@ -155,6 +153,24 @@ public class RecipeController {
 	@GetMapping("/getFoodProduct")
 	public @ResponseBody FoodProduct getFoodProduct(@RequestParam("name") String name) {
 		return recipeService.getFoodProduct(name);
+	}
+	
+	@GetMapping("/getFilteredRecipes")
+	public @ResponseBody List<Recipe> getFilteredRecipes(@RequestParam(name = "type", required = false) List<MealType> selectedMealtypes, 
+			@RequestParam(name = "products", required = false) List<String> products){
+		List<Recipe> recipes = new ArrayList<Recipe>();
+		if (selectedMealtypes != null) {		
+			if(products != null) {
+				recipes = recipeService.getRecipesByMealTypesAndSearchProducts(selectedMealtypes, products);
+			}else {
+				recipes = recipeService.getRecipesByMealTypes(selectedMealtypes);
+			}
+		} else if(products != null) {
+			recipes = recipeService.getRecipesForSearchProducts(products); 
+		} else {
+			recipes = recipeService.findAll();
+		}
+		return recipes;
 	}
 
 }
