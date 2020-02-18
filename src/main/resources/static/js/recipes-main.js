@@ -92,7 +92,7 @@ $("#add-ingredient-button").click(function(){
 	ingredient.setAttribute("id", "ingredient-"+id);
 	
 	var name = document.createElement("div");
-	name.setAttribute("class", "col-4");
+	name.setAttribute("class", "col-6");
 	var nInput = document.createElement("input");
 	nInput.setAttribute("id", "ingredients"+id+".name");
 	nInput.setAttribute("name", "ingredients["+id+"].name");
@@ -117,7 +117,7 @@ $("#add-ingredient-button").click(function(){
 	ingredient.appendChild(ammount);
 	
 	var unit = document.createElement("div");
-	unit.setAttribute("class", "col-2");
+	unit.setAttribute("class", "col-3");
 	var uInput = document.createElement("select");
 	uInput.setAttribute("id", "ingredients"+id+".unit");
 	uInput.setAttribute("name", "ingredients["+id+"].unit");
@@ -143,9 +143,8 @@ $("#add-ingredient-button").click(function(){
 	ingredient.appendChild(rInput);
 	
 	var button = document.createElement("a");
-	button.setAttribute("class", "remove-ingredient");
-	button.setAttribute("type", "button");
-	button.innerHTML = "<i class='fas fa-minus-circle fa-2x'>";
+	button.setAttribute("class", "remove-ingredient col-1");
+	button.innerHTML = "<img class='icon-m mr-2' src='/images/minus-black.svg'>";
 	ingredient.appendChild(button);
 	
 	container.appendChild(ingredient);
@@ -212,8 +211,7 @@ $("#add-preparation-button").click(function(){
 	
 	var button = document.createElement("a");
 	button.setAttribute("class", "remove-preparation");
-	button.setAttribute("type", "button");
-	button.innerHTML = "<i class='fas fa-minus-circle fa-2x'>";
+	button.innerHTML = "<img class='icon-m mr-2' src='/images/minus-black.svg'>";
 	preparation.appendChild(button);
 	
 	container.appendChild(preparation);

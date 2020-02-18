@@ -6,6 +6,7 @@
 <html lang="en">
   	<head>
 		<%@ include file="header.jsp" %>
+		<%@ include file="navbar.jsp" %>
 		<title></title>
 	</head>
 	<body>

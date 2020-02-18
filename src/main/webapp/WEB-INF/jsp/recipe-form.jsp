@@ -19,71 +19,80 @@
 		</c:if>
 	 	<form:form action="saveRecipe" cssClass="form-horizontal"
       method="post" modelAttribute="recipe" enctype="multipart/form-data">
-      	<form:hidden path="id" />
-      	<form:hidden path="image" />
-	      	<div class=form-group>
-	      	  	 <label for="imageFile">Paveikslėlis turi būti nedidesnis nei 128KB</label>
-	      		<form:input type = "file" class="form-control" path="imageFile" id="recipe-image-input"/>
-	        </div>
-	        <c:if test="${recipe.image ne null}">
-	        	<img id="recipe-form-image" src="${recipe.image}" alt="Paveikėlėlis nerastas"/>
-	        </c:if>
-		  <div class="form-group">
-		  	Pavadinimas
-	    	<form:input type="text" class="form-control" path="title" required="true"/>
-		  	<form:errors path="title" class="alert-danger"/>
-		  </div>
-		  <div class="form-group">
-		  	Aprašymas
-	    	<form:input type="text" class="form-control" path="description" required="true"/>
-		  	<form:errors path="description" class="alert-danger"/>
-		  </div>
-		  <div class="form-group">
-		  	Patiekalo tipas:
-            <form:select path="mealTypes" class="selectpicker" multiple="multiple" data-live-search="true" required="true">
-			  <form:options items="${mealTypes}" itemLabel="label"/>
-			</form:select>
-			<form:errors path="mealTypes" class="alert-info"/>
+	      	<form:hidden path="id" />
+	      	<form:hidden path="image" />
+	      	<div class="row">
+		      	<div class="col-md-8 col-lg-6">
+					<div class="form-group">
+						Pavadinimas
+					 	<form:input type="text" class="form-control" path="title" required="true"/>
+						<form:errors path="title" class="alert-danger"/>
+					
+						Aprašymas
+					 	<form:input type="text" class="form-control" path="description" required="true"/>
+						<form:errors path="description" class="alert-danger"/>
+			
+						Patiekalo tipas<br>
+				        <form:select path="mealTypes" class="selectpicker" multiple="multiple" data-live-search="true" required="true">
+						<form:options items="${mealTypes}" itemLabel="label"/>
+						</form:select>
+						<form:errors path="mealTypes" class="alert-info"/>
+						<br><br>
+					  	<label for="imageFile">Paveikslėlis</label>
+		      			<form:input type = "file" class="form-control" path="imageFile" id="recipe-image-input"/>
+					</div>
+				 </div>
+				 <div class="form-group col-md-4 col-lg-6 text-center">	      			
+		      		<c:if test="${recipe.image eq null}">
+			        	<img id="recipe-form-image" src="/recipeImages/default.png" alt="Paveikėlėlis nerastas"/>
+			        </c:if>	        
+			        <c:if test="${recipe.image ne null}">
+			        	<img id="recipe-form-image" src="${recipe.image}" alt="Paveikėlėlis nerastas"/>
+			        </c:if>
+			      
+	      		</div>
 		  </div>
 		  <div class="row">
-		  	<div id="ingredient-container" class ="col">
+		  	<div id="ingredient-container" class ="col-md-8 col-lg-6">
 		  	  <label for="ingredients">Ingredientai</label>
 		  	  <div class="row">
-		  	  	<div class="col-4">
+		  	  	<div class="col-6">
 		  	  		Pavadinimas
 		  	  	</div>
 		  	  	<div class="col-2">
 		  	  		Kiekis
 		  	  	</div>
-		  	  	<div class="col-2">
+		  	  	<div class="col-3">
 		  	  		Vienetai
 		  	  	</div>
 		  	  </div>
 			  <c:forEach var="ingredient" items="${recipe.ingredients}" varStatus="status">
 					<div id ="ingredient-${status.index}" class = "ingredient-container row form-group">
-						<div class = "col-4">
+						<div class = "col-6">
 							<form:input type="text" class="food-product-name form-control" path="ingredients[${status.index}].name" required="true"/>
 						</div>
 						<div class = "col-2">
 							<form:input type="number"  class="form-control" path="ingredients[${status.index}].ammount" required="true" min="0.1" step="0.1"/>
 						</div>
-						<div class = "col-2">
+						<div class = "col-3">
 							<form:select class="food-product-unit form-control" path="ingredients[${status.index}].unit" required="true">
 							    <form:options items="${unitTypes}" itemLabel="label" />
 							</form:select>
 						</div>
 						<form:hidden path="ingredients[${status.index}].id" />
 						<form:hidden path="ingredients[${status.index}].recipe" />
-						<a class ="remove-ingredient" type="button"><i class="fas fa-minus-circle fa-2x"></i></a>
+						<div class = "col-1">
+							<a class ="remove-ingredient"></a><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
+						</div>
 					</div>
 				</c:forEach>
 				<div id ="add-ingredient-container"></div>
 				<form:errors path="ingredients" class="alert-info"/>
 				<br/>
-				<button id="add-ingredient-button" type="button">Pridėti</button>
+				<a id="add-ingredient-button"><img class="icon-m mr-2" src="/images/plus-sign.svg"></a>
 			  	<br/><br/>
 		  	</div>
-		  	<div id="preparation-container" class ="col">
+		  	<div id="preparation-container" class ="col-md-4 col-lg-6">
 		  		<label for="preparations">Paruošimo būdas:</label>
 		  		<c:forEach var="preparation" items="${recipe.preparations}" varStatus="status">
 		  			<div id ="preparation-${status.index}" class ="preparation-container row form-group">
@@ -91,13 +100,13 @@
 		  				<form:textarea class="preparation-area form-control col" path="preparations[${status.index}].description" required="true"/>
 		  				<form:hidden path="preparations[${status.index}].id" />
 						<form:hidden path="preparations[${status.index}].recipe" />
-						<a class ="remove-preparation" type="button"><i class="fas fa-minus-circle fa-2x"></i></a>
+						<a class ="remove-preparation"><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
 		  			</div>
 		  		</c:forEach>
 		  		<div id ="add-preparation-container"></div>
 		  		<form:errors path="preparations" class="alert-info"/>
 				<br/>
-				<button id="add-preparation-button" type="button">Pridėti</button>
+				<a id="add-preparation-button"><img class="icon-m mr-2" src="/images/plus-sign.svg"></a>
 		  	</div>
 		  </div>
 		  
