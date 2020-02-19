@@ -344,4 +344,8 @@ ul.ui-autocomplete {
     overflow: hidden;
 }
 
+.typeahead li.active{
+	background-color: #E0FFFF;
+}
+
 

@@ -145,7 +145,7 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	private boolean isSearchProductInIngredients(String product, List<Ingredient> ingredients) {
 		for(Ingredient ingredient: ingredients) {
-			if (ingredient.getName().toLowerCase().contains(product)) {
+			if (ingredient.getName().toLowerCase().contains(product.toLowerCase())) {
 				return true;
 			}
 		}

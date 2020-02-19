@@ -568,6 +568,27 @@ function enableFoodProductAutocomplete(){
 	});
 }
 
+
+
+$("#tags").tagsinput({
+	
+//	typeaheadjs: {
+//		name: "product",
+//	    source: '/recipe/searchProducts'
+//	  }
+	 typeahead: {
+		 source: function(query) {
+		      return $.get('/recipe/searchProducts?term='+query);
+		    },
+		afterSelect: function() {
+		    this.$element[0].value = '';
+		  }
+		  },
+	  freeInput: true
+	  
+	    
+});
+
 $("#recipe-side-nav-form").submit(function(event){
 	
 	event.preventDefault(); // avoid to execute the actual submit of the form.

@@ -31,7 +31,7 @@
 	                    		</c:forEach>
 	                    		
 	               				Produktai:
-	                    		<input type="text" value="" data-role="tagsinput" id="tags" name="products" class="form-control">
+	                    		<input type="text" value="" id="tags" name="products" class="form-control">
 	                    		
                     			<input type="submit" class = "btn btn-primary" value="Ieškoti" />
 	                    	</form>
