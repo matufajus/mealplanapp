@@ -348,4 +348,10 @@ ul.ui-autocomplete {
 	background-color: #E0FFFF;
 }
 
+.page-landscape
+    {
+     -webkit-transform: rotate(-90deg); 
+     -moz-transform:rotate(-90deg);
+     filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    }
 

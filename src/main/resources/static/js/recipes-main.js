@@ -404,6 +404,11 @@ function printPlan()
         $(".remove-recipe").hide();
         $(".link-to-settings").hide();
         $(".btn").hide();
+        $(".open-edit-meal-modal").css("color","black");
+        $(".open-edit-meal-modal").css("text-decoration","none");
+        $(".add-meal-button img").hide();
+        $(".add-meal-button").append("<br>")
+        //$("body").addClass("page-landscape");
         //Print Page
         window.print();
         //Restore orignal HTML
@@ -502,31 +507,6 @@ function loadShoppingItems(){
 		 });
 	 });
 }
-//function removeDuplicateShoppingItems(){
-//	var shoppingList = [];
-//	$(".shopping-item").each(function (i, item){
-//		var name = $(item).children(".shopping-item-name").text();
-//		var ammount = $(item).children(".shopping-item-ammount").text();
-//		var unit = $(item).children(".shopping-item-unit").text();
-//		var isDone = $(item).data("done");
-//		var shoppingItem = {name: name, ammount: ammount, unit: unit, isDone: isDone};
-//		shoppingList.push(shoppingItem);
-//	});
-//	for(i = shoppingList.length-1; i >= 0; i--) {
-//		if (i != 0) {
-//			var item1 = shoppingList[i];
-//			var item2 = shoppingList[i-1];
-//			 if (item1.name == item2.name) {
-//				if ((item1.unit == item2.unit) && (item1.isDone == item2.isDone)) {
-//					item2.ammount = parseFloat(item1.ammount) + parseFloat(item2.ammount);
-//					item2.ammount = Math.round( item2.ammount * 10) / 10;
-//					shoppingList.splice(i, 1);
-//				}
-//			}	
-//		}
-//	}
-//	
-//}
 
 
 function removeDuplicateShoppingItems(shoppingList){
