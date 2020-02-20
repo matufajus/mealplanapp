@@ -172,5 +172,21 @@ public class RecipeServiceImpl implements RecipeService {
 		return availableRecipes;
 	}
 
+	@Override
+	public List<Recipe> findByAuthorId(long currentUserId) {
+		return recipeRepository.findByAuthorId(currentUserId);
+	}
+
+	@Override
+	public void deleteUsersRecipe(Recipe recipe) {
+		if (!recipe.isApproved()) {
+			deleteById(recipe.getId());
+		} else {
+			recipe.setAuthor(null);
+			save(recipe);
+		}
+		
+	}
+
 
 }

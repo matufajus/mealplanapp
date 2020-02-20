@@ -74,5 +74,12 @@ public class UserServiceImpl implements UserService {
 		User user = getCurrentUser();
 		return user.getId();
 	}
+	
+	@Override
+	public boolean hasCurrentUserRole(String role) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		boolean hasUserRole = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals(role));
+		return hasUserRole;
+	}
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
+import com.melearning.mealplanapp.entity.User;
 
 public class RecipeFormDTO {
 	
@@ -34,7 +35,11 @@ public class RecipeFormDTO {
 	
 	private MultipartFile imageFile;
 	
+	private User author;
+	
 	private String description;
+	
+	private boolean shared;
 
 
 	public String getTitle() {
@@ -102,6 +107,22 @@ public class RecipeFormDTO {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isShared() {
+		return shared;
+	}
+
+	public void setShared(boolean shared) {
+		this.shared = shared;
+	}
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(User author) {
+		this.author = author;
 	}
 	
 	

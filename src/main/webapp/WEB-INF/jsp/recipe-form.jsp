@@ -2,6 +2,7 @@
  pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security"%>   
 <!doctype html>
 <html lang="en">
   <head>
@@ -37,9 +38,17 @@
 						<form:options items="${mealTypes}" itemLabel="label"/>
 						</form:select>
 						<form:errors path="mealTypes" class="alert-info"/>
+						<div class="custom-control custom-switch">
+						<br>
+						  <form:checkbox path="shared" class="custom-control-input" id="customSwitch1"/>
+						  <label class="custom-control-label" for="customSwitch1">Padaryti receptą visiems matomą</label>
+						</div>
+
 						<br><br>
 					  	<label for="imageFile">Paveikslėlis</label>
 		      			<form:input type = "file" class="form-control" path="imageFile" id="recipe-image-input"/>
+		      			
+		      			<form:input type="hidden" path="author"/>
 					</div>
 				 </div>
 				 <div class="form-group col-md-4 col-lg-6 text-center">	      			

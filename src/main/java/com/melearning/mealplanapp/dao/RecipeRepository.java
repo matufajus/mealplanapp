@@ -14,5 +14,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 	//SELECT * FROM recipe WHERE id IN (SELECT DISTINCT recipe_id from recipe_meal_type WHERE meal_type IN (1, 2));
 
 	List<Recipe> getRecipesByMealTypesIn(List<MealType> mealTypes);
+	
+	List<Recipe> findByAuthorId(long id);
 
 }

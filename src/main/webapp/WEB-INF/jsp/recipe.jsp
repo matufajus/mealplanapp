@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="security"%>  
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%> 
 <!doctype html>
 <html lang="en">
   	<head>
@@ -54,6 +56,11 @@
 	 		<br>
 			<security:authorize access="hasRole('ADMIN')">
 				<a class="btn btn-primary" href="updateForm?recipeId=${recipe.id}">Redaguoti</a>
+			</security:authorize>
+			<security:authorize access="!hasRole('ADMIN')">
+				<c:if test="${isAuthor}">
+					<a class="btn btn-primary" href="updateForm?recipeId=${recipe.id}">Redaguoti</a>
+				</c:if>
 			</security:authorize>
  		</div>
 		<%@ include file="footer.jsp" %>

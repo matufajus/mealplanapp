@@ -15,4 +15,6 @@ public interface UserService{
 	
 	public long getCurrentUserId();
 
+	public boolean hasCurrentUserRole(String role);
+
 }

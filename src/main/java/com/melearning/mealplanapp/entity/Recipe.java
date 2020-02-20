@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -46,6 +47,18 @@ public class Recipe {
 	
 	@Column(name="image")
 	private String image;
+	
+	@ManyToOne
+	@JoinColumn(name = "author_id")
+	private User author;
+	
+	//requested to be made public so everyone could see
+	@Column(name="shared")
+	private boolean shared;
+	
+	//approved by admin and is now public
+	@Column(name="approved")
+	private boolean approved;
 	
 	public Recipe() {
 	}
@@ -111,6 +124,30 @@ public class Recipe {
 
 	public void setMealTypes(List<MealType> mealTypes) {
 		this.mealTypes = mealTypes;
+	}
+
+	public User getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(User author) {
+		this.author = author;
+	}
+
+	public boolean isShared() {
+		return shared;
+	}
+
+	public void setShared(boolean shared) {
+		this.shared = shared;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
 	}
 	
 	

@@ -38,6 +38,7 @@ import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.UnitType;
 import com.melearning.mealplanapp.service.FileService;
 import com.melearning.mealplanapp.service.RecipeService;
+import com.melearning.mealplanapp.service.UserService;
 
 
 @Controller
@@ -49,6 +50,9 @@ public class RecipeController {
 	
 	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private UserService userService;
 	
 	@Autowired
 	ModelMapper mapper;
@@ -67,15 +71,25 @@ public class RecipeController {
 		return "list-recipes";
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/myList")
+	public String listUserRecipes(Model model) {
+		List<Recipe> recipes= recipeService.findByAuthorId(userService.getCurrentUserId());
+		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("recipes", recipes);
+		return "list-recipes";
+	}
+	
 	@GetMapping("/showForm")
 	public String showFormForAdd(Model model) {
-		model.addAttribute("recipe", new RecipeFormDTO());
+		RecipeFormDTO recipeDTO = new RecipeFormDTO();		
+		if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
+			recipeDTO.setShared(true);
+		}
+		model.addAttribute("recipe", recipeDTO);
 		model.addAttribute("mealTypes", MealType.values());
 		return "recipe-form";
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/saveRecipe")
 	public String saveRecipe(@Valid @ModelAttribute("recipe") RecipeFormDTO recipeDTO, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
@@ -92,33 +106,51 @@ public class RecipeController {
 			Recipe recipe = convertToEntity(recipeDTO);
 			recipe.getIngredients().forEach(i -> i.setRecipe(recipe));
 			recipe.getPreparations().forEach(p -> p.setRecipe(recipe));
-//			recipeDTO.getIngredients().removeIf(i -> (i.getRecipe() == null));
-//			recipeDTO.getPreparations().removeIf(p -> (p.getRecipe() == null));
+			if (recipe.getId() == 0) {
+				recipe.setAuthor(userService.getCurrentUser());
+			}			
 			recipeService.save(recipe);
 			return "redirect:/recipe/list";
 		}
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/updateForm")
 	public String showFormForUpdate(@RequestParam("recipeId") int id, Model model) {
 		Recipe recipe = recipeService.findById(id);
-		model.addAttribute("recipe", convertToDTO(recipe));
-		model.addAttribute("mealTypes", MealType.values());
-		model.addAttribute("unitTypes", UnitType.values());
-		return "recipe-form";
+		if (recipe.getAuthor() == userService.getCurrentUser() || (userService.hasCurrentUserRole("ROLE_ADMIN"))) {
+			model.addAttribute("recipe", convertToDTO(recipe));
+			model.addAttribute("mealTypes", MealType.values());
+			model.addAttribute("unitTypes", UnitType.values());
+			return "recipe-form";
+		}else {
+			return "error";
+		}
+		
 	}
 	
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/delete")
 	public String deleteRecipe(@RequestParam("recipeId") int id) {
-		recipeService.deleteById(id);
+		if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
+			recipeService.deleteById(id);
+		} else {
+			Recipe recipe = recipeService.findById(id);
+			if (recipe.getAuthor() == userService.getCurrentUser()){
+				recipeService.deleteUsersRecipe(recipe);
+			}
+		}	
 		return "redirect:/recipe/list";
 	}
 	
 	@GetMapping("/info")
 	public String showRecipe(@RequestParam("recipeId") int id, Model model) {
-		model.addAttribute("recipe", recipeService.findById(id));
+		Recipe recipe = recipeService.findById(id);
+		boolean isAuthor = false;
+		if (userService.getCurrentUser() == recipe.getAuthor()) {
+			isAuthor = true;
+		}
+		model.addAttribute("recipe", recipe);
+		model.addAttribute("isAuthor", isAuthor);
+		
 		return "recipe";
 	}
 	

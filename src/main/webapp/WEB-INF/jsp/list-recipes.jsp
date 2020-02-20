@@ -15,12 +15,14 @@
 			<div class="row">
 				<div id="recipes-side-nav" class="col-sm-2 px-5 min-vh-100">
 		            <div class="py-2 sticky-top flex-grow-1">
-		                <div class="nav flex-sm-column top-container pt-2">	
-		                
-		                	<security:authorize access="hasRole('ADMIN')">
-								<a id="add-recipe-link" href="showForm"><img class="icon-m mr-2" src="/images/plus-sign.svg"> Pridėti naują receptą</a>
-							</security:authorize>
-		                	                 
+		                <div class="nav flex-sm-column top-container pt-2">	         
+		                	
+		                	<div class="btn-group" role="group" aria-label="Basic example">
+							  <a id="all-recipes-link" href="list" class="btn btn-light">Visi receptai</a>
+							  <a id="my-recipes-link" href="myList" class="btn btn-light"> Mano receptai</a>
+							</div>
+							<br>						
+								                	                 
 		                    <c:forEach var="selectedMealType" items="${selectedMealTypes}">
 		                   	 <input type="hidden" class="selectedMealType" value="${selectedMealType}">
 		                    </c:forEach>
@@ -41,20 +43,23 @@
 		                </div>
 		            </div>
 	        	</div>
-				<div id="recipes-list-container" class="col bg-light top-container">
-					<c:if test="${recipes.size() == 0}">
+				<div class="col bg-light top-container">
+					<div class="row">
+						<a id="add-recipe-link" class="btn btn-light my-4 mx-5" href="showForm"><img class="icon-m mr-2" src="/images/plus-sign.svg"> Pridėti receptą</a>
+					</div>
+					<div id="recipes-list-container" class="row">	
+						<c:if test="${recipes.size() == 0}">
 						<h2 class="m-3">Deja, nepavyko rasti receptų.</h2>
 					</c:if>	
-				    <c:forEach var="recipe" items="${recipes}">
-					   
+				    <c:forEach var="recipe" items="${recipes}">		   
 					   <div class = "recipe-thmbnl">
 								<a href="info?recipeId=${recipe.id}">
 									<img class="zoom" src="${recipe.image}" >	
 							   		<h2>${recipe.title}</h2>
 						  		 </a>
 					   </div>
-					</c:forEach>
-				
+					</c:forEach>			
+					</div>
 				</div>
 			</div>
 		</div>

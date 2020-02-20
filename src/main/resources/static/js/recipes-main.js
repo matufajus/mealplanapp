@@ -31,8 +31,7 @@ $(document).ready(function() {
   
   if (location.pathname.startsWith("/recipe/list")){
 	  var selectedTypes = $(".selectedMealType");
-	  var checkBoxes = $("input[name='type'");
-	  	
+	  var checkBoxes = $("input[name='type'");	  	
 	  checkBoxes.each(function( index ) {
 		  var checkBox = this;
 		  selectedTypes.each(function( index ) {
@@ -41,8 +40,11 @@ $(document).ready(function() {
 			});
 		 
 		});	
+	  $("#all-recipes-link").addClass("active");
   }
-		  
+  if (location.pathname.startsWith("/recipe/myList")){
+	  $("#my-recipes-link").addClass("active");
+  }
 
 });
 

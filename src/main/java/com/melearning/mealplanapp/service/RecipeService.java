@@ -35,4 +35,8 @@ public interface RecipeService {
 
 	public List<Recipe> getRecipesByMealTypesAndSearchProducts(List<MealType> mealTypes, List<String> products);
 
+	public List<Recipe> findByAuthorId(long currentUserId);
+
+	public void deleteUsersRecipe(Recipe recipe);
+
 }
