@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -194,40 +195,14 @@ public class RecipeServiceImpl implements RecipeService {
 		else {
 			filteredRecipes = recipes;
 		}
-		if (products != null)
-			filteredRecipes = filterRecipesBySearchProducts(filteredRecipes, products);
-//			filteredRecipes = recipes.stream().filter(recipe -> products.stream().allMatch(product -> recipe.getIngredients().
-//					.contains(product))).collect(Collectors.toList());
-		
+		if (products != null) {
+			filteredRecipes = filteredRecipes.stream().filter(recipe ->
+				products.stream().allMatch(product ->
+				recipe.getIngredients().stream().map(ingredient ->
+				ingredient.getName().toLowerCase()).anyMatch(ingredient ->
+				ingredient.contains(product.toLowerCase())))).collect(Collectors.toList());
+		}
 		return filteredRecipes;
-	}
-	
-	private List<Recipe> filterRecipesBySearchProducts(List<Recipe> recipes, List<String> products) {
-		List<Recipe> availableRecipes = new ArrayList<Recipe>();
-		for (Recipe recipe : recipes) {
-			if (areSearchProductsInIngredients(recipe.getIngredients(), products)) {
-				availableRecipes.add(recipe);
-			}
-		}
-		return availableRecipes;
-	}
-	
-	private boolean isSearchProductInIngredients(String product, List<Ingredient> ingredients) {
-		for(Ingredient ingredient: ingredients) {
-			if (ingredient.getName().toLowerCase().contains(product.toLowerCase())) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private boolean areSearchProductsInIngredients(List<Ingredient> ingredients, List<String> products) {
-		for (String product : products) {
-			if (!isSearchProductInIngredients(product, ingredients)) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 }
