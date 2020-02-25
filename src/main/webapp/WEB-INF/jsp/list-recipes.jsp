@@ -16,16 +16,7 @@
 				<div id="recipes-side-nav" class="col-sm-2 px-5 min-vh-100">
 		            <div class="py-2 sticky-top flex-grow-1">
 		                <div class="nav flex-sm-column top-container pt-2">	         
-		                	
-		                	<div class="btn-group" role="group" aria-label="Basic example">
-							  <a id="all-recipes-link" href="list" class="btn btn-light">Visi receptai</a>
-							  <a id="my-recipes-link" href="myList" class="btn btn-light"> Mano receptai</a>
-							</div>
-							<br>						
-								                	                 
-		                    <c:forEach var="selectedMealType" items="${selectedMealTypes}">
-		                   	 <input type="hidden" class="selectedMealType" value="${selectedMealType}">
-		                    </c:forEach>
+	
 		                    
 	                    	<form id="recipe-side-nav-form" action="getFilteredRecipes" method="GET">
 	                    		<c:forEach var="mealType" items="${mealTypes}">
@@ -35,6 +26,8 @@
 	               				Produktai:
 	                    		<input type="text" value="" id="tags" name="products" class="form-control">
 	                    		
+	                    		<input type="hidden" name="section">
+	                    		
                     			<input type="submit" class = "btn btn-primary" value="Ieškoti" />
 	                    	</form>
 	                    	
@@ -43,8 +36,25 @@
 		                </div>
 		            </div>
 	        	</div>
-				<div class="col bg-light top-container">
+				<div class="col bg-white top-container">
 					<div class="row">
+						
+						<security:authorize access="!hasRole('ADMIN')">
+								<div class="btn-group my-4 mx-5" role="group" aria-label="Basic example">
+									<a href="list" class="btn btn-light">Visi receptai</a>									
+									<a href="myList" class="btn btn-light"> Mano receptai</a>
+								</div>
+							</security:authorize>
+							<br>
+						
+						<security:authorize access="hasRole('ADMIN')">
+							<div class="btn-group my-4 mx-5" role="group" aria-label="Basic example">
+								<a href="list" class="btn btn-light">Patvirtinti receptai</a>
+								<a href="privateList" class="btn btn-light">Privatūs receptai</a>
+								<a href="sharedList" class="btn btn-light"> Laukiantys patvirtinimo</a>
+								<a href="rejectedList" class="btn btn-light">Atmesti receptai</a>
+							</div>
+						</security:authorize>
 						<a id="add-recipe-link" class="btn btn-light my-4 mx-5" href="showForm"><img class="icon-m mr-2" src="/images/plus-sign.svg"> Pridėti receptą</a>
 					</div>
 					<div id="recipes-list-container" class="row">	

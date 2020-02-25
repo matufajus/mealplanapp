@@ -35,11 +35,17 @@ public class RecipeFormDTO {
 	
 	private MultipartFile imageFile;
 	
-	private User author;
+	private String owner;
+	
+	private String author;
 	
 	private String description;
 	
 	private boolean shared;
+	
+	private boolean inspected;
+	
+	private boolean published;
 
 
 	public String getTitle() {
@@ -117,12 +123,36 @@ public class RecipeFormDTO {
 		this.shared = shared;
 	}
 
-	public User getAuthor() {
+	public String getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(String author) {
 		this.author = author;
+	}
+
+	public boolean isInspected() {
+		return inspected;
+	}
+
+	public void setInspected(boolean inspected) {
+		this.inspected = inspected;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
 	}
 	
 	

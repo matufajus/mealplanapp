@@ -1,6 +1,8 @@
 package com.melearning.mealplanapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum UnitType {
@@ -25,5 +27,16 @@ public enum UnitType {
 	public String getName() {
 		return this.name();
 	}
+	
+	@JsonCreator
+    public static UnitType forValues(@JsonProperty("label") String label,
+      @JsonProperty("name") String name) {
+        for (UnitType unitType : UnitType.values()) {
+            if (unitType.name().equals(name) && unitType.label.equals(label)) {
+                return unitType;
+            }
+        }
+        return null;
+    }
 
 }

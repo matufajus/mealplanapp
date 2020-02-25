@@ -56,9 +56,13 @@
 	 		<br>
 			<security:authorize access="hasRole('ADMIN')">
 				<a class="btn btn-primary" href="updateForm?recipeId=${recipe.id}">Redaguoti</a>
+				<c:if test="${recipe.shared && !recipe.inspected}">
+					<a class="btn btn-primary" href="approveRecipe?recipeId=${recipe.id}">Patvirtinti</a>
+					<a class="btn btn-primary" href="rejectRecipe?recipeId=${recipe.id}">Atmesti</a>
+				</c:if>	
 			</security:authorize>
 			<security:authorize access="!hasRole('ADMIN')">
-				<c:if test="${isAuthor}">
+				<c:if test="${isOwner}">
 					<a class="btn btn-primary" href="updateForm?recipeId=${recipe.id}">Redaguoti</a>
 				</c:if>
 			</security:authorize>

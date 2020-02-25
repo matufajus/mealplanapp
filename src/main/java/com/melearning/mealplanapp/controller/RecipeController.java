@@ -36,6 +36,7 @@ import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.UnitType;
+import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.service.FileService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.UserService;
@@ -64,8 +65,8 @@ public class RecipeController {
 	}
 	
 	@GetMapping("/list")
-	public String listRecipes(Model model) {
-		List<Recipe> recipes= recipeService.findAll();
+	public String listPublishedRecipes(Model model) {
+		List<Recipe> recipes= recipeService.getPublicRecipes();
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("recipes", recipes);
 		return "list-recipes";
@@ -73,17 +74,66 @@ public class RecipeController {
 	
 	@GetMapping("/myList")
 	public String listUserRecipes(Model model) {
-		List<Recipe> recipes= recipeService.findByAuthorId(userService.getCurrentUserId());
+		List<Recipe> recipes= recipeService.findByOwnerId(userService.getCurrentUserId());
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("recipes", recipes);
 		return "list-recipes";
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/sharedList")
+	public String listSharedRecipes(Model model) {
+		List<Recipe> recipes= recipeService.getRecipesWaitingForInspection();
+		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("recipes", recipes);
+		return "list-recipes";
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/privateList")
+	public String listUsersPrivateRecipes(Model model) {
+		List<Recipe> recipes= recipeService.getPrivateRecipes();
+		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("recipes", recipes);
+		return "list-recipes";
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/rejectedList")
+	public String listRejectedRecipes(Model model) {
+		List<Recipe> recipes= recipeService.getRejectedRecipes();
+		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("recipes", recipes);
+		return "list-recipes";
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/approveRecipe")
+	public String makeRecipePublic(@RequestParam("recipeId") int recipeId) {
+		User publisher = userService.getCurrentUser();
+		recipeService.makeRecipePublic(recipeId, publisher);
+		return "redirect:/recipe/sharedList";
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/rejectRecipe")
+	public String makeRecipePrivate(@RequestParam("recipeId") int recipeId) {
+		Recipe recipe = recipeService.findById(recipeId);
+		recipe.setInspected(true);
+		recipe.setPublished(false);
+		recipeService.save(recipe);
+		return "redirect:/recipe/sharedList";
+	}
+	
+	
+	
 	@GetMapping("/showForm")
 	public String showFormForAdd(Model model) {
-		RecipeFormDTO recipeDTO = new RecipeFormDTO();		
+		RecipeFormDTO recipeDTO = new RecipeFormDTO();	
+		recipeDTO.setShared(true);
 		if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
-			recipeDTO.setShared(true);
+			recipeDTO.setInspected(true);
+			recipeDTO.setPublished(true);
 		}
 		model.addAttribute("recipe", recipeDTO);
 		model.addAttribute("mealTypes", MealType.values());
@@ -107,8 +157,10 @@ public class RecipeController {
 			recipe.getIngredients().forEach(i -> i.setRecipe(recipe));
 			recipe.getPreparations().forEach(p -> p.setRecipe(recipe));
 			if (recipe.getId() == 0) {
-				recipe.setAuthor(userService.getCurrentUser());
-			}			
+				User user = userService.getCurrentUser();
+				recipe.setAuthor(user.getUsername());
+				recipe.setOwner(user);
+			}
 			recipeService.save(recipe);
 			return "redirect:/recipe/list";
 		}
@@ -117,7 +169,7 @@ public class RecipeController {
 	@GetMapping("/updateForm")
 	public String showFormForUpdate(@RequestParam("recipeId") int id, Model model) {
 		Recipe recipe = recipeService.findById(id);
-		if (recipe.getAuthor() == userService.getCurrentUser() || (userService.hasCurrentUserRole("ROLE_ADMIN"))) {
+		if (recipe.getOwner() == userService.getCurrentUser() || (userService.hasCurrentUserRole("ROLE_ADMIN"))) {
 			model.addAttribute("recipe", convertToDTO(recipe));
 			model.addAttribute("mealTypes", MealType.values());
 			model.addAttribute("unitTypes", UnitType.values());
@@ -125,7 +177,6 @@ public class RecipeController {
 		}else {
 			return "error";
 		}
-		
 	}
 	
 	@GetMapping("/delete")
@@ -134,8 +185,8 @@ public class RecipeController {
 			recipeService.deleteById(id);
 		} else {
 			Recipe recipe = recipeService.findById(id);
-			if (recipe.getAuthor() == userService.getCurrentUser()){
-				recipeService.deleteUsersRecipe(recipe);
+			if (recipe.getOwner() == userService.getCurrentUser()){
+				recipeService.deleteById(id);;
 			}
 		}	
 		return "redirect:/recipe/list";
@@ -144,12 +195,12 @@ public class RecipeController {
 	@GetMapping("/info")
 	public String showRecipe(@RequestParam("recipeId") int id, Model model) {
 		Recipe recipe = recipeService.findById(id);
-		boolean isAuthor = false;
-		if (userService.getCurrentUser() == recipe.getAuthor()) {
-			isAuthor = true;
+		boolean isOwner = false;
+		if (userService.getCurrentUser() == recipe.getOwner()) {
+			isOwner = true;
 		}
 		model.addAttribute("recipe", recipe);
-		model.addAttribute("isAuthor", isAuthor);
+		model.addAttribute("isOwner", isOwner);
 		
 		return "recipe";
 	}
@@ -160,11 +211,15 @@ public class RecipeController {
 	}
 	
 	private RecipeFormDTO convertToDTO(Recipe recipe) {
-		return mapper.map(recipe, RecipeFormDTO.class);
+		RecipeFormDTO recipeDTO = mapper.map(recipe, RecipeFormDTO.class);
+		recipeDTO.setOwner(recipe.getOwner().getUsername());
+		return recipeDTO;
 	}
 	
 	private Recipe convertToEntity(RecipeFormDTO recipeDTO) {
-		return mapper.map(recipeDTO, Recipe.class);
+		Recipe recipe = mapper.map(recipeDTO, Recipe.class);
+		recipe.setOwner(userService.findByUsername(recipeDTO.getOwner()));
+		return recipe;
 	}
 	
 	@GetMapping("/getRecipe")
@@ -188,20 +243,35 @@ public class RecipeController {
 	}
 	
 	@GetMapping("/getFilteredRecipes")
-	public @ResponseBody List<Recipe> getFilteredRecipes(@RequestParam(name = "type", required = false) List<MealType> selectedMealtypes, 
+	public @ResponseBody List<Recipe> getFilteredRecipes(@RequestParam(name = "section", required = true) String section,
+			@RequestParam(name = "type", required = false) List<MealType> selectedMealtypes, 
 			@RequestParam(name = "products", required = false) List<String> products){
-		List<Recipe> recipes = new ArrayList<Recipe>();
-		if (selectedMealtypes != null) {		
-			if(products != null) {
-				recipes = recipeService.getRecipesByMealTypesAndSearchProducts(selectedMealtypes, products);
-			}else {
-				recipes = recipeService.getRecipesByMealTypes(selectedMealtypes);
-			}
-		} else if(products != null) {
-			recipes = recipeService.getRecipesForSearchProducts(products); 
-		} else {
-			recipes = recipeService.findAll();
+		List<Recipe> recipes = new ArrayList<Recipe>();;
+		switch (section) {
+		case "list":
+			recipes= recipeService.getPublicRecipes();
+			break;
+		case "myList":
+			recipes= recipeService.findByOwnerId(userService.getCurrentUserId());;
+			break;
+		case "sharedList":
+			if (userService.hasCurrentUserRole("ROLE_ADMIN"))
+				recipes= recipeService.getRecipesWaitingForInspection();
+			break;
+		case "privateList":
+			if (userService.hasCurrentUserRole("ROLE_ADMIN"))
+				recipes= recipeService.getPrivateRecipes();
+			break;
+		case "rejectedList":
+			if (userService.hasCurrentUserRole("ROLE_ADMIN"))
+				recipes= recipeService.getRejectedRecipes();
+			break;
+			
+		default:
+			break;
 		}
+		recipes = recipeService.filterRecipesByMealTypesAndSearchProducts(recipes, selectedMealtypes, products);
+
 		return recipes;
 	}
 

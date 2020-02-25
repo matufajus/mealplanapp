@@ -82,4 +82,9 @@ public class UserServiceImpl implements UserService {
 		return hasUserRole;
 	}
 
+	@Override
+	public String getCurrentUserName() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
+	}
+
 }

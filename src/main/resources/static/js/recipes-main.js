@@ -22,28 +22,17 @@ $(function () {
 });
 
 $(document).ready(function() {
+	//for main navigation bar
   $('li.nav-item.active').removeClass('active');
   $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
-  
   if (location.pathname.startsWith("/recipe/")){
 	  $('a[href="/recipe/list"]').closest('li').addClass('active'); 
   }
   
-  if (location.pathname.startsWith("/recipe/list")){
-	  var selectedTypes = $(".selectedMealType");
-	  var checkBoxes = $("input[name='type'");	  	
-	  checkBoxes.each(function( index ) {
-		  var checkBox = this;
-		  selectedTypes.each(function( index ) {
-			  if(checkBox.value == this.value) 
-				  checkBox.setAttribute("checked", "checked");
-			});
-		 
-		});	
-	  $("#all-recipes-link").addClass("active");
-  }
-  if (location.pathname.startsWith("/recipe/myList")){
-	  $("#my-recipes-link").addClass("active");
+  //for button group in recipes list
+  if (location.pathname.startsWith("/recipe/")){
+	  var type = location.pathname.substring(8);
+	  $('.btn-group a[href="' + type + '"]').addClass('active');
   }
 
 });
@@ -581,6 +570,10 @@ $("#recipe-side-nav-form").submit(function(event){
 	
 	var form = $(this);
     var url = form.attr('action');
+    
+    var section = location.pathname.substring(8);
+    
+    $("input[name='section']").attr("value", section);
 
     $.ajax({
            type: "GET",

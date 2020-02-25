@@ -49,20 +49,47 @@ public class Recipe {
 	private String image;
 	
 	@ManyToOne
-	@JoinColumn(name = "author_id")
-	private User author;
+	@JoinColumn(name = "owner_id")
+	private User owner;
 	
 	//requested to be made public so everyone could see
 	@Column(name="shared")
 	private boolean shared;
 	
-	//approved by admin and is now public
-	@Column(name="approved")
-	private boolean approved;
+	//approved by admin
+	@Column(name="inspected")
+	private boolean inspected;
+	
+	//is public
+	@Column(name="published")
+	private boolean published;
+	
+	@Column(name="author")
+	private String author;
 	
 	public Recipe() {
 	}
 	
+	
+	public Recipe(int id, String title, String description, List<Ingredient> ingredients,
+			List<Preparation> preparations, List<MealType> mealTypes, String image, User owner, boolean shared,
+			boolean inspected, boolean published, String author) {
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.ingredients = ingredients;
+		this.preparations = preparations;
+		this.mealTypes = mealTypes;
+		this.image = image;
+		this.owner = owner;
+		this.shared = shared;
+		this.inspected = inspected;
+		this.published = published;
+		this.author = author;
+	}
+
+
+
 	public int getId() {
 		return id;
 	}
@@ -126,14 +153,6 @@ public class Recipe {
 		this.mealTypes = mealTypes;
 	}
 
-	public User getAuthor() {
-		return author;
-	}
-
-	public void setAuthor(User author) {
-		this.author = author;
-	}
-
 	public boolean isShared() {
 		return shared;
 	}
@@ -142,12 +161,36 @@ public class Recipe {
 		this.shared = shared;
 	}
 
-	public boolean isApproved() {
-		return approved;
+	public boolean isInspected() {
+		return inspected;
 	}
 
-	public void setApproved(boolean approved) {
-		this.approved = approved;
+	public void setInspected(boolean inspected) {
+		this.inspected = inspected;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	
+	public String getAuthor() {
+		return author;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
 	}
 	
 	

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.melearning.mealplanapp.dao.FoodProductRepository;
 import com.melearning.mealplanapp.dao.RecipeRepository;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
@@ -21,6 +29,7 @@ import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.KitchenProduct;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
+import com.melearning.mealplanapp.entity.User;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
@@ -97,12 +106,6 @@ public class RecipeServiceImpl implements RecipeService {
 		return true;
 	}
 	
-	@Override
-	public List<Recipe> getRecipesByMealTypes(List<MealType> mealTypes) {
-		List<Recipe> listWithDuplicates = recipeRepository.getRecipesByMealTypesIn(mealTypes);
-		List<Recipe> listWithoutDuplicates = new ArrayList<Recipe>(new HashSet<Recipe>(listWithDuplicates));
-		return listWithoutDuplicates;
-	}
 	
 	@Override
 	public Page<Recipe> getRecipesByPage(int pageId, int pageSize){
@@ -130,10 +133,76 @@ public class RecipeServiceImpl implements RecipeService {
 	public FoodProduct getFoodProduct(String name) {
 		return foodProductRepository.findByName(name);
 	}
+
+	@Override
+	public List<Recipe> findByOwnerId(long currentUserId) {
+		return recipeRepository.findByOwnerId(currentUserId);
+	}
+
+	@Override
+	public void makeRecipePublic(int recipeId, User publisher) {
+		Recipe recipe = findById(recipeId);
+		recipe.setInspected(true);
+		save(recipe);
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			Recipe copyRecipe = objectMapper.readValue(objectMapper.writeValueAsString(recipe), Recipe.class);
+			copyRecipe.setId(0);
+			copyRecipe.setOwner(publisher);
+			copyRecipe.setPublished(true);
+			copyRecipe.getIngredients().forEach(i -> i.setId(0));
+			copyRecipe.getPreparations().forEach(p -> p.setId(0));
+			copyRecipe.getIngredients().forEach(i -> i.setRecipe(copyRecipe));
+			copyRecipe.getPreparations().forEach(p -> p.setRecipe(copyRecipe));
+			save(copyRecipe);
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+	}
 	
 	@Override
-	public List<Recipe> getRecipesForSearchProducts(List<String> products) {
-		List<Recipe> recipes = recipeRepository.findAll();
+	public List<Recipe> getRecipesWaitingForInspection() {
+		return recipeRepository.findBySharedAndInspected(true, false);
+	}
+
+	@Override
+	public List<Recipe> getPublicRecipes() {
+		return recipeRepository.findByPublished(true);
+	}
+	
+	@Override
+	public List<Recipe> getPrivateRecipes(){
+		return recipeRepository.findByShared(false);
+	}
+	
+	@Override
+	public List<Recipe> getRejectedRecipes(){
+		return recipeRepository.findBySharedAndInspectedAndPublished(true, true, false);
+	}
+
+	@Override
+	public List<Recipe> filterRecipesByMealTypesAndSearchProducts(List<Recipe> recipes,
+			List<MealType> selectedMealtypes, List<String> products) {
+		List<Recipe> filteredRecipes;
+		if (selectedMealtypes != null)
+			filteredRecipes = recipes.stream().filter(recipe -> selectedMealtypes.stream()
+					.anyMatch(mealType -> recipe.getMealTypes().contains(mealType))).collect(Collectors.toList());
+		else {
+			filteredRecipes = recipes;
+		}
+		if (products != null)
+			filteredRecipes = filterRecipesBySearchProducts(filteredRecipes, products);
+//			filteredRecipes = recipes.stream().filter(recipe -> products.stream().allMatch(product -> recipe.getIngredients().
+//					.contains(product))).collect(Collectors.toList());
+		
+		return filteredRecipes;
+	}
+	
+	private List<Recipe> filterRecipesBySearchProducts(List<Recipe> recipes, List<String> products) {
 		List<Recipe> availableRecipes = new ArrayList<Recipe>();
 		for (Recipe recipe : recipes) {
 			if (areSearchProductsInIngredients(recipe.getIngredients(), products)) {
@@ -160,33 +229,5 @@ public class RecipeServiceImpl implements RecipeService {
 		}
 		return true;
 	}
-	
-	public List<Recipe> getRecipesByMealTypesAndSearchProducts(List<MealType> mealTypes, List<String> products){
-		List<Recipe> recipesByMeal = getRecipesByMealTypes(mealTypes);
-		List<Recipe> availableRecipes = new ArrayList<Recipe>();
-		for (Recipe recipe : recipesByMeal) {
-			if (areSearchProductsInIngredients(recipe.getIngredients(), products)) {
-				availableRecipes.add(recipe);
-			}
-		}
-		return availableRecipes;
-	}
-
-	@Override
-	public List<Recipe> findByAuthorId(long currentUserId) {
-		return recipeRepository.findByAuthorId(currentUserId);
-	}
-
-	@Override
-	public void deleteUsersRecipe(Recipe recipe) {
-		if (!recipe.isApproved()) {
-			deleteById(recipe.getId());
-		} else {
-			recipe.setAuthor(null);
-			save(recipe);
-		}
-		
-	}
-
 
 }

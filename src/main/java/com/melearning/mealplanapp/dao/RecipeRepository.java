@@ -15,6 +15,15 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 
 	List<Recipe> getRecipesByMealTypesIn(List<MealType> mealTypes);
 	
-	List<Recipe> findByAuthorId(long id);
+	List<Recipe> findByOwnerId(long id);
+	
+	List<Recipe> findBySharedAndInspected(boolean b, boolean c);
+	
+	List<Recipe> findByInspected(boolean b);
+	
+	List<Recipe> findByShared(boolean b);
+	
+	List<Recipe> findByPublished(boolean b);
 
+	List<Recipe> findBySharedAndInspectedAndPublished(boolean b, boolean c, boolean d);
 }

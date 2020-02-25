@@ -8,6 +8,7 @@ import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.KitchenProduct;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
+import com.melearning.mealplanapp.entity.User;
 
 public interface RecipeService {
 	
@@ -23,20 +24,26 @@ public interface RecipeService {
 	
 	public List<Recipe> getRecipesForUserProducts(List<KitchenProduct> products);
 	
-	public List<Recipe> getRecipesByMealTypes(List<MealType> mealTypes);
-	
 	public Page<Recipe> getRecipesByPage(int pageId, int pageSize);
 	
 	public List<String> getNamesLike(String keyword);
 	
 	public FoodProduct getFoodProduct(String name);
 
-	public List<Recipe> getRecipesForSearchProducts(List<String> products);
+	public List<Recipe> findByOwnerId(long currentUserId);
 
-	public List<Recipe> getRecipesByMealTypesAndSearchProducts(List<MealType> mealTypes, List<String> products);
+	public List<Recipe> getRecipesWaitingForInspection();
 
-	public List<Recipe> findByAuthorId(long currentUserId);
+	public List<Recipe> getPublicRecipes();
 
-	public void deleteUsersRecipe(Recipe recipe);
+	public List<Recipe> getPrivateRecipes();
+
+	public void makeRecipePublic(int recipeId, User publisher);
+
+	public List<Recipe> getRejectedRecipes();
+
+	public List<Recipe> filterRecipesByMealTypesAndSearchProducts(List<Recipe> recipes,
+			List<MealType> selectedMealtypes, List<String> products);
+
 
 }

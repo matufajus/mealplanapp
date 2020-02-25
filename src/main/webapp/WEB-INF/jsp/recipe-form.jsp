@@ -40,15 +40,19 @@
 						<form:errors path="mealTypes" class="alert-info"/>
 						<div class="custom-control custom-switch">
 						<br>
-						  <form:checkbox path="shared" class="custom-control-input" id="customSwitch1"/>
-						  <label class="custom-control-label" for="customSwitch1">Padaryti receptą visiems matomą</label>
+							<form:checkbox path="shared" class="custom-control-input" id="sharedSwitch"/>
+							<label class="custom-control-label" for="sharedSwitch">Dalintis receptu su kitais</label>
 						</div>
-
 						<br><br>
 					  	<label for="imageFile">Paveikslėlis</label>
 		      			<form:input type = "file" class="form-control" path="imageFile" id="recipe-image-input"/>
 		      			
 		      			<form:input type="hidden" path="author"/>
+		      			<form:input type="hidden" path="owner"/>
+		      			<security:authorize access="hasRole('ADMIN')">
+			      			<form:input type="hidden" path="inspected"/>
+			      			<form:input type="hidden" path="published"/>
+		      			</security:authorize>
 					</div>
 				 </div>
 				 <div class="form-group col-md-4 col-lg-6 text-center">	      			
