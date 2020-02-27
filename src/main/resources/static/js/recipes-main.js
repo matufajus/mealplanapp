@@ -602,4 +602,17 @@ $("#recipe-side-nav-form").submit(function(event){
 	
 });
 
+$("#editIngredientLink").click(function(){
+	var id = $(this).data("id");
+	var name = $(this).data("name");
+	$("form[action='editIngredient'] input[name='id']").val(id);
+	$("form[action='editIngredient'] input[name='name']").val(name);
+});
+
+$("#addFoodProductLink").click(function(){
+	var name = $(this).data("name");
+	$("form[action='addFoodProduct'] input[name='name']").val(name);
+});
+
+
 

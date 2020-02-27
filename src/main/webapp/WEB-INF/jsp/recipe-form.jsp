@@ -122,7 +122,6 @@
 				<a id="add-preparation-button"><img class="icon-m mr-2" src="/images/plus-sign.svg"></a>
 		  	</div>
 		  </div>
-		  
 		  <form:button type="submit" class="btn btn-primary">Išsaugoti</form:button>
 	  		<a href="javascript:history.back()" class="btn btn-secondary">Atšaukti</a>
 		  <c:if test="${recipe.id ne 0 }">

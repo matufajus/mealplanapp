@@ -54,6 +54,8 @@
 								<a href="sharedList" class="btn btn-light"> Laukiantys patvirtinimo</a>
 								<a href="rejectedList" class="btn btn-light">Atmesti receptai</a>
 							</div>
+							
+							<a class="btn btn-light my-4 mx-2" href="unknownIngredients">Neatpažinti ingredientai</a>
 						</security:authorize>
 						<a id="add-recipe-link" class="btn btn-light my-4 mx-5" href="showForm"><img class="icon-m mr-2" src="/images/plus-sign.svg"> Pridėti receptą</a>
 					</div>

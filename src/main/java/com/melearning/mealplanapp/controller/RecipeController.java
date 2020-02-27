@@ -274,5 +274,28 @@ public class RecipeController {
 
 		return recipes;
 	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@GetMapping("/unknownIngredients")
+	public String showUnknownIngredients(Model model) {
+		model.addAttribute("ingredients", recipeService.getUnkownIngredients());
+		model.addAttribute("foodProduct", new FoodProduct());
+		return "unknown-ingredients";
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/editIngredient")
+	public String editIngredient(@RequestParam(name = "id") int id,
+			@RequestParam(name="name") String name) {
+		recipeService.updateIngredientName(id, name);
+		return "redirect:/recipe/unknownIngredients";
+	}
+	
+	@PreAuthorize("hasRole('ADMIN')")
+	@PostMapping("/addFoodProduct")
+	public String addFoodProduct(@ModelAttribute("foodProduct") FoodProduct foodProduct) {
+		recipeService.addFoodProduct(foodProduct);
+		return "redirect:/recipe/unknownIngredients";
+	}
 
 }

@@ -1,15 +1,16 @@
 package com.melearning.mealplanapp.entity;
 
 public enum FoodType {
-	VEGETABLE("Vegetable"),
-	FRUIT("Fruit"),
-	GRAINS_BEANS_NUTS("Grains, beans or nuts"),
-	MEAT_POULTRY("Meat or poultry"),
-	FISH_SEAFOOD("Fish or Seafood"),
-	DAIRY("Dairy"),
-	OTHER("Other");
+	VEGETABLE("Daržovės"),
+	FRUIT("Vaisiai"),
+	GRAINS_BEANS_NUTS("Grūdai, pupelės, riešutai"),
+	MEAT_POULTRY("Mėsa, paukštiena"),
+	FISH_SEAFOOD("Žuvis, jūros gėrybės"),
+	DAIRY("Pieno produktai"),
+	OTHER("Kita");
 	
 	public final String label;
+
 	
 	private FoodType(String label) {
 		this.label = label;

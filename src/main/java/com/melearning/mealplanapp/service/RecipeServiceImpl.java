@@ -23,6 +23,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.melearning.mealplanapp.dao.FoodProductRepository;
+import com.melearning.mealplanapp.dao.IngredientRepository;
 import com.melearning.mealplanapp.dao.RecipeRepository;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
@@ -38,11 +39,15 @@ public class RecipeServiceImpl implements RecipeService {
 	RecipeRepository recipeRepository;
 	
 	FoodProductRepository foodProductRepository;
+	
+	IngredientRepository ingredientRepository;
 
 	@Autowired
-	public RecipeServiceImpl(RecipeRepository recipeRepository, FoodProductRepository foodProductRepository) {
+	public RecipeServiceImpl(RecipeRepository recipeRepository, FoodProductRepository foodProductRepository,
+			IngredientRepository ingredientRepository) {
 		this.recipeRepository = recipeRepository;
 		this.foodProductRepository = foodProductRepository;
+		this.ingredientRepository = ingredientRepository;
 	}
 
 	@Override
@@ -203,6 +208,27 @@ public class RecipeServiceImpl implements RecipeService {
 				ingredient.contains(product.toLowerCase())))).collect(Collectors.toList());
 		}
 		return filteredRecipes;
+	}
+
+	@Override
+	public List<Ingredient> getUnkownIngredients() {
+		return ingredientRepository.findUnknownIngredients();
+	}
+
+	@Override
+	public void updateIngredientName(int id, String name) {
+		Optional<Ingredient> result = ingredientRepository.findById(id);
+		if (result.isPresent()) {
+			Ingredient ingredient = result.get();
+			ingredient.setName(name);
+			ingredientRepository.save(ingredient);
+		}
+		
+	}
+
+	@Override
+	public void addFoodProduct(FoodProduct foodProduct) {
+		foodProductRepository.save(foodProduct);
 	}
 
 }
