@@ -2,16 +2,18 @@ $(document).ready(function(){
   $('[data-toggle="popover"]').popover();   
 });
 
-//$(document).on('click', function (e) {
-//    $('[data-toggle="popover"],[data-original-title]').each(function () {
-//        //the 'is' for buttons that trigger popups
-//        //the 'has' for icons within a button that triggers a popup
-//        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {                
-//            (($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false  // fix for BS 3.3.6
-//        }
+// $(document).on('click', function (e) {
+// $('[data-toggle="popover"],[data-original-title]').each(function () {
+// //the 'is' for buttons that trigger popups
+// //the 'has' for icons within a button that triggers a popup
+// if (!$(this).is(e.target) && $(this).has(e.target).length === 0 &&
+// $('.popover').has(e.target).length === 0) {
+// (($(this).popover('hide').data('bs.popover')||{}).inState||{}).click = false
+// // fix for BS 3.3.6
+// }
 //
-//    });
-//});
+// });
+// });
 
 $(function () {
   var token = $("meta[name='_csrf']").attr("content");
@@ -22,14 +24,14 @@ $(function () {
 });
 
 $(document).ready(function() {
-	//for main navigation bar
+	// for main navigation bar
   $('li.nav-item.active').removeClass('active');
   $('a[href="' + location.pathname + '"]').closest('li').addClass('active'); 
   if (location.pathname.startsWith("/recipe/")){
 	  $('a[href="/recipe/list"]').closest('li').addClass('active'); 
   }
   
-  //for button group in recipes list
+  // for button group in recipes list
   if (location.pathname.startsWith("/recipe/")){
 	  var type = location.pathname.substring(8);
 	  $('.btn-group a[href="' + type + '"]').addClass('active');
@@ -377,20 +379,20 @@ $("#shopping-list-container").on("click", ".check-item", function(){
 	var item = $(this).parent("div");
 	var ids = item.data("ids");
 	$.post("plan/updateShoppingItem",{ids: ids}, function(){
-//		item.children("i").toggleClass("fa-square fa-check-square");
-//		item.remove();
-//		if (item.children("i").hasClass("fa-square")){
-//			$("#shopping-not-done").append(item);
-//		}else{
-//			$("#shopping-done").append(item);
-//		}
+// item.children("i").toggleClass("fa-square fa-check-square");
+// item.remove();
+// if (item.children("i").hasClass("fa-square")){
+// $("#shopping-not-done").append(item);
+// }else{
+// $("#shopping-done").append(item);
+// }
 		loadShoppingItems();
 	})
 })
 
 function printPlan()
 {       
-        //hide unnecessary stuff
+        // hide unnecessary stuff
         $("#plan-side-container").hide();
         $(".remove-recipe").hide();
         $(".link-to-settings").hide();
@@ -399,16 +401,16 @@ function printPlan()
         $(".open-edit-meal-modal").css("text-decoration","none");
         $(".add-meal-button img").hide();
         $(".add-meal-button").append("<br>")
-        //$("body").addClass("page-landscape");
-        //Print Page
+        // $("body").addClass("page-landscape");
+        // Print Page
         window.print();
-        //Restore orignal HTML
+        // Restore orignal HTML
         location.reload();
 }
 
 function printShoppingList()
 {       
-        //hide unnecessary stuff
+        // hide unnecessary stuff
         $("#plan").hide();
         $(".remove-recipe").hide();
         $(".link-to-settings").hide();
@@ -417,9 +419,9 @@ function printShoppingList()
         $("#plan-side-container").removeClass("col-2");
         $("#plan-side-container").css("position", "absolute");
         
-        //Print Page
+        // Print Page
         window.print();
-        //Restore orignal HTML
+        // Restore orignal HTML
         location.reload();
 }
 
@@ -455,9 +457,11 @@ $(document).on("click", ".open-edit-meal-modal", function () {
          });   	
     	
     	if (mealId != 0) {
-    		//var servings = $("#numberOfServings").val();
+    		// var servings = $("#numberOfServings").val();
         	$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='plan/deleteMeal?mealId="+mealId+"'>Pašalinti iš plano</a>");
-        	//$("#editMealModal .modal-body #buttons").append("<a class='btn btn-success' href='plan/updateMeal?mealId="+mealId+"&servings="+servings+">Išsaugoti</a>");
+        	// $("#editMealModal .modal-body #buttons").append("<a class='btn
+			// btn-success'
+			// href='plan/updateMeal?mealId="+mealId+"&servings="+servings+">Išsaugoti</a>");
         	$("#numberOfServings").prop( "disabled", true );
     	} else {
         	$("#editMealModal .modal-body #buttons").append("<a class='add-meal btn btn-success' data-recipe-id="+recipeId+">Pridėti prie plano</a>");
@@ -476,25 +480,37 @@ $(document).ready(function() {
 });
 
 function loadShoppingItems(){
-	$("#shopping-not-done").empty();
-	$("#shopping-done").empty();
-	 $.get("plan/getShoppingItems", function(shoppingList){
-		 shoppingList = removeDuplicateShoppingItems(shoppingList);
-		 $.each(shoppingList, function(i, shoppingItem){
-			 var html = "";
-			 if (!shoppingItem.done){
-				 html = "<div data-id="+shoppingItem.id+" data-ids="+shoppingItem.ids+">"+
-							"<img class='icon-sm check-item mr-1' src='/images/rectangular.svg'>" +
-							shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unit.label +
-						"</div>";
-				 $("#shopping-not-done").append(html);
-			 }else{
-				 html = "<div data-id="+shoppingItem.id+" data-ids="+shoppingItem.ids+">"+
-							"<img class='icon-sm check-item mr-1' src='/images/rectangular-checked.svg'>"+
-							shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unit.label +
-						"</div>";
-				 $("#shopping-done").append(html);
-			 }
+	$("#shopping-items").empty();
+	 $.get("plan/getShoppingItems", function(shoppingItemsDTO){
+		 console.log(shoppingItemsDTO);
+//		 var shoppingList = shoppingItemsDTO.map(a => a.shoppingItem);
+		 shoppingList = removeDuplicateShoppingItems(shoppingItemsDTO);
+		 console.log(shoppingList);
+		 var grouped = shoppingList.reduce(function (g, a) {
+		        g[a.foodType.label] = g[a.foodType.label] || [];
+		        g[a.foodType.label].push(a);
+		        return g;
+		    }, Object.create(null));
+
+
+		 console.log(grouped);
+		 $.each(grouped, function(i, foodType){
+			 
+			 var html = "<div>"+i;
+			 $.each(foodType, function(i, shoppingItemDTO){
+				 var shoppingItem = shoppingItemDTO.shoppingItem;
+				 html = html + "<div data-id="+shoppingItem.id+" data-ids="+shoppingItem.ids+">";
+				 if(!shoppingItem.done)
+					html = html + "<img class='icon-sm check-item mr-1' src='/images/rectangular.svg'>";
+				 if(shoppingItem.done)
+						html = html + "<img class='icon-sm check-item mr-1' src='/images/rectangular-checked.svg'>";
+				 
+				 html = html + shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unit.label+"</div>";
+			 })
+			
+
+			 html = html + "<hr/></div>";
+			 $("#shopping-items").append(html);
 		 });
 	 });
 }
@@ -502,13 +518,12 @@ function loadShoppingItems(){
 
 function removeDuplicateShoppingItems(shoppingList){
 	$.each(shoppingList, function(i, shoppingItem){
-		shoppingItem.ids = [shoppingItem.id];
+		shoppingItem.shoppingItem.ids = [shoppingItem.shoppingItem.id];
 	});
-	console.dir(shoppingList);
 	for(i = shoppingList.length-1; i >= 0; i--) {
 		if (i != 0) {
-			var item1 = shoppingList[i];
-			var item2 = shoppingList[i-1];
+			var item1 = shoppingList[i].shoppingItem;
+			var item2 = shoppingList[i-1].shoppingItem;
 			 if (item1.name == item2.name) {
 				if ((item1.unit.name == item2.unit.name) && (item1.done == item2.done)) {
 					item2.ammount = parseFloat(item1.ammount) + parseFloat(item2.ammount);
@@ -543,10 +558,10 @@ function enableFoodProductAutocomplete(){
 
 $("#tags").tagsinput({
 	
-//	typeaheadjs: {
-//		name: "product",
-//	    source: '/recipe/searchProducts'
-//	  }
+// typeaheadjs: {
+// name: "product",
+// source: '/recipe/searchProducts'
+// }
 	 typeahead: {
 		 source: function(query) {
 		      return $.get('/recipe/searchProducts?term='+query);

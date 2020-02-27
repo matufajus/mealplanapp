@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.melearning.mealplanapp.dto.ShoppingItemDTO;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
@@ -59,7 +60,6 @@ public class PlanController {
 	public String showPlan(Model model) {
 		User user = userService.getCurrentUser();
 		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), user.getPlanDays());
-		List<ShoppingItem> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		Meal meal = new Meal();
 		int planDays = user.getPlanDays();
 		String planStyle = user.getPlanStyle();
@@ -68,7 +68,6 @@ public class PlanController {
 		model.addAttribute("planStyle", user.getPlanStyle());
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("newMeal", meal);
-		model.addAttribute("shoppingList", shoppingList);
 		model.addAttribute("planDays", planDays);
 		model.addAttribute("planStyle", planStyle);
 		return "meal-plan";
@@ -108,10 +107,10 @@ public class PlanController {
 	}
 	
 	@GetMapping("/getShoppingItems")
-	public @ResponseBody List<ShoppingItem> getShoppingItems() {
+	public @ResponseBody List<ShoppingItemDTO> getShoppingItems() {
 		User user = userService.getCurrentUser();
 		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), user.getPlanDays());
-		List<ShoppingItem> shoppingList = shoppingService.getShoppingListForMeals(meals);
+		List<ShoppingItemDTO> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		return shoppingList;
 	}
 }

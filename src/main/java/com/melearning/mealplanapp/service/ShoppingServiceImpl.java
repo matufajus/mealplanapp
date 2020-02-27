@@ -4,11 +4,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.melearning.mealplanapp.dao.FoodProductRepository;
 import com.melearning.mealplanapp.dao.ShoppingRepository;
+import com.melearning.mealplanapp.dto.ShoppingItemDTO;
+import com.melearning.mealplanapp.entity.FoodProduct;
+import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.ShoppingItem;
@@ -20,27 +25,25 @@ public class ShoppingServiceImpl implements ShoppingService{
 	@Autowired
 	ShoppingRepository shoppingRepository;
 	
+	@Autowired
+	FoodProductRepository foodProductRepository;
+	
 	@Override
-	public List<ShoppingItem> getShoppingListForMeals(List<Meal> meals){
+	public List<ShoppingItemDTO> getShoppingListForMeals(List<Meal> meals){
 		List<ShoppingItem> shoppingItems = shoppingRepository.findByMealInOrderByName(meals);
-		return shoppingItems;
+		List<FoodProduct> foodProducts = foodProductRepository.findAll();
+		List<ShoppingItemDTO> shoppingItemsDTO = new ArrayList<ShoppingItemDTO>();
+		for (ShoppingItem shoppingItem : shoppingItems) {
+			FoodType foodType = FoodType.OTHER;
+			for (FoodProduct foodProduct : foodProducts) {
+				if(shoppingItem.getName().equalsIgnoreCase(foodProduct.getName())) {
+					foodType = foodProduct.getFoodType();
+				}
+			}
+			shoppingItemsDTO.add(new ShoppingItemDTO(shoppingItem, foodType));
+		}
+		return shoppingItemsDTO;
 	}	
-
-//	private List<ShoppingItem> removeDuplicatesByName(List<ShoppingItem> shoppingItems) {	
-//		for(int i = shoppingItems.size()-1; i >= 0; i--) {
-//			if (i != 0) {
-//				ShoppingItem item1 = shoppingItems.get(i);
-//				ShoppingItem item2 = shoppingItems.get(i-1);
-//				 if (item1.getName().equals(item2.getName())) {
-//					if ((item1.getUnit().equals(item2.getUnit())) && (item1.isDone() == (item2.isDone()))) {
-//						item2.setAmmount(item1.getAmmount() + item2.getAmmount());
-//						shoppingItems.remove(i);
-//					}
-//				}	
-//			}
-//		}	
-//		return shoppingItems;		
-//	}
 
 
 
