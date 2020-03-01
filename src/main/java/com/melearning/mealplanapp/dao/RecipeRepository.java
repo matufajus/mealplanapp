@@ -2,6 +2,8 @@ package com.melearning.mealplanapp.dao;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.melearning.mealplanapp.entity.MealType;
@@ -26,4 +28,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 	List<Recipe> findByPublished(boolean b);
 
 	List<Recipe> findBySharedAndInspectedAndPublished(boolean b, boolean c, boolean d);
+
+	Page<Recipe> findByPublished(boolean b, Pageable pageable);
+
+	Page<Recipe> findByOwnerId(long currentUserId, Pageable pageable);
 }

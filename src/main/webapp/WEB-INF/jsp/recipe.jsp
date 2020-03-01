@@ -68,5 +68,6 @@
 			</security:authorize>
  		</div>
 		<%@ include file="footer.jsp" %>
+		<script src="/js/recipe.js"></script>
 	</body>
 </html>

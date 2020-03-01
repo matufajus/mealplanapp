@@ -39,7 +39,16 @@
 					<button class="btn btn-primary m-2" onclick="printShoppingList()"><img class="icon-sm" src="/images/printer-white.svg"> Spausdinti</button>				
 				</div>
 				<div id ="hide-meal-recipes-container-icon" class="d-none">&#10006;</div>
+				<div>
+				</div>
 				<div id="meal-recipes-container" class="d-none">
+					<h2>Pasirinkti patiekalą:</h2>
+					<div class='recipes-section btn-group my-4 mx-5' role='group'>
+						<a class='btn btn-light active' data-section="public">Visi receptai</a>							
+						<a class='btn btn-light' data-section="private"> Mano receptai</a>
+					</div>
+					<div id="recipes-list-container">
+					</div>
 				</div>
 				<br/>
 				<nav id="pagination-nav" aria-label="Page navigation" class="d-none">
@@ -112,5 +121,6 @@
 	</div>
 		
 	<%@ include file="footer.jsp"%>
+	<script src="/js/plan.js"></script>
 </body>
 </html>

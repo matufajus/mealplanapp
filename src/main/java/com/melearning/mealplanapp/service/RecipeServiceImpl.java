@@ -231,4 +231,16 @@ public class RecipeServiceImpl implements RecipeService {
 		foodProductRepository.save(foodProduct);
 	}
 
+	@Override
+	public Page<Recipe> getPublicRecipes(int pageId, int pageSize) {
+		Pageable pageable = PageRequest.of(pageId, pageSize);
+		return recipeRepository.findByPublished(true, pageable);
+	}
+
+	@Override
+	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize) {
+		Pageable pageable = PageRequest.of(pageId, pageSize);
+		return recipeRepository.findByOwnerId(currentUserId, pageable);
+	}
+
 }

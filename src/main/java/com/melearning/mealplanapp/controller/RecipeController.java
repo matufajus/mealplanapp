@@ -206,8 +206,15 @@ public class RecipeController {
 	}
 	
 	@GetMapping("/getRecipes")
-	public @ResponseBody Page<Recipe> getRecipes(@RequestParam(name = "pageId", defaultValue = "0") int pageId, @RequestParam(name = "pageSize", defaultValue = "16") int pageSize){
-		return recipeService.getRecipesByPage(pageId, pageSize);
+	public @ResponseBody Page<Recipe> getRecipes(@RequestParam(name = "section") String section,
+												@RequestParam(name = "pageId", defaultValue = "0") int pageId, 
+												@RequestParam(name = "pageSize", defaultValue = "16") int pageSize){
+		if (section.equals("public")) {
+			return recipeService.getPublicRecipes(pageId, pageSize);
+		}else {
+			return recipeService.findByOwnerId(userService.getCurrentUserId(), pageId, pageSize);
+		}
+		
 	}
 	
 	private RecipeFormDTO convertToDTO(Recipe recipe) {

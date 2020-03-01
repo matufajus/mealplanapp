@@ -52,5 +52,9 @@ public interface RecipeService {
 
 	public void addFoodProduct(FoodProduct foodProduct);
 
+	public Page<Recipe> getPublicRecipes(int pageId, int pageSize);
+
+	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize);
+
 
 }
