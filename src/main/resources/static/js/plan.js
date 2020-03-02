@@ -237,12 +237,13 @@ function loadShoppingItems(){
 	$("#shopping-items").empty();
 	 $.get("plan/getShoppingItems", function(shoppingItemsDTO){
 		 shoppingList = removeDuplicateShoppingItems(shoppingItemsDTO);
+		 shoppingList.sort(compareFoodType);
 		 var grouped = shoppingList.reduce(function (g, a) {
 		        g[a.foodType.label] = g[a.foodType.label] || [];
 		        g[a.foodType.label].push(a);
 		        return g;
 		    }, Object.create(null));
-
+		 
 		 $.each(grouped, function(i, foodType){
 			 
 			 var html = "<div>"+i;
@@ -302,3 +303,13 @@ function printShoppingList()
         // Restore orignal HTML
         location.reload();
 }
+
+function compareFoodType( a, b ) {
+	  if ( a.foodType.position < b.foodType.position ){
+	    return -1;
+	  }
+	  if ( a.foodType.position > b.foodType.position ){
+	    return 1;
+	  }
+	  return 0;
+	}
