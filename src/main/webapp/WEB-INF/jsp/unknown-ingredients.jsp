@@ -30,7 +30,7 @@
 					<td>
 						${ingredient.name} 
 						<a id="editIngredientLink" data-toggle="modal" href="#editIngredientModal" 
-						data-id="${ingredient.id}" data-name="${ingredient.name}">Redaguoti</a>
+						data-id="${ingredient.id}" data-name="${ingredient.name}"><img class="icon-sm" src="/images/edit-black.svg"></a>
 					</td>
 					<td>${ingredient.unit.label}</td>
 					<td> ${ingredient.recipe.title}</td> 

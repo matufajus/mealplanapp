@@ -67,6 +67,9 @@ public class Recipe {
 	@Column(name="author")
 	private String author;
 	
+	@Column(name="servings")
+	private int servings;
+	
 	public Recipe() {
 	}
 	
@@ -191,6 +194,16 @@ public class Recipe {
 
 	public void setPublished(boolean published) {
 		this.published = published;
+	}
+
+
+	public int getServings() {
+		return servings;
+	}
+
+
+	public void setServings(int servings) {
+		this.servings = servings;
 	}
 	
 	

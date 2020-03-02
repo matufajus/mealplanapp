@@ -42,6 +42,8 @@ import com.melearning.mealplanapp.service.FileService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.UserService;
 
+import net.bytebuddy.utility.RandomString;
+
 
 @Controller
 @RequestMapping("/recipe")
@@ -149,8 +151,9 @@ public class RecipeController {
 		}
 		else {
 			if (!recipeDTO.getImageFile().isEmpty()) {
-				fileService.uploadFile(recipeDTO.getImageFile());
-				recipeDTO.setImage("/recipeImages/" + recipeDTO.getImageFile().getOriginalFilename());
+				String prefix = RandomString.make(8);
+				fileService.uploadFile(recipeDTO.getImageFile(), prefix);
+				recipeDTO.setImage("/recipeImages/" + prefix + recipeDTO.getImageFile().getOriginalFilename());
 			}
 			Recipe recipe = convertToEntity(recipeDTO);
 			recipe.getIngredients().forEach(i -> i.setRecipe(recipe));

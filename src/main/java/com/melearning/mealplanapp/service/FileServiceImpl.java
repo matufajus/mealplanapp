@@ -25,7 +25,7 @@ public class FileServiceImpl implements FileService {
     @Value("${app.upload.dir}")
     public String uploadDir;
 
-    public void uploadFile(MultipartFile file) {
+    public void uploadFile(MultipartFile file, String prefix) {
 
         try {
         	
@@ -36,7 +36,7 @@ public class FileServiceImpl implements FileService {
         	InputStream inputStream = file.getInputStream();
 			BufferedImage image = ImageIO.read(inputStream);
 			BufferedImage resized = resize(image, 500, 500);
-        	File newImage = new File(uploadDir + StringUtils.cleanPath(file.getOriginalFilename()));
+        	File newImage = new File(uploadDir + StringUtils.cleanPath(prefix + file.getOriginalFilename()));
 			ImageIO.write(resized, "png", newImage);
            
         } catch (Exception e) {

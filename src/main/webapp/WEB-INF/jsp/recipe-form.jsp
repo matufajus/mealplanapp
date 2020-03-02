@@ -26,11 +26,11 @@
 		      	<div class="col-md-8 col-lg-6">
 					<div class="form-group">
 						Pavadinimas
-					 	<form:input type="text" class="form-control" path="title" required="true"/>
+					 	<form:input type="text" class="form-control" path="title" required="true" maxlength="50"/>
 						<form:errors path="title" class="alert-danger"/>
 					
 						Aprašymas
-					 	<form:input type="text" class="form-control" path="description" required="true"/>
+					 	<form:input type="text" class="form-control" path="description" required="true" maxlength="200"/>
 						<form:errors path="description" class="alert-danger"/>
 			
 						Patiekalo tipas<br>
@@ -38,6 +38,9 @@
 						<form:options items="${mealTypes}" itemLabel="label"/>
 						</form:select>
 						<form:errors path="mealTypes" class="alert-info"/>
+						<br><br>	
+						Porcijos
+						<form:input type="number"  class="form-control" path="servings" required="true" min="1" step="1"/>
 						<div class="custom-control custom-switch">
 						<br>
 							<form:checkbox path="shared" class="custom-control-input" id="sharedSwitch"/>
@@ -82,7 +85,7 @@
 			  <c:forEach var="ingredient" items="${recipe.ingredients}" varStatus="status">
 					<div id ="ingredient-${status.index}" class = "ingredient-container row form-group">
 						<div class = "col-6">
-							<form:input type="text" class="food-product-name form-control" path="ingredients[${status.index}].name" required="true"/>
+							<form:input type="text" class="food-product-name form-control" path="ingredients[${status.index}].name" required="true" maxlength="50"/>
 						</div>
 						<div class = "col-2">
 							<form:input type="number"  class="form-control" path="ingredients[${status.index}].ammount" required="true" min="0.1" step="0.1"/>
@@ -110,7 +113,7 @@
 		  		<c:forEach var="preparation" items="${recipe.preparations}" varStatus="status">
 		  			<div id ="preparation-${status.index}" class ="preparation-container row form-group">
 		  				<p class= "preparation-index col-1">${status.index+1}</p>
-		  				<form:textarea class="preparation-area form-control col" path="preparations[${status.index}].description" required="true"/>
+		  				<form:textarea class="preparation-area form-control col" path="preparations[${status.index}].description" required="true" maxlength="1000"/>
 		  				<form:hidden path="preparations[${status.index}].id" />
 						<form:hidden path="preparations[${status.index}].recipe" />
 						<a class ="remove-preparation"><img class="icon-m mr-2" src="/images/minus-black.svg"></a>

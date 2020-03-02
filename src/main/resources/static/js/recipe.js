@@ -49,6 +49,7 @@ $("#add-ingredient-button").click(function(){
 	nInput.setAttribute("type", "text");
 	nInput.setAttribute("class", "form-control food-product-name");
 	nInput.setAttribute("required", "true");
+	nInput.setAttribute("maxlength", "50");
 	name.appendChild(nInput);
 	ingredient.appendChild(name);
 	
@@ -139,6 +140,7 @@ $("#add-preparation-button").click(function(){
 	description.setAttribute("name", "preparations["+id+"].description");
 	description.setAttribute("id", "preparations"+id+".description");
 	description.setAttribute("required", "true");
+	description.setAttribute("maxlength", "1000");
 	preparation.appendChild(description);
 	
 	var iInput = document.createElement("input");

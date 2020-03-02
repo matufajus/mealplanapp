@@ -46,6 +46,8 @@ public class RecipeFormDTO {
 	private boolean inspected;
 	
 	private boolean published;
+	
+	private int servings;
 
 
 	public String getTitle() {
@@ -153,6 +155,14 @@ public class RecipeFormDTO {
 
 	public void setPublished(boolean published) {
 		this.published = published;
+	}
+
+	public int getServings() {
+		return servings;
+	}
+
+	public void setServings(int servings) {
+		this.servings = servings;
 	}
 	
 	

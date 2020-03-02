@@ -156,17 +156,6 @@ $("#pagination-nav").on("click", ".page-link", function() {
 	loadRecipes(page, 16);
 })
 
-$("#shopping-list-container").on("click", ".check-item", function(){
-	var item = $(this).parent("div");
-	var ids = item.data("ids");
-	$.post("plan/updateShoppingItem",{ids: ids}, function(){
-		loadShoppingItems();
-	})
-})
-
-
-
-
 
 $(document).on("click", ".open-edit-meal-modal", function () {
     var recipeId = $(this).data('recipe-id');
@@ -251,9 +240,9 @@ function loadShoppingItems(){
 				 var shoppingItem = shoppingItemDTO.shoppingItem;
 				 html = html + "<div data-id="+shoppingItem.id+" data-ids="+shoppingItem.ids+">";
 				 if(!shoppingItem.done)
-					html = html + "<img class='icon-sm check-item mr-1' src='/images/rectangular.svg'>";
+					html = html + "<img class='icon-sm check-item mr-1 unchecked' src='/images/rectangular.svg'>";
 				 if(shoppingItem.done)
-						html = html + "<img class='icon-sm check-item mr-1' src='/images/rectangular-checked.svg'>";
+						html = html + "<img class='icon-sm check-item mr-1 checked' src='/images/rectangular-checked.svg'>";
 				 
 				 html = html + shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unit.label+"</div>";
 			 })
@@ -312,4 +301,20 @@ function compareFoodType( a, b ) {
 	    return 1;
 	  }
 	  return 0;
-	}
+}
+
+
+$("#shopping-list-container").on("click", ".check-item", function(){
+	var item = $(this);
+	var ids = $(this).parent("div").data("ids");
+	$.post("plan/updateShoppingItem",{ids: ids}, function(){
+		item.toggleClass("checked");
+		item.toggleClass("unchecked");
+		if (item.hasClass("checked")){
+			item.attr('src','/images/rectangular-checked.svg');
+		}else{
+			item.attr('src','/images/rectangular.svg');
+		}
+		console.log(item);
+	})
+})
