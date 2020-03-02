@@ -32,7 +32,7 @@
 								${ingredient.ammount}
 							</div>
 							<div class = "col">
-								${ingredient.unit}
+								${ingredient.unit.label}
 							</div>
 						</div>
 					</c:forEach>

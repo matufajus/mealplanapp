@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.melearning.mealplanapp.demodata.CSVReader;
 import com.melearning.mealplanapp.demodata.Record;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
@@ -150,8 +151,6 @@ public class RecipeController {
 			if (!recipeDTO.getImageFile().isEmpty()) {
 				fileService.uploadFile(recipeDTO.getImageFile());
 				recipeDTO.setImage("/recipeImages/" + recipeDTO.getImageFile().getOriginalFilename());
-			} else {
-				recipeDTO.setImage("/recipeImages/default.png");
 			}
 			Recipe recipe = convertToEntity(recipeDTO);
 			recipe.getIngredients().forEach(i -> i.setRecipe(recipe));
@@ -160,6 +159,9 @@ public class RecipeController {
 				User user = userService.getCurrentUser();
 				recipe.setAuthor(user.getUsername());
 				recipe.setOwner(user);
+				if (recipe.getImage() == null) {
+					recipe.setImage("/recipeImages/default.png");
+				}
 			}
 			recipeService.save(recipe);
 			return "redirect:/recipe/list";
@@ -303,6 +305,26 @@ public class RecipeController {
 	public String addFoodProduct(@ModelAttribute("foodProduct") FoodProduct foodProduct) {
 		recipeService.addFoodProduct(foodProduct);
 		return "redirect:/recipe/unknownIngredients";
+	}
+	
+	@GetMapping("/checkAuthorizationForRecipe")
+	public @ResponseBody boolean checkIfuserIsAuthorizedForRecipe(@RequestParam int recipeId){
+		
+		Recipe recipe = recipeService.findById(recipeId);
+
+		if ((userService.getCurrentUser() == recipe.getOwner()) ||  (userService.hasCurrentUserRole("ROLE_ADMIN"))){
+			return true;
+		}
+		return false;
+	}
+	
+	@GetMapping("/hasUserRole")
+	public @ResponseBody boolean checkIfuserHasRole(@RequestParam String role){
+		
+		if (userService.hasCurrentUserRole("ROLE_ADMIN")){
+			return true;
+		}
+		return false;
 	}
 
 }

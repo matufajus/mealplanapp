@@ -94,7 +94,7 @@ $("#recipe-side-nav-form").submit(function(event){
         	   }else{
         		   $.each(recipes, function(i, recipe){
         			   container.append("<div class = 'recipe-thmbnl'>"+
-											"<a href='info?recipeId="+recipe.id+"'>"+
+											"<a class='recipe-modal-link' data-toggle='modal' href='#recipeModal' data-recipe-id='"+recipe.id+"'>"+
 												"<img class='zoom' src='"+recipe.image+"' >"+	
 										   		"<h2>"+recipe.title+"</h2>"+
 									  		 "</a>"+

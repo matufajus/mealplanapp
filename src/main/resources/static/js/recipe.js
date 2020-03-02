@@ -192,3 +192,48 @@ $('textarea').each(function () {
 
 
 $('.selectpicker').selectpicker();
+
+$("#recipes-list-container").on("click", ".recipe-modal-link", function () {
+		var recipeId = $(this).data('recipe-id');
+	    $("#recipeModal .modal-body").empty();
+	    var html ="";
+	    $.get("getRecipe",{recipeId}, function(recipe){
+	    	html = "<div class='row'>" +
+	    				"<div class='col-4'>"+
+							"<img class='img-modal' src='"+recipe.image+"'>"+
+						"</div>"+
+						"<div class='col-8'>"+
+							"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
+							"<div class='row mt-2' id='buttons'></div>"+
+						"</div>"+
+					"</div>"+
+		    		"<div class='row'>" +
+			    		"<div class='col' id='ingredients'>Reikės:</div>"+    
+			    		"<div class='col' id='preparations'>Paruošimo būdas:</div>"+  
+		    		"</div>";
+	        $("#recipeModal .modal-body").append(html);
+	        
+	    	$("#recipeModal .modal-title").text(recipe.title);
+	    	    	
+	    	$.each(recipe.ingredients, function(i, ingredient) {
+	    		$("#recipeModal .modal-body #ingredients").append("<p>"+ ingredient.name + ": "+ ingredient.ammount +" "+ ingredient.unit.label +"</p>");
+	         });
+	    	$.each(recipe.preparations, function(i, preparation) {
+	    		$("#recipeModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
+	         });   	
+	    	$.get("checkAuthorizationForRecipe",{recipeId}, function(data){
+	    		if (data == true){
+	    			$("#recipeModal .modal-body #buttons").append("<a class='btn btn-primary mx-1' href='updateForm?recipeId="+recipeId+"'>Redaguoti</a>");
+	    		}
+	    	$.get("hasUserRole", {role: "ROLE_ADMIN"}, function(data){
+	    		if ((data == true) && (recipe.shared && !recipe.inspected)){
+	    			$("#recipeModal .modal-body #buttons").append("<a class='btn btn-primary mx-1' href='approveRecipe?recipeId="+recipeId+"'>Patvirtinti</a>"+
+																	"<a class='btn btn-primary mx-1' href='rejectRecipe?recipeId="+recipeId+"'>Atmesti</a>");
+	    		}
+	    	})
+	    	});
+	    	
+		})
+		
+		
+})

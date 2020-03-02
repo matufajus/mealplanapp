@@ -32,7 +32,7 @@
 						<a id="editIngredientLink" data-toggle="modal" href="#editIngredientModal" 
 						data-id="${ingredient.id}" data-name="${ingredient.name}">Redaguoti</a>
 					</td>
-					<td>${ingredient.unit}</td>
+					<td>${ingredient.unit.label}</td>
 					<td> ${ingredient.recipe.title}</td> 
 					<td>
 						<a id="addFoodProductLink" data-toggle="modal" href="#addFoodProductModal" data-name="${ingredient.name }">Pridėti</a>
