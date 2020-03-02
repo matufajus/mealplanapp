@@ -68,8 +68,7 @@ function loadRecipes(page, size){
 	            html += "<div class='col-3'><a class='open-edit-meal-modal' data-toggle='modal' href='#editMealModal' data-recipe-id="+recipe.id+" data-meal-id='0'>"+
 			             		"<img class='img-thmbnl' src='"+recipe.image+"'>" +
 			             		"<span>"+recipe.title+"</span>" +
-		             		"</a></div>";
-	             
+		             		"</a></div>";            
 	         });
 	        html +="</div>";
 	        
@@ -86,11 +85,13 @@ $( "#editMealModal" ).on("click", ".add-meal", function() {
 	var date = $("#meal-recipes-container").data("date");
 	var mealType = $("#meal-recipes-container").data("meal-type");
 	var servings = $("#numberOfServings").val();
+	var addIngredients = $("#addIngredients").val();
 	
 	$("input[name='recipeId']").attr("value", recipeId);
 	$("input[name='date']").attr("value", date);
 	$("input[name='mealType']").attr("value", mealType);
 	$("input[name='servings']").attr("value", servings);
+	$("input[name='addIngredients']").attr("value", addIngredients);
 	
 	$("form[name='saveMeal']").submit();
 });
@@ -168,9 +169,15 @@ $(document).on("click", ".open-edit-meal-modal", function () {
 						"<img class='img-modal' src='"+recipe.image+"'>"+
 					"</div>"+
 					"<div class='col-8'>"+
-						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
-						"<div class='row'>Porcijos:<input type='number' id='numberOfServings' min='1' max='100' value='1'></div>"+
-						"<div class='row mt-2' id='buttons'></div>"+
+						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>";
+    	if (mealId== 0){
+    		html = html + "<div class='row'>Porcijos:<input type='number' id='numberOfServings' min='1' max='100' value='1'></div>"+
+    					"<div class='row'><input class='mr-1 mt-2' type='checkbox' id='addIngredients' checked> Įtraukti ingredientus į pirkinių sąrašą </div>";
+    	}else{
+    		html = html + "<div class='row'>Porcijos: "+recipe.servings+"</div>";
+
+    	}
+    	html = html +	"<div class='row mt-2' id='buttons'></div>"+
 					"</div>"+
 				"</div>"+
 	    		"<div class='row'>" +
@@ -189,17 +196,16 @@ $(document).on("click", ".open-edit-meal-modal", function () {
          });   	
     	
     	if (mealId != 0) {
-    		// var servings = $("#numberOfServings").val();
         	$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='plan/deleteMeal?mealId="+mealId+"'>Pašalinti iš plano</a>");
-        	// $("#editMealModal .modal-body #buttons").append("<a class='btn
-			// btn-success'
-			// href='plan/updateMeal?mealId="+mealId+"&servings="+servings+">Išsaugoti</a>");
-        	$("#numberOfServings").prop( "disabled", true );
     	} else {
         	$("#editMealModal .modal-body #buttons").append("<a class='add-meal btn btn-success' data-recipe-id="+recipeId+">Pridėti prie plano</a>");
     	}
     	
 	})
+});
+
+$("#editMealModal").on("change", "#addIngredients", function(){
+    $('#addIngredients').val($(this).is(':checked'));   
 });
 
 function printPlan()

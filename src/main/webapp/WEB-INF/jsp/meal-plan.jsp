@@ -60,7 +60,8 @@
 				<input type="hidden" name="recipeId"/>		
 				<input type="hidden" name="date"/>		
 				<input type="hidden" name="mealType"/>		
-				<input type="hidden" name="servings"/>		
+				<input type="hidden" name="servings"/>	
+				<input type="hidden" name="addIngredients"/>		
 			</form:form>
 		</div>
 	</div>

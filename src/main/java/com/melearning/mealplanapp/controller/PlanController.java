@@ -74,13 +74,15 @@ public class PlanController {
 	}
 	
 	@PostMapping("/createMeal")
-	public String createMeal(int recipeId, String date, String mealType, int servings) {
+	public String createMeal(int recipeId, String date, String mealType, int servings, boolean addIngredients) {
 		Recipe recipe = recipeService.findById(recipeId);
 		MealType type = MealType.valueOf(mealType);
 		LocalDate mealDate = LocalDate.parse(date);
 		Meal meal = new Meal(0, userService.getCurrentUser(), recipe, type, mealDate, servings);
 		mealService.saveMeal(meal);
-		shoppingService.addMealIngredientsToShoppingList(meal);
+		if (addIngredients) {
+			shoppingService.addMealIngredientsToShoppingList(meal);
+		}
 		return "redirect:/plan";
 	}
 	
