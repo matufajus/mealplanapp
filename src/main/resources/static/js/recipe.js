@@ -54,7 +54,7 @@ $("#add-ingredient-button").click(function(){
 	ingredient.appendChild(name);
 	
 	var ammount = document.createElement("div");
-	ammount.setAttribute("class", "col-2");
+	ammount.setAttribute("class", "col-3");
 	var aInput = document.createElement("input");
 	aInput.setAttribute("id", "ingredients"+id+".ammount");
 	aInput.setAttribute("name", "ingredients["+id+"].ammount");
@@ -68,7 +68,7 @@ $("#add-ingredient-button").click(function(){
 	ingredient.appendChild(ammount);
 	
 	var unit = document.createElement("div");
-	unit.setAttribute("class", "col-3");
+	unit.setAttribute("class", "col-2");
 	var uInput = document.createElement("select");
 	uInput.setAttribute("id", "ingredients"+id+".unit");
 	uInput.setAttribute("name", "ingredients["+id+"].unit");

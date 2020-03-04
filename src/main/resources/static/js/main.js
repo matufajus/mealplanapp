@@ -121,4 +121,7 @@ $("#addFoodProductLink").click(function(){
 });
 
 
-
+$("#scroll-down-link").click(function(){
+	var elem = document.getElementById("reasonsToPlan");
+	window.scroll(0, elem.offsetTop - 56);
+});

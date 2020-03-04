@@ -75,10 +75,10 @@
 		  	  	<div class="col-6">
 		  	  		Pavadinimas
 		  	  	</div>
-		  	  	<div class="col-2">
+		  	  	<div class="col-3">
 		  	  		Kiekis
 		  	  	</div>
-		  	  	<div class="col-3">
+		  	  	<div class="col-2">
 		  	  		Vienetai
 		  	  	</div>
 		  	  </div>
@@ -87,10 +87,10 @@
 						<div class = "col-6">
 							<form:input type="text" class="food-product-name form-control" path="ingredients[${status.index}].name" required="true" maxlength="50"/>
 						</div>
-						<div class = "col-2">
+						<div class = "col-3">
 							<form:input type="number"  class="form-control" path="ingredients[${status.index}].ammount" required="true" min="0.1" step="0.1"/>
 						</div>
-						<div class = "col-3">
+						<div class = "col-2">
 							<form:select class="food-product-unit form-control" path="ingredients[${status.index}].unit" required="true">
 							    <form:options items="${unitTypes}" itemLabel="label" />
 							</form:select>
