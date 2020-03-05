@@ -14,9 +14,9 @@
       <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/recipe/list">Receptai</a>
       </li>
-<!--       <li class="nav-item"> -->
-<%--         <a class="nav-link" href="${pageContext.request.contextPath}/kitchen/showProducts">Mano virtuvė</a> --%>
-<!--       </li> -->
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/kitchen/showProducts">Mano virtuvė</a>
+      </li>
        <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/plan">Planuoti</a>
       </li>

@@ -29,6 +29,7 @@ import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
 import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.service.KitchenService;
 import com.melearning.mealplanapp.service.MealService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.ShoppingService;
@@ -49,6 +50,9 @@ public class PlanController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	KitchenService kitchenService;
 	
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {

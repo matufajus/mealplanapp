@@ -17,6 +17,7 @@ function showRecipesContainer(){
 	$("#meal-recipes-container").data("date", date);
 	$("#meal-recipes-container").data("meal-type", mealType);
 	$("#shopping-list-container").addClass("d-none");
+	$("#shopping-list-settings").addClass("d-none");
 	$("#plan-side-container").attr("class", "col-6");
 	$("#hide-meal-recipes-container-icon").removeClass("d-none");
 	loadRecipes();
@@ -28,6 +29,7 @@ function hideRecipesContainer() {
 	$("#meal-recipes-container" ).addClass("d-none");
 	$("#pagination-nav").addClass("d-none");
 	$("#shopping-list-container").removeClass("d-none");
+	$("#shopping-list-settings").removeClass("d-none");
 	$("#hide-meal-recipes-container-icon").addClass("d-none");
 }
 
@@ -232,42 +234,56 @@ function loadShoppingItems(){
 	$("#shopping-items").empty();
 	 $.get("plan/getShoppingItems", function(shoppingItemsDTO){
 		 shoppingList = removeDuplicateShoppingItems(shoppingItemsDTO);
-		 shoppingList.sort(compareFoodType);
-		 var grouped = shoppingList.reduce(function (g, a) {
-		        g[a.foodType.label] = g[a.foodType.label] || [];
-		        g[a.foodType.label].push(a);
-		        return g;
-		    }, Object.create(null));
-		 
-		 $.each(grouped, function(i, foodType){
+		 if ($('#checkKitchenProducts').is(":checked")){
 			 
-			 var html = "<div>"+i;
-			 $.each(foodType, function(i, shoppingItemDTO){
-				 var shoppingItem = shoppingItemDTO.shoppingItem;
-				 html = html + "<div data-id="+shoppingItem.id+" data-ids="+shoppingItem.ids+">";
-				 if(!shoppingItem.done)
-					html = html + "<img class='icon-sm check-item mr-1 unchecked' src='/images/rectangular.svg'>";
-				 if(shoppingItem.done)
-						html = html + "<img class='icon-sm check-item mr-1 checked' src='/images/rectangular-checked.svg'>";
-				 
-				 html = html + shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unit.label+"</div>";
-			 })
-			
-
-			 html = html + "<hr/></div>";
-			 $("#shopping-items").append(html);
-		 });
+			 checkKitchenProducts(shoppingList)
+			  .then(response => {
+			    console.log(response)
+			    appendShoppingList(shoppingList);
+			  })
+			  .catch(error => {
+			    console.log(error)
+			  })
+		 } else{
+			 appendShoppingList(shoppingList);
+		 }
+		
 	 });
 }
-function removeDuplicateShoppingItems(shoppingList){
-	
+
+function appendShoppingList(shoppingList){
+	 shoppingList.sort(compareFoodType);
+	 let grouped = shoppingList.reduce(function (g, a) {
+	        g[a.foodType.label] = g[a.foodType.label] || [];
+	        g[a.foodType.label].push(a);
+	        return g;
+	    }, Object.create(null));
+	 $.each(grouped, function(i, foodType){			 
+		 let html = "<div>"+i;
+		 $.each(foodType, function(i, shoppingItemDTO){
+			 let shoppingItem = shoppingItemDTO.shoppingItem;
+			 html = html + "<div data-id="+shoppingItem.id+" data-ids="+shoppingItem.ids+">";
+			 if(!shoppingItem.done)
+				html = html + "<img class='icon-sm check-item mr-1 unchecked' src='/images/rectangular.svg'>";
+			 if(shoppingItem.done)
+					html = html + "<img class='icon-sm check-item mr-1 checked' src='/images/rectangular-checked.svg'>";
+			 
+			 html = html + shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unit.label+"</div>";
+		 })
+		 html = html + "<hr/></div>";
+		 $("#shopping-items").append(html);
+		 showOrHideDoneItems();	 
+	 });
+}
+
+function removeDuplicateShoppingItems(shoppingList){	
 	$.each(shoppingList, function(i, shoppingItem){
 		shoppingItem.shoppingItem.ids = [shoppingItem.shoppingItem.id];
 	});
 	for(i = shoppingList.length-1; i >= 0; i--) {
 		if (i != 0) {
-			var item1 = shoppingList[i].shoppingItem;
-			var item2 = shoppingList[i-1].shoppingItem;
+			let item1 = shoppingList[i].shoppingItem;
+			let item2 = shoppingList[i-1].shoppingItem;
 			 if (item1.name == item2.name) {
 				if ((item1.unit.name == item2.unit.name) && (item1.done == item2.done)) {
 					item2.ammount = parseFloat(item1.ammount) + parseFloat(item2.ammount);
@@ -282,6 +298,26 @@ function removeDuplicateShoppingItems(shoppingList){
 	}
 	return shoppingList;
 }
+
+function checkKitchenProducts(shoppingList){
+	return new Promise((resolve, reject) => {
+		$.get("/kitchen/getUserProducts", function(products){
+			$.each(products, function(i, product){
+				$.each(shoppingList, function(j, item){
+					//TODO: add checking if product.quantity > shoppingItem.quantity
+					if (product.name == item.shoppingItem.name){
+						item.shoppingItem.done = true;
+					}
+				});
+			});
+			resolve("success");
+		}).fail(function(){
+			reject("Couldn't get kitchen products");
+		});
+	});
+	
+}
+
 function printShoppingList()
 {       
         // hide unnecessary stuff
@@ -289,7 +325,9 @@ function printShoppingList()
         $(".remove-recipe").hide();
         $(".link-to-settings").hide();
         $(".btn").hide();
-        
+        $("#shopping-items").addClass("show");
+        $("#shopping-list-settings").hide();
+        $("#shopping-list-container a").hide();
         $("#plan-side-container").removeClass("col-2");
         $("#plan-side-container").css("position", "absolute");
         
@@ -323,4 +361,21 @@ $("#shopping-list-container").on("click", ".check-item", function(){
 		}
 		console.log(item);
 	})
-})
+});
+
+$('#checkKitchenProducts').change(function(){
+	loadShoppingItems();
+});
+
+$('#hideDoneItems').change(function(){
+	showOrHideDoneItems();
+});
+
+
+function showOrHideDoneItems(){
+	if ($('#hideDoneItems').is(":checked")){
+		 $(".checked").parent().hide();
+	 }else{
+		$(".checked").parent().show();
+	 };
+}

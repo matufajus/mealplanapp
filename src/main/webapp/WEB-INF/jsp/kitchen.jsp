@@ -12,9 +12,9 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div class="container-fluid top-container">
+	<div class="container top-container blue-bg">
 		<br>
-		<h2>Food products that are in my kitchen:</h2>
+		<h2>Mano virtuvėje esantys maisto produktai:</h2>
 		<div class="row">
 			<c:forEach var="type" items="${foodTypes}">
 				<div class="col food-type-products">
@@ -33,18 +33,17 @@
 			</c:forEach>
 		</div>
 		<br>
-		<label>Note: Product names should be singular (e.g.: Apple, Banana, Cheese...)</label>
 		<c:if test="${errorMessage != null}">
 			<p style="color:red">${errorMessage}</p>
 		</c:if>
 		<form:form method="POST" action="addProduct" modelAttribute="newProduct">
-			<form:input path="name" placeholder="Product" required="true"/>
-<%-- 			<form:input path="quantity" placeholder="Quantity" required="true"/> --%>
-<%-- 			<form:input type="date" path="expirationDate" placeholder="Galiojimo data"/> --%>
+			<form:input path="name" placeholder="Pavadinimas" required="true"/>
+			<form:input path="quantity" placeholder="Kiekis"/>
+			<form:input type="date" path="expirationDate" placeholder="Galiojimo data"/>
 			<form:select path="foodType">
 				<form:options items="${foodTypes}" itemLabel="label"/>
 			</form:select>
-			<input type="submit" value="Add"/>
+			<input type="submit" value="Pridėti"/>
 		</form:form>
 		<br>
 		<hr>

@@ -13,7 +13,7 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div id="plan-container" class="container-fluid top-container">
+	<div id="plan-container" class="container-fluid top-container blue-bg">
 		
 		<div class="row">
 			<div class="col">
@@ -34,10 +34,29 @@
 			</div>
 			<div id="plan-side-container" class="col-3">
 				<div id="shopping-list-container">
-					<h3>Pirkinių sąrašas:</h3>
-					<div id="shopping-items"></div>
+					<h3>Pirkinių sąrašas</h3>
+					<div id="shopping-items" class="collapse"></div>
+       				 <a class="collapsed" data-toggle="collapse" href="#shopping-items" aria-expanded="false" aria-controls="shopping-items"></a>
 					<button class="btn btn-primary m-2" onclick="printShoppingList()"><img class="icon-sm" src="/images/printer-white.svg"> Spausdinti</button>				
 				</div>
+				<div id="shopping-list-settings">
+					<div class="custom-control custom-switch" data-toggle="tooltip" data-placement="left" 
+							title="Įveskite savo virtuvėje esančius produktus, kurie bus neįtraukiami į pirkinių sąrašą">
+						<input type="checkbox" class="custom-control-input" id="checkKitchenProducts">
+						<label class="custom-control-label" for="checkKitchenProducts">
+							<a href="/kitchen/showProducts" > 
+							Mano virtuvėje</a> esančius produktus pažymėti kaip atliktus.
+						</label>
+					</div>
+					<div class="custom-control custom-switch" data-toggle="tooltip" data-placement="left" 
+							title="Nerodyti varnele pažymėtų pirkinių sąraše.">
+						<input type="checkbox" class="custom-control-input" id="hideDoneItems">
+						<label class="custom-control-label" for="hideDoneItems">					
+							Slėpti atliktus pirkinius.
+						</label>
+					</div>
+				</div>	
+				
 				<div id ="hide-meal-recipes-container-icon" class="d-none">&#10006;</div>
 				<div>
 				</div>
@@ -120,6 +139,7 @@
 	    </div>
 	  </div>
 	</div>
+	
 		
 	<%@ include file="footer.jsp"%>
 	<script src="/js/plan.js"></script>

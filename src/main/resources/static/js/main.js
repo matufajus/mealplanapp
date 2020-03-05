@@ -3,6 +3,9 @@ $(document).ready(function() {
 	
 	//enable popovers
 	$('[data-toggle="popover"]').popover();  
+	
+	//enable tooltips
+	$('[data-toggle="tooltip"]').tooltip()
 	 
 	// for main navigation bar
 	$('li.nav-item.active').removeClass('active');

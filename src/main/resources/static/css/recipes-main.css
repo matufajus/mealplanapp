@@ -1,4 +1,4 @@
-
+@charset "UTF-8";
  
  .recipe-thmbnl{
 	display:inline;
@@ -97,11 +97,9 @@ input[type=checkbox] {
 }
 
 .food-type-products{
-	border-color:#80ced6; 
-	border-style: solid; 
 	border-radius:10px; 
 	margin:10px 5px 0 5px; 
-	background-color:#d5f4e6; 
+	background-color:white; 
 	padding-bottom: 5px;
 }
 
@@ -215,15 +213,35 @@ html{
 }
 
 #shopping-list-container{
-	background-image: url("/images/shopping-list-bg.jpg");
-	background-size: contain;
-	padding-left:3vw;
 	padding-right:3vw;
 	font-family: 'Amatic SC', cursive;
 	font-weight: 700;
 	font-size: 1.2vw;
-	min-height: 500px;
 }
+
+#shopping-items{
+
+}
+
+#shopping-list-container #shopping-items.collapse:not(.show) {
+    height: 300px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;  
+}
+
+#shopping-list-container #shopping-items.collapsing {
+    min-height: 300px;
+}
+
+#shopping-list-container a.collapsed:after  {
+    content: 'Rodyti daugiau';
+}
+
+#shopping-list-container a:not(.collapsed):after {
+    content: 'Rodyti mažiau';
+}
+
 
 #shopping-list-container h3{
 	font-size: 3vw !important;
@@ -251,7 +269,7 @@ html{
 	font-family: 'Caveat', cursive;
 }
 
-#plan-container{
+.blue-bg{
 	background-image: linear-gradient(to left, #81b1ef , #E0E8F3);
 }
 
