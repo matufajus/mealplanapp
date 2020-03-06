@@ -12,7 +12,7 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div class="container top-container blue-bg">
+	<div class="container-fluid top-container blue-bg px-5">
 		<br>
 		<h2>Mano virtuvėje esantys maisto produktai:</h2>
 		<div class="row">
@@ -37,21 +37,38 @@
 			<p style="color:red">${errorMessage}</p>
 		</c:if>
 		<form:form method="POST" action="addProduct" modelAttribute="newProduct">
-			<form:input path="name" placeholder="Pavadinimas" required="true"/>
-			<form:input path="quantity" placeholder="Kiekis"/>
-			<form:input type="date" path="expirationDate" placeholder="Galiojimo data"/>
-			<form:select path="foodType">
-				<form:options items="${foodTypes}" itemLabel="label"/>
-			</form:select>
-			<input type="submit" value="Pridėti"/>
+			<div class="form-row">
+				<div class="form-group col-2">
+					<label for="product-name">Pavadinimas</label>
+					<form:input class="form-control" id="product-name" path="name" placeholder="Avokadas" required="true"/>
+				</div>
+<!-- 				 <div class="form-group col"> -->
+<!-- 					<label for="product-quantity">Kiekis</label> -->
+<%-- 					<form:input class="form-control" id="product-quantity" placeholder="1 vnt" path="quantity"/> --%>
+<!-- 				</div> -->
+<!-- 				 <div class="form-group col"> -->
+<!-- 				 	<label for="product-expiration-date">Galiojimo data</label> -->
+<%-- 					<form:input class="form-control" id="product-expiration-date" type="date" path="expirationDate"/> --%>
+<!-- 				</div> -->
+				 <div class="form-group col-2">
+				 	<label for="product-food-type">Kategorija</label>
+					<form:select  class="form-control" path="foodType" id="product-food-type">
+						<form:options items="${foodTypes}" itemLabel="label"/>
+					</form:select>
+				</div>
+				<div class="form-group col">		
+					<br>
+					<input class="btn btn-primary mt-2" type="submit" value="Pridėti"/>	
+				</div>
+			</div>
 		</form:form>
 		<br>
 		<hr>
 		<br>
-		<h3>What can I make from the products that I have?</h3>
+		<h3>Iš savo turimų produktų galite pasigaminti:</h3>
 		<div class="row">
 			<c:if test="${recipes.size() eq 0 }">
-				<p>Unfortunately, there are no suitable recipes for your products..</p>
+				<p>Deja, tokių receptų nėra..</p>
 			</c:if>
 			<c:set var = "i" scope = "page" value = "0"/>
 		    <c:forEach var="recipe" items="${recipes}">
