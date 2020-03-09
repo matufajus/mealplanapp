@@ -10,9 +10,11 @@ public enum UnitType {
 	GRAM("g."),
 	LITRE("l."),
 	MILILITRE("ml."),
-	TABLE_SPOON("v.š."),
-	TEA_SPOON("a.š."),
-	WHOLE("vnt.");
+	TABLE_SPOON("šaukšt."),
+	TEA_SPOON("šaukštel."),
+	WHOLE("vnt."),
+	CUP("stiklin."),
+	OTHER("kita");
 	
 	public final String label;
 	

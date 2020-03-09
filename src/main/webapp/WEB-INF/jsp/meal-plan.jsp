@@ -32,7 +32,7 @@
 					<%@ include file="plan-list.jsp"%>
 				</c:if>
 			</div>
-			<div id="plan-side-container" class="col-3">
+			<div id="plan-side-container" class="col-lg-3">
 				<div id="shopping-list-container">
 					<h3>Pirkinių sąrašas</h3>
 					<div id="shopping-items" class="collapse"></div>
@@ -57,23 +57,10 @@
 					</div>
 				</div>	
 				
-				<div id ="hide-meal-recipes-container-icon" class="d-none">&#10006;</div>
-				<div>
-				</div>
-				<div id="meal-recipes-container" class="d-none">
-					<h2>Pasirinkti patiekalą:</h2>
-					<div class='recipes-section btn-group my-4 mx-5' role='group'>
-						<a class='btn btn-light active' data-section="public">Visi receptai</a>							
-						<a class='btn btn-light' data-section="private"> Mano receptai</a>
-					</div>
-					<div id="recipes-list-container">
-					</div>
-				</div>
-				<br/>
-				<nav id="pagination-nav" aria-label="Page navigation" class="d-none">
-				  <ul class="pagination justify-content-center">				    
-				  </ul>
-				</nav>
+				
+				
+				
+				
 			</div>
 			<form:form name="saveMeal" action="plan/createMeal" method="POST" modelAttribute="newMeal">
 				<input type="hidden" name="recipeId"/>		
@@ -123,6 +110,34 @@
 	    </div>
 	  </div>
 	</div>
+		
+	<div class="modal" id="chooseRecipeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel"></h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	 <div id="meal-recipes-container">
+				<div class='recipes-section btn-group my-4 mx-5' role='group'>
+					<a class='btn btn-light active' data-section="public">Visi receptai</a>							
+					<a class='btn btn-light' data-section="private"> Mano receptai</a>
+				</div>
+				<div id="recipes-list-container">
+				</div>
+				<br/>
+				<nav id="pagination-nav" aria-label="Page navigation">
+				  <ul class="pagination justify-content-center">				    
+				  </ul>
+				</nav>
+			</div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 	
 	<div class="modal fade" id="editMealModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg" role="document">
@@ -139,7 +154,22 @@
 	    </div>
 	  </div>
 	</div>
-	
+		
+	<div class="modal" id="addMealModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel"></h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	 
+	      </div>
+	    </div>
+	  </div>
+	</div>
 		
 	<%@ include file="footer.jsp"%>
 	<script src="/js/plan.js"></script>
