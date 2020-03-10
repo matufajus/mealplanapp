@@ -5,10 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -18,12 +21,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
+import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
@@ -37,6 +43,7 @@ import com.melearning.mealplanapp.service.UserService;
 
 @Controller
 @RequestMapping("/plan")
+@SessionAttributes({"meals", "shoppingList"})
 public class PlanController {
 	
 	@Autowired
@@ -118,5 +125,71 @@ public class PlanController {
 		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), user.getPlanDays());
 		List<ShoppingItemDTO> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		return shoppingList;
+	}
+	
+	@GetMapping("/simple")
+	public String showSimplePlan(Model model, @ModelAttribute("meals") List<Meal> meals) {
+		model.addAttribute("newMeal", new Meal());
+		model.addAttribute("mealTypes", MealType.values());
+		LocalDate startDate = LocalDate.now();
+		List<LocalDate> dates = IntStream.iterate(0, i -> i + 1)
+	      .limit(7)
+	      .mapToObj(i -> startDate.plusDays(i))
+	      .collect(Collectors.toList()); 	
+		model.addAttribute("meals", meals);
+		model.addAttribute("dates", dates);
+		return "simple-plan";
+	}
+	
+	@PostMapping("/simple/createMeal")
+	public String createSimpleMeal(int recipeId, String date, String mealType, int servings, boolean addIngredients,
+			@ModelAttribute("meals") List<Meal> meals,
+			@ModelAttribute("shoppingList") List<ShoppingItem> shoppingList) {
+		Recipe recipe = recipeService.findById(recipeId);
+		MealType type = MealType.valueOf(mealType);
+		LocalDate mealDate = LocalDate.parse(date);
+		Meal meal = new Meal(0, null, recipe, type, mealDate, servings);
+		meals.add(meal);
+		int id = shoppingList.size();
+		if (addIngredients) {
+			for (Ingredient ingredient : recipe.getIngredients()) {
+				shoppingList.add(new ShoppingItem(id, meal, ingredient.getName(), ingredient.getAmmount(),
+						ingredient.getUnit(), false));
+				id++;
+			}
+		}
+		return "redirect:/plan/simple";
+	}
+	
+	@GetMapping("/simple/getShoppingItems")
+	public @ResponseBody List<ShoppingItemDTO> getSimpleShoppingItems(@ModelAttribute("shoppingList") List<ShoppingItem> shoppingList) {
+		shoppingList.sort((item1, item2) -> item1.getName().compareTo(item2.getName()));
+		List<ShoppingItemDTO> shoppingListDTO = shoppingService.convertShoppingListToDTO(shoppingList);
+		return shoppingListDTO;
+	}
+	
+	@PostMapping("/simple/updateShoppingItem")
+	public @ResponseBody String updateSimpleShoppingItem(@RequestParam(name = "ids") List<Integer> ids,
+			@ModelAttribute("shoppingList") List<ShoppingItem> shoppingList){
+		shoppingList = shoppingService.updateSimpleShoppingItems(shoppingList, ids);
+		return "updated";
+	}
+	
+	@GetMapping("/simple/newPlan")
+	public String restartPlan(@ModelAttribute("meals") List<Meal> meals,
+			@ModelAttribute("shoppingList") List<ShoppingItem> shoppingList) {
+		meals.clear();
+		shoppingList.clear();
+		return "redirect:/plan/simple";
+	}
+	
+	@ModelAttribute("meals")
+	public List<Meal> meals(){
+		return new ArrayList<Meal>();
+	}
+	
+	@ModelAttribute("shoppingList")
+	public List<ShoppingItem> shoppingList(){
+		return new ArrayList<ShoppingItem>();
 	}
 }

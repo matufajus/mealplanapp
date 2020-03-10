@@ -224,7 +224,7 @@ html{
 }
 
 #shopping-list-container #shopping-items.collapse:not(.show) {
-    height: 300px;
+    max-height: 300px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;  

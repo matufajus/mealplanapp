@@ -13,24 +13,56 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div id="plan-container" class="container-fluid top-container blue-bg">
-		
+	<div class="container-fluid top-container">
+		<h1>Jou jou jou, refridgerator meg here</h1>
 		<div class="row">
 			<div class="col">
-				<div class="link-to-settings m-4">
-					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#settingsModal">
-						<img class="icon-sm" src="/images/settings-white.svg"> Nustatymai
-					</button>
+				<div class="mx-5 my-2">
+					<a class="btn btn-primary" href="/plan/simple/newPlan">Naujas planas</a>
 					<button class="btn btn-primary m-2" onclick="printPlan()">
 						<img class="icon-sm" src="/images/printer-white.svg"> Spausdinti
 					</button>
 				</div>
-				<c:if test="${planStyle == 'table' }">
-					<%@ include file="plan-table.jsp"%>
-				</c:if>
-				<c:if test="${planStyle == 'list' }">
-					<%@ include file="plan-list.jsp"%>
-				</c:if>
+				<table id="plan" class="table table-bordered table-striped">
+					<thead class="thead-light">
+						<tr class="d-flex">
+							<th scope="col" class="w-20"></th>
+							<c:forEach var="mealType" items="${mealTypes}">
+								<th scope="col" class="w-20 text-center">
+									${mealType.label}
+								</th>
+							</c:forEach>
+						</tr>
+					</thead>
+						<tbody>
+							<c:forEach var="date" items="${dates}" varStatus="status">
+							 <tr class="d-flex">
+							 	<td class="w-20 text-center"><h3 class="py-0">
+							 		<fmt:parseDate  value="${date}"  type="date" pattern="yyyy-MM-dd" var="parsedDate" />
+									<fmt:formatDate value="${parsedDate}" type="date" pattern="MM.dd E" var="stdDatum" />
+									${stdDatum}
+							 	</h3></td>
+							 	<c:forEach var="mealType" items="${mealTypes}">	
+						 			<c:set var="hasMeal" value="false"/>
+									<c:forEach var="meal" items="${meals}">	
+								 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
+								 			<c:set var="hasMeal" value="true"/>
+								 			<td class="w-20 text-center" data-test="${meal }" data-meal-type="${mealType}" data-date="${date}">
+									 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" 
+									 				data-content="<div><img class='img-thmbnl' src='${meal.recipe.image}'></div>">
+													<a class="open-edit-meal-modal" data-toggle="modal" href="#editMealModal" data-recipe-id="${meal.recipe.id }" data-meal-id="${meal.id }">${meal.recipe.title}</a>
+												</p>
+								 			</td>
+								 		</c:if> 		
+							 		</c:forEach>
+							 		<c:if test="${hasMeal == false}">
+							 			<td class="w-20 text-center" data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button" data-toggle="modal" href="#chooseRecipeModal"><img class="icon-m" src="/images/plus-sign.svg"></a></td>
+							 		</c:if>
+								</c:forEach>
+						    </tr>
+						</c:forEach>
+					</tbody>
+				</table>
 			</div>
 			<div id="plan-side-container" class="col-lg-3">
 				<div id="shopping-list-container">
@@ -41,28 +73,15 @@
 				</div>
 				<div id="shopping-list-settings">
 					<div class="custom-control custom-switch" data-toggle="tooltip" data-placement="left" 
-							title="Įveskite savo virtuvėje esančius produktus, kurie bus neįtraukiami į pirkinių sąrašą">
-						<input type="checkbox" class="custom-control-input" id="checkKitchenProducts">
-						<label class="custom-control-label" for="checkKitchenProducts">
-							<a href="/kitchen/showProducts" > 
-							Mano virtuvėje</a> esančius produktus pažymėti kaip atliktus.
-						</label>
-					</div>
-					<div class="custom-control custom-switch" data-toggle="tooltip" data-placement="left" 
 							title="Nerodyti varnele pažymėtų pirkinių sąraše.">
 						<input type="checkbox" class="custom-control-input" id="hideDoneItems">
 						<label class="custom-control-label" for="hideDoneItems">					
 							Slėpti atliktus pirkinius.
 						</label>
 					</div>
-				</div>	
-				
-				
-				
-				
-				
+				</div>				
 			</div>
-			<form:form name="saveMeal" action="plan/createMeal" method="POST" modelAttribute="newMeal">
+			<form:form name="saveMeal" action="/plan/simple/createMeal" method="POST" modelAttribute="newMeal">
 				<input type="hidden" name="recipeId"/>		
 				<input type="hidden" name="date"/>		
 				<input type="hidden" name="mealType"/>		
@@ -72,45 +91,6 @@
 		</div>
 	</div>
 	
-	<!-- Modal -->
-	<div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	  <div class="modal-dialog" role="document">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="exampleModalLabel">Plano nustatymai:</h5>
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-		        <div class="row pl-3">
-				<form:form action="plan/changePlanSettings" method="POST">
-					<label>Pasirinkite kelių dienų maisto planą norite sudaryti:</label>
-					<input type="number" name="quantity" min="1" max="31" value="${planDays}">
-					<br>
-					<label>Pasirinkite norimą plano atvaizdavimo būdą:</label>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="planStyle" id="plan-table" value="table" ${planStyle == 'table' ? 'checked' : '' }>
-					  <label class="form-check-label" for="plan-table">
-					    Lentelė
-					  </label>
-					</div>
-					<div class="form-check">
-					  <input class="form-check-input" type="radio" name="planStyle" id="plan-list" value="list" ${planStyle == 'list' ? 'checked' : '' }>
-					  <label class="form-check-label" for="plan-list">
-					    Sąrašas
-					  </label>
-					</div>
-					<br>
-	  				<button class="btn btn-primary"  type="submit">Išsaugoti</button>
-	  				<button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
-				</form:form>
-			</div>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-		
 	<div class="modal" id="chooseRecipeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
@@ -122,10 +102,6 @@
 	      </div>
 	      <div class="modal-body">
 	      	 <div id="meal-recipes-container">
-				<div class='recipes-section btn-group my-4 mx-5' role='group'>
-					<a class='btn btn-light active' data-section="public">Visi receptai</a>							
-					<a class='btn btn-light' data-section="private"> Mano receptai</a>
-				</div>
 				<div id="recipes-list-container">
 				</div>
 				<br/>
@@ -154,7 +130,7 @@
 	    </div>
 	  </div>
 	</div>
-		
+	
 	<div class="modal" id="addMealModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
@@ -170,9 +146,11 @@
 	    </div>
 	  </div>
 	</div>
-		
+	
+	
+	
 	<%@ include file="footer.jsp"%>
-	<script src="/js/plan.js"></script>
-	<script src="/js/shopping-list.js"></script>	
+	<script src="/js/simple-plan.js"></script>
+	<script src="/js/shopping-list.js"></script>
 </body>
 </html>

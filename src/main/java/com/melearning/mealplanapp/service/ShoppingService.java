@@ -19,6 +19,10 @@ public interface ShoppingService {
 
 	public void removeMealIngredientsFromShoppingList(int mealId);
 
+	public List<ShoppingItemDTO> convertShoppingListToDTO(List<ShoppingItem> shoppingList);
+
+	public List<ShoppingItem> updateSimpleShoppingItems(List<ShoppingItem> shoppingList, List<Integer> ids);
+
 
 
 }

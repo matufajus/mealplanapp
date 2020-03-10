@@ -31,18 +31,7 @@ public class ShoppingServiceImpl implements ShoppingService{
 	@Override
 	public List<ShoppingItemDTO> getShoppingListForMeals(List<Meal> meals){
 		List<ShoppingItem> shoppingItems = shoppingRepository.findByMealInOrderByName(meals);
-		List<FoodProduct> foodProducts = foodProductRepository.findAll();
-		List<ShoppingItemDTO> shoppingItemsDTO = new ArrayList<ShoppingItemDTO>();
-		for (ShoppingItem shoppingItem : shoppingItems) {
-			FoodType foodType = FoodType.OTHER;
-			for (FoodProduct foodProduct : foodProducts) {
-				if(shoppingItem.getName().equalsIgnoreCase(foodProduct.getName())) {
-					foodType = foodProduct.getFoodType();
-				}
-			}
-			shoppingItemsDTO.add(new ShoppingItemDTO(shoppingItem, foodType));
-		}
-		return shoppingItemsDTO;
+		return convertShoppingListToDTO(shoppingItems);
 	}	
 
 
@@ -76,6 +65,40 @@ public class ShoppingServiceImpl implements ShoppingService{
 	public void removeMealIngredientsFromShoppingList(int mealId) {
 		shoppingRepository.deleteByMealId(mealId);
 		
+	}
+
+
+
+	@Override
+	public List<ShoppingItemDTO> convertShoppingListToDTO(List<ShoppingItem> shoppingItems) {
+		List<FoodProduct> foodProducts = foodProductRepository.findAll();
+		List<ShoppingItemDTO> shoppingItemsDTO = new ArrayList<ShoppingItemDTO>();
+		for (ShoppingItem shoppingItem : shoppingItems) {
+			FoodType foodType = FoodType.OTHER;
+			for (FoodProduct foodProduct : foodProducts) {
+				if(shoppingItem.getName().equalsIgnoreCase(foodProduct.getName())) {
+					foodType = foodProduct.getFoodType();
+				}
+			}
+			shoppingItemsDTO.add(new ShoppingItemDTO(shoppingItem, foodType));
+		}
+		return shoppingItemsDTO;
+	}
+
+
+
+	@Override
+	public List<ShoppingItem> updateSimpleShoppingItems(List<ShoppingItem> shoppingList, List<Integer> ids) {
+		for (Integer id : ids) {
+			for (ShoppingItem shoppingItem: shoppingList) {
+				if (shoppingItem.getId() == id) {
+					if (!shoppingItem.isDone())
+						shoppingItem.setDone(true);
+					else shoppingItem.setDone(false);	
+					}	
+				}
+			}	
+		return shoppingList;
 	}
 	
 	

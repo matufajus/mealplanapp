@@ -329,5 +329,16 @@ public class RecipeController {
 		}
 		return false;
 	}
+	
+	@GetMapping("/simple/getRecipes")
+	public @ResponseBody Page<Recipe> getSimpleRecipes(@RequestParam(name = "pageId", defaultValue = "0") int pageId, 
+												@RequestParam(name = "pageSize", defaultValue = "16") int pageSize){		
+		return recipeService.getPublicRecipes(pageId, pageSize);		
+	}
+	
+	@GetMapping("/simple/getRecipe")
+	public @ResponseBody Recipe getSimpleRecipe(@RequestParam("recipeId") int id) {
+		return recipeService.findById(id);
+	}
 
 }
