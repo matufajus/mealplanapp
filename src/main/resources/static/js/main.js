@@ -128,3 +128,21 @@ $("#scroll-down-link").click(function(){
 	var elem = document.getElementById("reasonsToPlan");
 	window.scroll(0, elem.offsetTop - 56);
 });
+
+$(".mealType-checkbox").change(function(){
+	$("#recipe-side-nav-form").submit();
+})
+
+$(".food-product").click(function(){
+	$(this).toggleClass("active");
+	let tag = $(this).data("food");
+	if ($(this).hasClass("active")){
+		$('#tags').tagsinput('add', tag);
+	}else{
+		$('#tags').tagsinput('remove', tag);
+	}
+})
+
+$('#tags').on('itemAdded itemRemoved', function(event) {
+	$("#recipe-side-nav-form").submit();
+})

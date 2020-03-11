@@ -13,22 +13,56 @@
 		<%@ include file="navbar.jsp" %>
 		<div class="container-fluid">
 			<div class="row">
-				<div id="recipes-side-nav" class="col-sm-2 px-5 min-vh-100">
+				<div id="recipes-side-nav" class="col-sm-2 px-1 min-vh-100">
 		            <div class="py-2 sticky-top flex-grow-1">
 		                <div class="nav flex-sm-column top-container pt-2">	         
-	
-		                    
+                   
 	                    	<form id="recipe-side-nav-form" action="getFilteredRecipes" method="GET">
+	                    		<h3>Tipas</h3>
 	                    		<c:forEach var="mealType" items="${mealTypes}">
-	                    			<input type="checkbox" name="type" value="${mealType}"> <label>${mealType.label}</label> <br/>
+	                    			<div class="mealType-container">	                    					
+		                    			<input id="${mealType}-checkbox" class="mealType-checkbox d-none" type="checkbox" name="type" value="${mealType}">
+		                    			<label class="mealType-image" for="${mealType}-checkbox" >
+			                    			<span>${mealType.label}</span>
+			                    			<img src="/images/${mealType}.jpg" />
+		                    			</label> 
+	                    			</div>
 	                    		</c:forEach>
-	                    		
-	               				Produktai:
+	                    		<h3>Produktai</h3>
+	                    		<div class="food-product" data-food="Avokad">
+	                    			<img src="/images/foodProducts/avocado.jpg">
+	                    		</div>
+	                    		<div class="food-product" data-food="Brokol">
+	                    			<img src="/images/foodProducts/broccoli.jpg">
+	                    		</div>
+	                    		<div class="food-product" data-food="Mork">
+	                    			<img src="/images/foodProducts/carrot.jpg">
+	                    		</div>
+	                    		<div class="food-product" data-food="Kalafijor">
+	                    			<img src="/images/foodProducts/cauliflower.jpg">
+	                    		</div>
+	                    		<div class="food-product" data-food="Baklažan">
+	                    			<img src="/images/foodProducts/eggplant.jpg">
+	                    		</div>
+	                    		<div class="food-product" data-food="Pomidor">
+	                    			<img src="/images/foodProducts/tomato.jpg">
+	                    		</div>
+	                    		<div class="food-product" data-food="Moliūg">
+	                    			<img src="/images/foodProducts/pumpkin.jpg">
+	                    		</div>
+	                    		<div class="food-product" data-food="Gryb">
+	                    			<img src="/images/foodProducts/mushroom.jpg">
+	                    		</div>
+	                    		<div class="food-product" data-food="Svogūn">
+	                    			<img src="/images/foodProducts/onion.jpg">
+	                    		</div>
+								
+	               				<span>Daugiau:</span>
 	                    		<input type="text" value="" id="tags" name="products" class="form-control">
 	                    		
 	                    		<input type="hidden" name="section">
 	                    		
-                    			<input type="submit" class = "btn btn-primary" value="Ieškoti" />
+<!--                     			<input type="submit" class = "btn btn-primary" value="Ieškoti" /> -->
 	                    	</form>
 	                    	
 	                    	

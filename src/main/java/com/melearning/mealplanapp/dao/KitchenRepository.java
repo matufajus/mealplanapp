@@ -9,5 +9,7 @@ import com.melearning.mealplanapp.entity.KitchenProduct;
 public interface KitchenRepository extends JpaRepository<KitchenProduct, Integer>{
 	
 	List<KitchenProduct> findByUserId(long userId);
+
+	void deleteByUserIdAndName(long userId, String name);
 	
 }

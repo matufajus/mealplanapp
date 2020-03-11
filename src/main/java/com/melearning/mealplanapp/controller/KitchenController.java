@@ -29,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.dto.UserDTO;
+import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.KitchenProduct;
 import com.melearning.mealplanapp.entity.User;
@@ -56,41 +57,54 @@ public class KitchenController {
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 
-	@GetMapping("/showProducts")
-	public String showKitchen(@ModelAttribute("errorMessage") String errorMessage, Model model) {
-		List<KitchenProduct> products =  kitchenService.getAllProductsForUser(userService.getCurrentUserId());
-		model.addAttribute("products", products);
-		model.addAttribute("recipes", recipeService.getRecipesForUserProducts(products));
-		model.addAttribute("foodTypes", FoodType.values());
-		model.addAttribute("newProduct", new KitchenProduct());
-		if(errorMessage != null) {
-	        model.addAttribute("errorMessage", errorMessage);
-	    }
-		return "kitchen";
-	}
+//	@GetMapping("/")
+//	public String showKitchen(@ModelAttribute("errorMessage") String errorMessage, Model model) {
+//		List<KitchenProduct> products =  kitchenService.getAllProductsForUser(userService.getCurrentUserId());
+//		model.addAttribute("products", products);
+//		model.addAttribute("recipes", recipeService.getRecipesForUserProducts(products));
+//		model.addAttribute("foodTypes", FoodType.values());
+//		model.addAttribute("newProduct", new KitchenProduct());
+//		if(errorMessage != null) {
+//	        model.addAttribute("errorMessage", errorMessage);
+//	    }
+//		return "kitchen";
+//	}
 	
-	@PostMapping("/addProduct")
-	public String addProduct(@Valid @ModelAttribute("newProduct") KitchenProduct product, BindingResult bindingResult,
-			RedirectAttributes redirectAttrs) {
-		if (bindingResult.hasErrors()) {
-			System.err.println(bindingResult.toString());
-			return "kitchen";
-		}
-		product.setUser(userService.getCurrentUser());
-		try {
-			kitchenService.addProduct(product);
-		} catch (UniqueProductConstraintValidationException e) {
-			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
-			return "redirect:/kitchen/showProducts";
-		}
-		
-		return "redirect:/kitchen/showProducts";
-	}
+//	@PostMapping("/addProduct")
+//	public String addProduct(@Valid @ModelAttribute("newProduct") KitchenProduct product, BindingResult bindingResult,
+//			RedirectAttributes redirectAttrs) {
+//		if (bindingResult.hasErrors()) {
+//			System.err.println(bindingResult.toString());
+//			return "kitchen";
+//		}
+//		product.setUser(userService.getCurrentUser());
+//		try {
+//			kitchenService.addProduct(product);
+//		} catch (UniqueProductConstraintValidationException e) {
+//			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
+//			return "redirect:/kitchen/showProducts";
+//		}
+//		
+//		return "redirect:/kitchen/showProducts";
+//	}
 	
 	@GetMapping("/removeProduct")
-	public String removeProduct(@RequestParam("productId") int id) {
-		kitchenService.removeProduct(id);
-		return "redirect:/kitchen/showProducts";
+	public @ResponseBody String removeProduct(@RequestParam int foodProductId) {
+		FoodProduct foodProduct = recipeService.getFoodProduct(foodProductId);
+		long userId = userService.getCurrentUserId();
+		kitchenService.removeProductByName(userId, foodProduct.getName());
+		return "success";
+	}
+	
+	@GetMapping("/addProduct")
+	public @ResponseBody String addProduct(@RequestParam int foodProductId) {
+		FoodProduct foodProduct = recipeService.getFoodProduct(foodProductId);
+		KitchenProduct kitchenProduct = new KitchenProduct();
+		kitchenProduct.setName(foodProduct.getName());
+		kitchenProduct.setUser(userService.getCurrentUser());
+		kitchenProduct.setFoodType(foodProduct.getFoodType());
+		kitchenService.addProduct(kitchenProduct);
+		return "success";
 	}
 	
 	@GetMapping("/getUserProducts")
@@ -98,7 +112,13 @@ public class KitchenController {
 		List<KitchenProduct> products =  kitchenService.getAllProductsForUser(userService.getCurrentUserId());
 		return products;
 	}
-
+	
+	@GetMapping("/getFoodTypes")
+	public @ResponseBody FoodType[] getFoodTypes(){
+		return FoodType.values();
+	}
+	
+	
 	
 
 }

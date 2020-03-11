@@ -236,6 +236,4 @@ $("#recipes-list-container").on("click", ".recipe-modal-link", function () {
 	    	});
 	    	
 		})
-		
-		
 })

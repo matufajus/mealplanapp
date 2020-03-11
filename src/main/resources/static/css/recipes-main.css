@@ -71,7 +71,6 @@ input[type=checkbox] {
 
 .top-container{
 	margin-top: 56px;
-	min-height: 100vh;
 }
 
 .remove-preparation{
@@ -224,7 +223,7 @@ html{
 }
 
 #shopping-list-container #shopping-items.collapse:not(.show) {
-    height: 300px;
+    max-height: 300px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;  
@@ -281,7 +280,9 @@ html{
 }
 
 #recipes-side-nav{
-	background-image: linear-gradient(to right, #81b1ef , #F8F9FA);
+/* 	background-image: linear-gradient(to right, #81b1ef , #F8F9FA); */
+	background-color: #F8F9FA;
+	font-family: 'Caveat', cursive;
 	color: black;
 }
 
@@ -292,7 +293,8 @@ html{
 
 .bootstrap-tagsinput .tag{
 	color:black !important;
-	background-color: #D3D3D3;
+	background-color: #FFE4C4;
+	border-radius: 5px;
 }
 
 .img-thmbnl{
@@ -375,3 +377,86 @@ ul.ui-autocomplete {
      filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     }
 
+.mealType-container{
+	position:relative;  
+	text-align: center;
+	height:100px;
+	width:100px;
+	margin:5px;
+	display: inline;
+}
+
+.mealType-image{
+	height:100px;
+	width:100px;
+	color:white;
+}
+
+.mealType-image:hover{
+	color:black;
+}
+
+.mealType-image img{
+	height:100px;
+	width:100px;
+	object-fit: cover;
+	border-radius: 8px;
+	opacity: 0.8;
+	z-index:-1;
+}
+.mealType-image span{
+	position:absolute;
+	top: 50%; 
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size:160%;
+	z-index: 1;
+	font-weight: bold;
+	background-color:rgba(0, 0, 0, 0.2);
+	padding-right:2px;
+	border-radius: 10px;
+}
+
+
+.mealType-container input:checked + .mealType-image img {
+	opacity: 0.4;
+}
+
+.mealType-container input:checked + .mealType-image span{
+	font-weight: bold;
+	color:black;
+	background-color:transparent;
+}
+
+.food-product{
+	float:left;
+}
+
+.food-product img{
+	height:70px;
+	width: 70px;
+	margin:5px;
+	border: 2px solid white;
+	border-radius: 4px;
+}
+
+.food-product.active img{
+	border-color: grey;	
+}
+
+#kitchen-products .tab-content .product{
+	width:100px;
+	height:100px;
+	margin: 5px;
+	float:left;
+	background-color: beige;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	cursor: pointer;
+}
+
+#kitchen-products .tab-content .product.active{
+	background-color: green;
+}

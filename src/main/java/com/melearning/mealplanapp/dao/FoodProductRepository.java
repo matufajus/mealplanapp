@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.melearning.mealplanapp.entity.FoodProduct;
+import com.melearning.mealplanapp.entity.FoodType;
 
 public interface FoodProductRepository extends JpaRepository<FoodProduct, Integer>{
 
@@ -14,6 +15,8 @@ public interface FoodProductRepository extends JpaRepository<FoodProduct, Intege
 	List<String> findByNameContaining(@Param("keyword") String keyword);
 	
 	FoodProduct findByName(String name);
+
+	List<FoodProduct> findByFoodType(FoodType foodType);
 	
 //	List<FoodProduct> findByNameContaining(String keyword);
 }

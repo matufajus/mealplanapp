@@ -36,7 +36,7 @@
 				<div id="shopping-list-container">
 					<h3>Pirkinių sąrašas</h3>
 					<div id="shopping-items" class="collapse"></div>
-       				 <a class="collapsed" data-toggle="collapse" href="#shopping-items" aria-expanded="false" aria-controls="shopping-items"></a>
+       				 <a id="read-more-shopping-list" class="collapsed" data-toggle="collapse" href="#shopping-items" aria-expanded="false" aria-controls="shopping-items"></a>
 					<button class="btn btn-primary m-2" onclick="printShoppingList()"><img class="icon-sm" src="/images/printer-white.svg"> Spausdinti</button>				
 				</div>
 				<div id="shopping-list-settings">

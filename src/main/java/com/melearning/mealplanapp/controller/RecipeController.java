@@ -32,6 +32,7 @@ import com.melearning.mealplanapp.demodata.CSVReader;
 import com.melearning.mealplanapp.demodata.Record;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
+import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
@@ -328,6 +329,19 @@ public class RecipeController {
 			return true;
 		}
 		return false;
+	}
+	
+	@GetMapping("/getFoodProducts")
+	public @ResponseBody List<FoodProduct> getFoodProducts(){
+		List<FoodProduct> products =  recipeService.getFoodProducts();
+		return products;
+	}
+	
+	@GetMapping("/getFoodProductsByType")
+	public @ResponseBody List<FoodProduct> getFoodProductsByType(@RequestParam String type){
+		FoodType foodType = FoodType.valueOf(type);
+		List<FoodProduct> products =  recipeService.getFoodProductsByType(foodType);
+		return products;
 	}
 
 }

@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.melearning.mealplanapp.dao.KitchenRepository;
+import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.KitchenProduct;
 import com.melearning.mealplanapp.exception.UniqueProductConstraintValidationException;
 
@@ -35,4 +37,11 @@ public class KitchenServiceImpl implements KitchenService {
 	public void removeProduct(int id) {
 		kitchenRepository.deleteById(id);
 	}
+	
+	@Transactional
+	@Override
+	public void removeProductByName(long userId , String name) {
+		kitchenRepository.deleteByUserIdAndName(userId, name);
+	}
+
 }

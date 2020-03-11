@@ -276,8 +276,11 @@ function appendShoppingList(shoppingList){
 		 })
 		 html = html + "<hr/></div>";
 		 $("#shopping-items").append(html);
-		 showOrHideDoneItems();	 
 	 });
+	 if ($("#shopping-list-container #shopping-items").height() < 300){
+			$("#read-more-shopping-list").hide();
+	 }
+	 showOrHideDoneItems();	 
 }
 
 function removeDuplicateShoppingItems(shoppingList){	

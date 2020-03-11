@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 import com.melearning.mealplanapp.entity.FoodProduct;
+import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.KitchenProduct;
 import com.melearning.mealplanapp.entity.MealType;
@@ -55,6 +56,12 @@ public interface RecipeService {
 	public Page<Recipe> getPublicRecipes(int pageId, int pageSize);
 
 	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize);
+
+	public List<FoodProduct> getFoodProductsByType(FoodType foodType);
+
+	public List<FoodProduct> getFoodProducts();
+
+	public FoodProduct getFoodProduct(int foodProductId);
 
 
 }

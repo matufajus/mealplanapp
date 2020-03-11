@@ -21,6 +21,8 @@
 			<p>Jūs naudojatės administratoriaus teisėmis</p>
 		</security:authorize>
 	</div>
+	<%@ include file="kitchen.jsp"%>
 	<%@ include file="footer.jsp"%>
+	<script src="/js/home.js"></script>
 </body>
 </html>

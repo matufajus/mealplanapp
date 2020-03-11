@@ -27,6 +27,7 @@ import com.melearning.mealplanapp.dao.IngredientRepository;
 import com.melearning.mealplanapp.dao.RecipeRepository;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
+import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.KitchenProduct;
 import com.melearning.mealplanapp.entity.MealType;
@@ -241,6 +242,26 @@ public class RecipeServiceImpl implements RecipeService {
 	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize) {
 		Pageable pageable = PageRequest.of(pageId, pageSize);
 		return recipeRepository.findByOwnerId(currentUserId, pageable);
+	}
+
+	@Override
+	public List<FoodProduct> getFoodProductsByType(FoodType foodType) {
+		return foodProductRepository.findByFoodType(foodType);
+	}
+	
+	@Override
+	public List<FoodProduct> getFoodProducts() {
+		return foodProductRepository.findAll();
+	}
+
+	@Override
+	public FoodProduct getFoodProduct(int foodProductId) {	
+		Optional<FoodProduct> result = foodProductRepository.findById(foodProductId);
+		if (result.isPresent()) {
+			return result.get();
+		}
+		return null;
+		
 	}
 
 }
