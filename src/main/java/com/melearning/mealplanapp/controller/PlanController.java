@@ -119,4 +119,11 @@ public class PlanController {
 		List<ShoppingItemDTO> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		return shoppingList;
 	}
+	
+	@GetMapping("/getMealsForToday")
+	public @ResponseBody List<Meal> getPlanForToday(){
+		User user = userService.getCurrentUser();
+		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), 1);
+		return meals;
+	}
 }

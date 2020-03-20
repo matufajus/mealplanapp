@@ -394,6 +394,7 @@ ul.ui-autocomplete {
 
 .mealType-image:hover{
 	color:black;
+	cursor: pointer;
 }
 
 .mealType-image img{
@@ -438,11 +439,17 @@ ul.ui-autocomplete {
 	margin:5px;
 	border: 2px solid white;
 	border-radius: 4px;
+	cursor: pointer;
 }
 
 .food-product.active img{
 	border-color: grey;	
 }
+
+#kitchen{
+	font-family: 'Caveat', cursive;
+}
+
 
 #kitchen-products .tab-content .product{
 	width:100px;
@@ -460,3 +467,57 @@ ul.ui-autocomplete {
 #kitchen-products .tab-content .product.active{
 	background-color: green;
 }
+
+.list-group-item{
+    background-size: cover;
+    font-weight: bold;
+    padding: 1.25rem 1.25rem !important;
+}
+
+
+.list-group-item span{
+	background-color:rgba(255,255,255,0.6);
+	font-size:150%;
+	padding-right:2px;
+	border-radius: 10px;
+}
+
+.list-group-item.active span{
+	background-color:rgba(0,0,0,0.6);
+}
+
+.tab-content .product{
+	font-size: 150%;
+}
+
+#available-recipes .recipe-thmbnl{
+	margin:1vw;
+}
+
+#available-recipes .recipe-thmbnl img{
+	width: 10vw;
+	height: 10vw;
+	object-fit: cover;
+}
+
+#plan-today{
+	font-family: 'Caveat', cursive;
+	position:relative;
+	padding-bottom: 3vh;
+}
+
+#plan-today h1, h3{
+	font-family: 'Amatic SC', cursive;
+}
+
+#home-cover{
+	width:100vw;
+	max-height:100%;
+	position:absolute;
+	left: 50%;
+    transform: translate(-50%, 0);
+    opacity:0.3;
+    z-index:-1;
+}
+
+

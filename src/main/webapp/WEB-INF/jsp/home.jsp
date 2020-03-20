@@ -12,10 +12,35 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div class="top-container mx-auto" style="width:70%;">
-	  	<img src="/images/calendar.jpg" style="width:100%;">
-		
-		<h1>Sveiki</h1>
+	<div class="container-fluid top-container mx-auto">
+		<div id="plan-today">
+			<img id="home-cover" src="/images/calendar.jpg">
+			<h1 class="text-center my-5">Dienos planas</h1>
+			<div class="row">
+				<c:forEach var="mealType" items="${mealTypes}">
+					<div class="col"><h2 class="text-center">${mealType.label}</h2></div>
+				</c:forEach>
+			</div>
+			<div class="row">
+				<c:forEach var="mealType" items="${mealTypes}">
+					<c:set var="hasMeal" value="false"/>
+					<c:forEach var="meal" items="${meals}">
+						<c:if test="${mealType == meal.mealType}">
+							<div class="col text-center">
+								<img class='img-thmbnl' src="${meal.recipe.image}">
+								<h3 class="text-center">${meal.recipe.title}</h3>
+							</div>
+							<c:set var="hasMeal" value="true"/>
+						</c:if>
+					</c:forEach>
+					<c:if test="${hasMeal == false}">
+						<div class="col">
+						</div>
+					</c:if>
+				</c:forEach>
+			</div>
+			<br>
+		</div>
 		
 		<security:authorize access="hasRole('ADMIN')">
 			<p>Jūs naudojatės administratoriaus teisėmis</p>
@@ -23,6 +48,8 @@
 	</div>
 	<%@ include file="kitchen.jsp"%>
 	<%@ include file="footer.jsp"%>
+	
 	<script src="/js/home.js"></script>
+	
 </body>
 </html>

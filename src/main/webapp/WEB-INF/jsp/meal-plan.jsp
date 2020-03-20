@@ -44,7 +44,7 @@
 							title="Įveskite savo virtuvėje esančius produktus, kurie bus neįtraukiami į pirkinių sąrašą">
 						<input type="checkbox" class="custom-control-input" id="checkKitchenProducts">
 						<label class="custom-control-label" for="checkKitchenProducts">
-							<a href="/kitchen/showProducts" > 
+							<a href="/home#kitchen" > 
 							Mano virtuvėje</a> esančius produktus pažymėti kaip atliktus.
 						</label>
 					</div>

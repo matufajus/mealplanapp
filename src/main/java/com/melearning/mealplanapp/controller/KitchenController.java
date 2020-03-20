@@ -32,6 +32,7 @@ import com.melearning.mealplanapp.dto.UserDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.KitchenProduct;
+import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.exception.UniqueProductConstraintValidationException;
 import com.melearning.mealplanapp.service.KitchenService;
@@ -116,6 +117,12 @@ public class KitchenController {
 	@GetMapping("/getFoodTypes")
 	public @ResponseBody FoodType[] getFoodTypes(){
 		return FoodType.values();
+	}
+	
+	@GetMapping("/getAvailableRecipes")
+	public @ResponseBody List<Recipe> getRecipesForUsersProducts(){
+		List<KitchenProduct> kitchenProducts = kitchenService.getAllProductsForUser(userService.getCurrentUserId());
+		return recipeService.getRecipesForUserProducts(kitchenProducts);
 	}
 	
 	
