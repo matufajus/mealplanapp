@@ -3,7 +3,9 @@ package com.melearning.mealplanapp.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -12,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -73,14 +77,34 @@ public class RecipeController {
 		List<Recipe> recipes= recipeService.getPublicRecipes();
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("recipes", recipes);
+		
+		//for adding new Recipe
+		RecipeFormDTO recipeDTO = new RecipeFormDTO();	
+		recipeDTO.setShared(true);
+		if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
+			recipeDTO.setInspected(true);
+			recipeDTO.setPublished(true);
+		}
+		model.addAttribute("myRecipe", recipeDTO);
+		
 		return "list-recipes";
 	}
 	
 	@GetMapping("/myList")
 	public String listUserRecipes(Model model) {
-		List<Recipe> recipes= recipeService.findByOwnerId(userService.getCurrentUserId());
+		List<Recipe> recipes= recipeService.findByOwnerIdDesc(userService.getCurrentUserId());
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("recipes", recipes);
+		
+		//for adding new Recipe
+		RecipeFormDTO recipeDTO = new RecipeFormDTO();	
+		recipeDTO.setShared(true);
+		if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
+			recipeDTO.setInspected(true);
+			recipeDTO.setPublished(true);
+		}
+		model.addAttribute("myRecipe", recipeDTO);
+		
 		return "list-recipes";
 	}
 	
@@ -145,13 +169,15 @@ public class RecipeController {
 	}
 	
 	@PostMapping("/saveRecipe")
-	public String saveRecipe(@Valid @ModelAttribute("recipe") RecipeFormDTO recipeDTO, BindingResult bindingResult, Model model) {
+	public @ResponseBody ResponseEntity<Object> saveRecipe(@Valid @ModelAttribute("recipe") RecipeFormDTO recipeDTO,
+			BindingResult bindingResult, Model model) {
+		Map<String, Object> map = new HashMap<String, Object>();
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("mealTypes", MealType.values());
-			return "recipe-form";
+			map.put("errors", bindingResult.getAllErrors());
+			return new ResponseEntity<Object>(map, HttpStatus.BAD_REQUEST);
 		}
 		else {
-			if (!recipeDTO.getImageFile().isEmpty()) {
+			if (recipeDTO.getImageFile() != null) {
 				String prefix = RandomString.make(8);
 				fileService.uploadFile(recipeDTO.getImageFile(), prefix);
 				recipeDTO.setImage("/recipeImages/" + prefix + recipeDTO.getImageFile().getOriginalFilename());
@@ -168,7 +194,7 @@ public class RecipeController {
 				}
 			}
 			recipeService.save(recipe);
-			return "redirect:/recipe/list";
+			return new ResponseEntity<Object>(HttpStatus.OK);
 		}
 	}
 	
@@ -265,7 +291,7 @@ public class RecipeController {
 			recipes= recipeService.getPublicRecipes();
 			break;
 		case "myList":
-			recipes= recipeService.findByOwnerId(userService.getCurrentUserId());;
+			recipes= recipeService.findByOwnerIdDesc(userService.getCurrentUserId());;
 			break;
 		case "sharedList":
 			if (userService.hasCurrentUserRole("ROLE_ADMIN"))

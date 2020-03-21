@@ -101,6 +101,7 @@ $("#add-ingredient-button").click(function(){
 	container.appendChild(ingredient);
 	
 	enableFoodProductAutocomplete();
+	$('.food-product-name').autocomplete("option", "appendTo", "#recipeFormModal");
 });
 
 function loadUnitTypes(container){
@@ -184,14 +185,14 @@ $("#recipe-image-input").change(function() {
 	  readURL(this);
 });
 
-
+/*
 $('textarea').each(function () {
 	  this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
 	}).on('input', function () {
 	  this.style.height = 'auto';
 	  this.style.height = (this.scrollHeight) + 'px';
 	});
-
+*/
 
 $('.selectpicker').selectpicker();
 
@@ -234,6 +235,35 @@ $("#recipes-list-container").on("click", ".recipe-modal-link", function () {
 	    		}
 	    	})
 	    	});
-	    	
 		})
 })
+
+$("#recipeFormModal").on("shown.bs.modal", function(){
+	$('.food-product-name').autocomplete("option", "appendTo", "#recipeFormModal");
+})
+
+
+
+$("#recipeFormModal form").submit(function(event){
+	event.preventDefault();
+	var form = $(this);
+    var url = form.attr('action');
+	$.ajax({
+		url: form.attr("action"),
+		type: form.attr("method"),
+		data: form.serialize(),
+		success: function(result){
+			$("#recipeFormModal").modal('toggle');
+			window.location.replace("/recipe/myList");
+        },
+		error: function(result){
+			console.log(result.responseJSON);
+			$.each(result.responseJSON.errors, function(i, error){	
+					$("#"+error.field+"-error").html(error.defaultMessage);
+			});
+	           
+	    }
+        
+
+    });
+});

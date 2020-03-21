@@ -32,7 +32,7 @@ public interface RecipeService {
 	
 	public FoodProduct getFoodProduct(String name);
 
-	public List<Recipe> findByOwnerId(long currentUserId);
+	public List<Recipe> findByOwnerIdDesc(long currentUserId);
 
 	public List<Recipe> getRecipesWaitingForInspection();
 

@@ -142,8 +142,8 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public List<Recipe> findByOwnerId(long currentUserId) {
-		return recipeRepository.findByOwnerId(currentUserId);
+	public List<Recipe> findByOwnerIdDesc(long currentUserId) {
+		return recipeRepository.findByOwnerIdOrderByIdDesc(currentUserId);
 	}
 
 	@Override

@@ -75,8 +75,8 @@
 						
 						<security:authorize access="!hasRole('ADMIN')">
 								<div class="btn-group my-4 mx-5" role="group" aria-label="Basic example">
-									<a href="list" class="btn btn-light">Visi receptai</a>									
 									<a href="myList" class="btn btn-light"> Mano receptai</a>
+									<a href="list" class="btn btn-light">Kiti receptai</a>									
 								</div>
 							</security:authorize>
 							<br>
@@ -91,7 +91,11 @@
 							
 							<a class="btn btn-light my-4 mx-2" href="unknownIngredients">Neatpažinti ingredientai</a>
 						</security:authorize>
-						<a id="add-recipe-link" class="btn btn-light my-4 mx-5" href="showForm"><img class="icon-m mr-2" src="/images/plus-sign.svg"> Pridėti receptą</a>
+<!-- 						<a id="add-recipe-link" class="btn btn-light my-4 mx-5" href="showForm"> -->
+						<a id="add-recipe-link" class="btn btn-light my-4 mx-5" data-toggle="modal" href="#recipeFormModal">
+
+							<img class="icon-m mr-2" src="/images/plus-sign.svg"> Pridėti receptą
+						</a>
 					</div>
 					<div id="recipes-list-container" class="row">	
 						<c:if test="${recipes.size() == 0}">
@@ -110,7 +114,7 @@
 			</div>
 		</div>
 		<%@ include file="recipe-modal.jsp" %>
-		
+		<%@ include file="recipe-form-modal.jsp" %>
  		
 		<%@ include file="footer.jsp" %>
 		<script src="/js/recipe.js"></script>

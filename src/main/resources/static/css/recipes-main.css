@@ -520,4 +520,15 @@ ul.ui-autocomplete {
     z-index:-1;
 }
 
+.servings-radio{
+	display: inline-block;
+	margin: 0px 10px;
+}
 
+.servings-radio input:checked + label img{
+	width:60px
+}
+
+.servings-radio input + label img{
+	width:40px
+}

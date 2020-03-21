@@ -12,7 +12,7 @@
         <a class="nav-link" href="${pageContext.request.contextPath}/home">Pagrindinis <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/recipe/list">Receptai</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/recipe/myList">Receptai</a>
       </li>
        <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/plan">Planuoti</a>
