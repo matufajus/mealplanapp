@@ -64,8 +64,8 @@ input[type=checkbox] {
 }
 
 #recipe-form-image{
-	width: 20vw;
-	height: 20vw;
+	width: 15vw;
+	height: 15vw;
 	object-fit: cover;
 }
 
@@ -307,7 +307,7 @@ html{
 	object-fit: cover;
 }
 
-.img-modal{
+.modal-img{
 	padding: .25rem;
     background-color: #fff;
     border: 1px solid #dee2e6;
@@ -377,7 +377,7 @@ ul.ui-autocomplete {
      filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
     }
 
-.mealType-container{
+#recipes-side-nav .mealType-container{
 	position:relative;  
 	text-align: center;
 	height:100px;
@@ -386,18 +386,18 @@ ul.ui-autocomplete {
 	display: inline;
 }
 
-.mealType-image{
+#recipes-side-nav .mealType-image{
 	height:100px;
 	width:100px;
 	color:white;
 }
 
-.mealType-image:hover{
+#recipes-side-nav .mealType-image:hover{
 	color:black;
 	cursor: pointer;
 }
 
-.mealType-image img{
+#recipes-side-nav .mealType-image img{
 	height:100px;
 	width:100px;
 	object-fit: cover;
@@ -405,7 +405,7 @@ ul.ui-autocomplete {
 	opacity: 0.8;
 	z-index:-1;
 }
-.mealType-image span{
+#recipes-side-nav .mealType-image span{
 	position:absolute;
 	top: 50%; 
 	left: 50%;
@@ -419,21 +419,21 @@ ul.ui-autocomplete {
 }
 
 
-.mealType-container input:checked + .mealType-image img {
+#recipes-side-nav .mealType-container input:checked + .mealType-image img {
 	opacity: 0.4;
 }
 
-.mealType-container input:checked + .mealType-image span{
+#recipes-side-nav .mealType-container input:checked + .mealType-image span{
 	font-weight: bold;
 	color:black;
 	background-color:transparent;
 }
 
-.food-product{
+#recipes-side-nav .food-product{
 	float:left;
 }
 
-.food-product img{
+#recipes-side-nav .food-product img{
 	height:70px;
 	width: 70px;
 	margin:5px;
@@ -442,7 +442,7 @@ ul.ui-autocomplete {
 	cursor: pointer;
 }
 
-.food-product.active img{
+#recipes-side-nav .food-product.active img{
 	border-color: grey;	
 }
 
@@ -531,4 +531,56 @@ ul.ui-autocomplete {
 
 .servings-radio input + label img{
 	width:40px
+}
+
+#recipeFormModal .mealType-container{
+	position:relative;  
+	text-align: center;
+	height:70px;
+	width:70px;
+	margin:5px;
+	display: inline;
+}
+
+#recipeFormModal .mealType-image{
+	height:70px;
+	width:70px;
+	color:white;
+}
+
+#recipeFormModal .mealType-image:hover{
+	color:black;
+	cursor: pointer;
+}
+
+#recipeFormModal .mealType-image img{
+	height:70px;
+	width:70px;
+	object-fit: cover;
+	border-radius: 8px;
+	opacity: 0.8;
+	z-index:-1;
+}
+#recipeFormModal .mealType-image span{
+	position:absolute;
+	top: 50%; 
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size:100%;
+	z-index: 1;
+	font-weight: bold;
+	background-color:rgba(0, 0, 0, 0.2);
+	padding-right:2px;
+	border-radius: 10px;
+}
+
+
+#recipeFormModal .mealType-checkbox:checked ~ .mealType-image img {
+	opacity: 0.4;
+}
+
+#recipeFormModal .mealType-checkbox:checked ~ .mealType-image span{
+	font-weight: bold;
+	color:black;
+	background-color:transparent;
 }

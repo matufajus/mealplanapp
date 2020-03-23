@@ -129,11 +129,11 @@ $("#scroll-down-link").click(function(){
 	window.scroll(0, elem.offsetTop - 56);
 });
 
-$(".mealType-checkbox").change(function(){
+$("#recipes-side-nav .mealType-checkbox").change(function(){
 	$("#recipe-side-nav-form").submit();
 })
 
-$(".food-product").click(function(){
+$("#recipes-side-nav .food-product").click(function(){
 	$(this).toggleClass("active");
 	let tag = $(this).data("food");
 	if ($(this).hasClass("active")){
@@ -146,3 +146,4 @@ $(".food-product").click(function(){
 $('#tags').on('itemAdded itemRemoved', function(event) {
 	$("#recipe-side-nav-form").submit();
 })
+

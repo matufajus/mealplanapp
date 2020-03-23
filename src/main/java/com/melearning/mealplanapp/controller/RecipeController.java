@@ -76,16 +76,8 @@ public class RecipeController {
 	public String listPublishedRecipes(Model model) {
 		List<Recipe> recipes= recipeService.getPublicRecipes();
 		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
-		
-		//for adding new Recipe
-		RecipeFormDTO recipeDTO = new RecipeFormDTO();	
-		recipeDTO.setShared(true);
-		if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
-			recipeDTO.setInspected(true);
-			recipeDTO.setPublished(true);
-		}
-		model.addAttribute("myRecipe", recipeDTO);
 		
 		return "list-recipes";
 	}
@@ -94,17 +86,8 @@ public class RecipeController {
 	public String listUserRecipes(Model model) {
 		List<Recipe> recipes= recipeService.findByOwnerIdDesc(userService.getCurrentUserId());
 		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
-		
-		//for adding new Recipe
-		RecipeFormDTO recipeDTO = new RecipeFormDTO();	
-		recipeDTO.setShared(true);
-		if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
-			recipeDTO.setInspected(true);
-			recipeDTO.setPublished(true);
-		}
-		model.addAttribute("myRecipe", recipeDTO);
-		
 		return "list-recipes";
 	}
 	
@@ -113,6 +96,7 @@ public class RecipeController {
 	public String listSharedRecipes(Model model) {
 		List<Recipe> recipes= recipeService.getRecipesWaitingForInspection();
 		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
 		return "list-recipes";
 	}
@@ -122,6 +106,7 @@ public class RecipeController {
 	public String listUsersPrivateRecipes(Model model) {
 		List<Recipe> recipes= recipeService.getPrivateRecipes();
 		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
 		return "list-recipes";
 	}
@@ -131,6 +116,7 @@ public class RecipeController {
 	public String listRejectedRecipes(Model model) {
 		List<Recipe> recipes= recipeService.getRejectedRecipes();
 		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
 		return "list-recipes";
 	}
@@ -165,6 +151,7 @@ public class RecipeController {
 		}
 		model.addAttribute("recipe", recipeDTO);
 		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
 		return "recipe-form";
 	}
 	
@@ -191,6 +178,10 @@ public class RecipeController {
 				recipe.setOwner(user);
 				if (recipe.getImage() == null) {
 					recipe.setImage("/recipeImages/default.png");
+				}
+				if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
+					recipe.setInspected(true);
+					recipe.setPublished(true);
 				}
 			}
 			recipeService.save(recipe);
@@ -262,8 +253,8 @@ public class RecipeController {
 	}
 	
 	@GetMapping("/getRecipe")
-	public @ResponseBody Recipe getRecipe(@RequestParam("recipeId") int id) {
-		return recipeService.findById(id);
+	public @ResponseBody RecipeFormDTO getRecipe(@RequestParam("recipeId") int id) {
+		return convertToDTO(recipeService.findById(id));
 	}
 
 	@GetMapping("/getUnitTypes")

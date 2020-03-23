@@ -16,75 +16,77 @@
       </div>
       <div class="modal-body">
 	        <div class="container">
-		 	<form:form action="saveRecipe" cssClass="form-horizontal"
-	      method="post" modelAttribute="myRecipe" enctype="multipart/form-data">
-		      	<form:hidden path="id" value="0"/>
-		      	<form:hidden path="image" />
+		 	<form action="saveRecipe" method="post" enctype="multipart/form-data">
+		      	<input type="hidden" name="id" id="modal-recipe-id"/>
 		      	<div class="row">
 			      	<div class="col-md-8 col-lg-6">
 						<div class="form-group">
 							Pavadinimas
-						 	<form:input type="text" class="form-control" path="title" required="true" maxlength="50"/>
+						 	<input type="text" class="form-control" name="title" required maxlength="50"/>
 							
-						
 							Aprašymas
-						 	<form:input type="text" class="form-control" path="description" required="true" maxlength="200"/>
+						 	<input type="text" class="form-control" name="description" maxlength="200"/>
 				
 							Patiekalo tipas<br>
-					        <form:select path="mealTypes" class="selectpicker" multiple="multiple" data-live-search="true" required="true">
-							<form:options items="${mealTypes}" itemLabel="label"/>
-							</form:select>
+<%-- 					        <form:select path="mealTypes" class="selectpicker" multiple="multiple" data-live-search="true" required="true"> --%>
+<%-- 							<form:options items="${mealTypes}" itemLabel="label"/> --%>
+<%-- 							</form:select> --%>
+							<c:forEach var="mealType" items="${mealTypes}">
+                    			<div class="mealType-container">	                    					
+	                    			<input type="checkbox" id="${mealType}-modal-checkbox" name="mealTypes" class="mealType-checkbox d-none" value="${mealType}"/>
+	                    			<label class="mealType-image" for="${mealType}-modal-checkbox" >
+		                    			<span>${mealType.label}</span>
+		                    			<img src="/images/${mealType}.jpg" />
+	                    			</label> 
+                    			</div>
+                    		</c:forEach>
 							<br><br>	
 							Porcijos
 							<br>
 <%-- 							<form:input type="number"  class="form-control" path="servings" required="true" min="1" step="1"/>4 --%>
 							<div class="servings-radio">
-							    <form:radiobutton class="d-none" path="servings" value="1" id="servings-1" checked="true"/>
+							    <input type="radio" class="d-none" name="servings" value="1" id="servings-1" checked/>
 							    <label for="servings-1">
 							   		<img src="/images/x1.svg" />
 							    </label>
 							</div>
 							<div class="servings-radio">
-							   <form:radiobutton class="d-none" path="servings" value="2" id="servings-2"/>
+							   <input type="radio" class="d-none" name="servings" value="2" id="servings-2"/>
 							   <label for="servings-2">
 							   		<img src="/images/x2.svg" />
 							   </label>
 							</div>
 							<div class="servings-radio">
-							   <form:radiobutton class="d-none" path="servings" value="3" id="servings-3"/>
+							   <input type="radio" class="d-none" name="servings" value="3" id="servings-3"/>
 							   <label for="servings-3">
 							   		<img src="/images/x3.svg" />
 							   </label>
 							</div>
 							<div class="servings-radio">
-							   <form:radiobutton class="d-none" path="servings" value="4" id="servings-4"/>
+							   <input type="radio" class="d-none" name="servings" value="4" id="servings-4"/>
 							   <label for="servings-4">
 							   		<img src="/images/x4.svg" />
 							   </label>
 							</div>
 							<div class="custom-control custom-switch">
 							<br>
-								<form:checkbox path="shared" class="custom-control-input" id="sharedSwitch"/>
+								<input type="checkbox" name="shared" class="custom-control-input" id="sharedSwitch" checked/>
 								<label class="custom-control-label" for="sharedSwitch">Dalintis receptu su kitais</label>
 							</div>
 							<br><br>
 			      			
-			      			<form:input type="hidden" path="author"/>
-			      			<form:input type="hidden" path="owner"/>
+			      			<input type="hidden" name="author"/>
+			      			<input type="hidden" name="owner"/>
 			      			<security:authorize access="hasRole('ADMIN')">
-				      			<form:input type="hidden" path="inspected"/>
-				      			<form:input type="hidden" path="published"/>
+				      			<input type="hidden" name="inspected"/>
+				      			<input type="hidden" name="published"/>
 			      			</security:authorize>
 						</div>
 					 </div>
 					 <div class="form-group col-md-4 col-lg-6 text-center">	      			
-			      		<c:if test="${myRecipe.image eq null}">
-				        	<img id="recipe-form-image" src="/recipeImages/default.png" alt="Recepto paveikslėlis"/>
-				        </c:if>	        
-				        <c:if test="${myRecipe.image ne null}">
-				        	<img id="recipe-form-image" src="${recipe.image}" alt="Recepto paveikslėlis"/>
-				        </c:if>
-		      			<form:input type = "file" class="form-control" path="imageFile" id="recipe-image-input"/>
+			        	<img id="recipe-form-image" src="/recipeImages/default.png" alt="Recepto paveikslėlis"/>
+			        	<input type="hidden" name="image"/>
+		      			<input type = "file" class="form-control" name="imageFile" id="recipe-image-input"/>
 		      		</div>
 			  </div>
 			  <div class="row">
@@ -103,20 +105,23 @@
 			  	  </div>			
 						<div id ="ingredient-0" class = "ingredient-container row form-group">
 							<div class = "col-6">
-								<form:input type="text" class="food-product-name form-control" path="ingredients[0].name" required="true" maxlength="50"/>
+								<input type="text" class="food-product-name form-control" name="ingredients[0].name" required maxlength="50"/>
 							</div>
 							<div class = "col-3">
-								<form:input type="number"  class="form-control" path="ingredients[0].ammount" required="true" min="0.1" step="0.1"/>
+								<input type="number"  class="ammount form-control" name="ingredients[0].ammount" required min="0" step="0.1"/>
 							</div>
 							<div class = "col-2">
-								<form:select class="food-product-unit form-control" path="ingredients[0].unit" required="true">
-								    <form:options items="${unitTypes}" itemLabel="label" />
-								</form:select>
+								<select class="food-product-unit form-control" name="ingredients[0].unit" required>
+									<c:forEach var="unitType" items ="${unitTypes}">
+										<option value="${unitType}">${unitType.label}</option>
+									</c:forEach>
+								    
+								</select>
 							</div>
-							<form:hidden path="ingredients[0].id"/>
-							<form:hidden path="ingredients[0].recipe" value="0"/>
-							<div class = "col-1">
-								
+							<input class="ingredient-id" type="hidden" name="ingredients[0].id"/>
+							<input class="ingredient-recipe" type="hidden" name="ingredients[0].recipe"/>
+							<div class = "col-1 remove-ingredient-btn">
+								<a class ="remove-ingredient d-none"></a><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
 							</div>
 						</div>
 					<div id ="add-ingredient-container"></div>
@@ -128,11 +133,11 @@
 			  		<label for="preparations">Paruošimo būdas:</label>
 			  			<div id ="preparation-0" class ="preparation-container row form-group">
 			  				<p class= "preparation-index col-1">1</p>
-			  				<form:textarea class="preparation-area form-control col" path="preparations[0].description" required="true" maxlength="1000"/>
-			  				<form:hidden path="preparations[0].id" />
-							<form:hidden path="preparations[0].recipe" value="0"/>
-							<div class = "col-1">
-								
+			  				<textarea class="preparation-area form-control col" name="preparations[0].description" required maxlength="1000"></textarea>
+			  				<input class="preparation-id" type="hidden" name="preparations[0].id" />
+							<input class="preparation-recipe" type="hidden" name="preparations[0].recipe"/>
+							<div class = "col-1 remove-preparation-button">
+								<a class ="remove-preparation d-none"><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
 							</div>
 			  			</div>
 			  		<div id ="add-preparation-container"></div>
@@ -140,9 +145,9 @@
 					<a id="add-preparation-button"><img class="icon-m mr-2" src="/images/plus-sign.svg"></a>
 			  	</div>
 			  </div>
-			  <form:button type="submit" class="btn btn-primary">Išsaugoti</form:button>
+			  <button type="submit" class="btn btn-primary">Išsaugoti</button>
 		  		<a href="javascript:history.back()" class="btn btn-secondary">Atšaukti</a>			  
-			</form:form>
+			</form>
 		</div>
 		
 		

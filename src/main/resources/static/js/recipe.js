@@ -74,7 +74,7 @@ $("#add-ingredient-button").click(function(){
 	uInput.setAttribute("name", "ingredients["+id+"].unit");
 	uInput.setAttribute("class", "form-control food-product-unit");
 	uInput.setAttribute("required", "true");
-	loadUnitTypes(uInput);
+	uInput.append(loadUnitTypes());
 	unit.appendChild(uInput);
 	ingredient.appendChild(unit);
 	
@@ -89,7 +89,7 @@ $("#add-ingredient-button").click(function(){
 	rInput.setAttribute("id", "ingredients"+id+".recipe");
 	rInput.setAttribute("name", "ingredients["+id+"].recipe");
 	rInput.setAttribute("type", "hidden");
-	var recipeId = document.getElementById("id").value;
+	var recipeId = document.getElementById("modal-recipe-id").value;
 	rInput.setAttribute("value", recipeId);
 	ingredient.appendChild(rInput);
 	
@@ -104,13 +104,13 @@ $("#add-ingredient-button").click(function(){
 	$('.food-product-name').autocomplete("option", "appendTo", "#recipeFormModal");
 });
 
-function loadUnitTypes(container){
+function loadUnitTypes(){
 	 var html = "";
 	 $.get("/recipe/getUnitTypes", function(unitTypes){	
 		 $.each(unitTypes, function(i, unitType) {
 	    		html += "<option value="+unitType.name+">"+unitType.label+"</option>";
 	         }); 
-		 $(container).append(html);
+		 return html;
 	 });
 }
 
@@ -156,7 +156,6 @@ $("#add-preparation-button").click(function(){
 	rInput.setAttribute("name", "preparations["+id+"].recipe");
 	rInput.setAttribute("type", "hidden");
 	var recipeId = document.getElementById("id").value;
-	console.log(recipeId);
 	rInput.setAttribute("value", recipeId);
 	preparation.appendChild(rInput);
 	
@@ -185,52 +184,50 @@ $("#recipe-image-input").change(function() {
 	  readURL(this);
 });
 
-/*
-$('textarea').each(function () {
-	  this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
-	}).on('input', function () {
-	  this.style.height = 'auto';
-	  this.style.height = (this.scrollHeight) + 'px';
-	});
-*/
+function expandTextAreas(){
+	$('textarea').each(function () {
+		  this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+		}).on('input', function () {
+		  this.style.height = 'auto';
+		  this.style.height = (this.scrollHeight) + 'px';
+		});
+}
+
+
 
 $('.selectpicker').selectpicker();
 
 $("#recipes-list-container").on("click", ".recipe-modal-link", function () {
 		var recipeId = $(this).data('recipe-id');
-	    $("#recipeModal .modal-body").empty();
-	    var html ="";
 	    $.get("getRecipe",{recipeId}, function(recipe){
-	    	html = "<div class='row'>" +
-	    				"<div class='col-4'>"+
-							"<img class='img-modal' src='"+recipe.image+"'>"+
-						"</div>"+
-						"<div class='col-8'>"+
-							"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
-							"<div class='row mt-2' id='buttons'></div>"+
-						"</div>"+
-					"</div>"+
-		    		"<div class='row'>" +
-			    		"<div class='col' id='ingredients'>Reikės:</div>"+    
-			    		"<div class='col' id='preparations'>Paruošimo būdas:</div>"+  
-		    		"</div>";
-	        $("#recipeModal .modal-body").append(html);
-	        
 	    	$("#recipeModal .modal-title").text(recipe.title);
-	    	    	
+	    	$("#recipeModal .modal-img").attr("src", recipe.image);
+	    	if (recipe.description != null){
+	    		$("#recipeModal .modal-description").html(recipe.description);	
+	    	}else{
+	    		$("#recipeModal .modal-description").addClass("d-none");	
+	    	}
+	    	$("#recipeModal .modal-mealTypes").empty();
+	    	$.each(recipe.mealTypes, function(i, mealType){
+				$("#recipeModal .modal-mealTypes").append("<p>"+mealType.label+"</p>");
+			})
+	    	$("#recipeModal .modal-servings").html(recipe.servings);	
+	    	$("#recipeModal .modal-body .modal-ingredients").empty();
 	    	$.each(recipe.ingredients, function(i, ingredient) {
-	    		$("#recipeModal .modal-body #ingredients").append("<p>"+ ingredient.name + ": "+ ingredient.ammount +" "+ ingredient.unit.label +"</p>");
+	    		$("#recipeModal .modal-body .modal-ingredients").append("<p>"+ ingredient.name + ": "+ ingredient.ammount +" "+ ingredient.unit.label +"</p>");
 	         });
+	    	$("#recipeModal .modal-body .modal-preparations").empty();
 	    	$.each(recipe.preparations, function(i, preparation) {
-	    		$("#recipeModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
+	    		$("#recipeModal .modal-preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
 	         });   	
+	    	$("#recipeModal .modal-body .modal-buttons").empty();
 	    	$.get("checkAuthorizationForRecipe",{recipeId}, function(data){
 	    		if (data == true){
-	    			$("#recipeModal .modal-body #buttons").append("<a class='btn btn-primary mx-1' href='updateForm?recipeId="+recipeId+"'>Redaguoti</a>");
+	    			$("#recipeModal .modal-buttons").append("<a class='btn btn-primary mx-1 edit-recipe-btn' data-recipe-id="+recipeId+">Redaguoti</a>");
 	    		}
 	    	$.get("hasUserRole", {role: "ROLE_ADMIN"}, function(data){
 	    		if ((data == true) && (recipe.shared && !recipe.inspected)){
-	    			$("#recipeModal .modal-body #buttons").append("<a class='btn btn-primary mx-1' href='approveRecipe?recipeId="+recipeId+"'>Patvirtinti</a>"+
+	    			$("#recipeModal .modal-buttons").append("<a class='btn btn-primary mx-1' href='approveRecipe?recipeId="+recipeId+"'>Patvirtinti</a>"+
 																	"<a class='btn btn-primary mx-1' href='rejectRecipe?recipeId="+recipeId+"'>Atmesti</a>");
 	    		}
 	    	})
@@ -239,6 +236,7 @@ $("#recipes-list-container").on("click", ".recipe-modal-link", function () {
 })
 
 $("#recipeFormModal").on("shown.bs.modal", function(){
+	enableFoodProductAutocomplete();
 	$('.food-product-name').autocomplete("option", "appendTo", "#recipeFormModal");
 })
 
@@ -263,7 +261,84 @@ $("#recipeFormModal form").submit(function(event){
 			});
 	           
 	    }
-        
-
     });
 });
+
+$("#recipeModal").on("click", ".edit-recipe-btn", function(){
+	let recipeId = $(this).data("recipe-id");	
+	$.get("getRecipe",{recipeId}, function(recipe){
+		$("#recipeFormModal .modal-title").html("Redaguoti receptą");
+		$("#recipeFormModal input[name=id]").val(recipe.id);
+		$("#recipeFormModal input[name=title]").val(recipe.title);
+		if (recipe.description == null){
+			recipe.description = "";
+		}
+		$("#recipeFormModal input[name=description]").val(recipe.description);
+		$.each(recipe.mealTypes, function(i, mealType){
+			$("#recipeFormModal input[name=mealTypes][value="+mealType.name+"]").prop("checked", true);
+		})
+		$("#recipeFormModal input[name=servings][value="+recipe.servings+"]").prop("checked", true);
+		$("#recipeFormModal input[name=shared]").prop("checked", recipe.shared);
+		$("#recipeFormModal input[name=author]").val(recipe.author);
+		$("#recipeFormModal input[name=owner]").val(recipe.owner);
+		$("#recipeFormModal input[name=inspected]").val(recipe.inspected);
+		$("#recipeFormModal input[name=published]").val(recipe.published);
+		$("#recipeFormModal #recipe-form-image").attr("src", recipe.image);
+		$("#recipeFormModal input[name=image]").val(recipe.image);
+		
+	
+		
+		$.each(recipe.ingredients, function(i, item){
+			let ingredient = $("#recipeFormModal .ingredient-container").last().clone();
+			ingredient.attr("id", "ingredient-"+i);
+			ingredient.find(".food-product-name").attr("name", "ingredients["+i+"].name");
+			ingredient.find(".food-product-name").val(item.name);
+			ingredient.find(".ammount").attr("name", "ingredients["+i+"].ammount");
+			ingredient.find(".ammount").val(item.ammount);
+			ingredient.find(".food-product-unit").attr("name", "ingredients["+i+"].unit");
+			ingredient.find(".food-product-unit").append(loadUnitTypes());
+			ingredient.find(".food-product-unit").val(item.unit.name);
+			ingredient.find(".ingredient-id").attr("name", "ingredients["+i+"].id");
+			ingredient.find(".ingredient-id").val(item.id);
+			ingredient.find(".ingredient-recipe").attr("name", "ingredients["+i+"].recipe");
+			ingredient.find(".ingredient-recipe").val(item.recipe);
+			if (i > 0){
+				ingredient.find(".remove-ingredient").removeClass("d-none");
+				ingredient.insertAfter($("#recipeFormModal .ingredient-container").last());
+			}else{
+				$("#recipeFormModal .ingredient-container").replaceWith(ingredient);
+			}
+		});
+		
+		$.each(recipe.preparations, function(i, prep){
+			let preparation = $("#recipeFormModal .preparation-container").last().clone();
+			preparation.attr("id", "preparation-"+i);
+			preparation.find(".preparation-index").html(i+1);
+			preparation.find(".preparation-area").attr("name", "preparations["+i+"].description");
+			preparation.find(".preparation-area").val(prep.description);
+			preparation.find(".preparation-id").attr("name", "preparations["+i+"].id");
+			preparation.find(".preparation-id").val(prep.id);
+			preparation.find(".preparation-recipe").attr("name", "preparations["+i+"].recipe");
+			preparation.find(".preparation-recipe").val(prep.recipe);
+			if (i > 0){
+				preparation.find(".remove-preparation").removeClass("d-none");
+				preparation.insertAfter($("#recipeFormModal .preparation-container").last());
+			}else{
+				$("#recipeFormModal .preparation-container").replaceWith(preparation);
+			}
+		});
+//		$("#recipeModal").modal('toggle');
+		$("#recipeFormModal").modal('show');	
+		console.log($("#recipeFormModal form"));
+	});
+});
+
+
+$("#recipeFormModal").on('shown.bs.modal', function () {
+	expandTextAreas();
+});
+
+$(document).on('hidden.bs.modal', '.modal', function () {
+    $('.modal:visible').length && $(document.body).addClass('modal-open');
+});
+

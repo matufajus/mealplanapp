@@ -148,7 +148,7 @@ $("#plan").on("click", ".open-edit-meal-modal", function(){
     $.get("recipe/getRecipe",{recipeId}, function(recipe){
     	html = "<div class='row'>" +
     				"<div class='col-4'>"+
-						"<img class='img-modal' src='"+recipe.image+"'>"+
+						"<img class='modal-img' src='"+recipe.image+"'>"+
 					"</div>"+
 					"<div class='col-8'>"+
 						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
@@ -181,7 +181,7 @@ $(document).on("click", ".open-add-meal-modal",  function(){
     $.get("recipe/getRecipe",{recipeId}, function(recipe){
     	html = "<div class='row'>" +
     				"<div class='col-4'>"+
-						"<img class='img-modal' src='"+recipe.image+"'>"+
+						"<img class='modal-img' src='"+recipe.image+"'>"+
 					"</div>"+
 					"<div class='col-8'>"+
 						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+

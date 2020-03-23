@@ -1,5 +1,8 @@
 package com.melearning.mealplanapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum MealType {
 	BREAKFAST("Pusryčiai"),
 	LUNCH("Pietūs"),
@@ -14,6 +17,10 @@ public enum MealType {
 	
 	public String getLabel() {
 		return label;
+	}
+	
+	public String getName() {
+		return this.name();
 	}
 
 }
