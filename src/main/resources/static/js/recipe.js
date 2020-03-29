@@ -74,7 +74,7 @@ $("#add-ingredient-button").click(function(){
 	uInput.setAttribute("name", "ingredients["+id+"].unit");
 	uInput.setAttribute("class", "form-control food-product-unit");
 	uInput.setAttribute("required", "true");
-	uInput.append(loadUnitTypes());
+	loadUnitTypes(uInput);
 	unit.appendChild(uInput);
 	ingredient.appendChild(unit);
 	
@@ -104,13 +104,13 @@ $("#add-ingredient-button").click(function(){
 	$('.food-product-name').autocomplete("option", "appendTo", "#recipeFormModal");
 });
 
-function loadUnitTypes(){
+function loadUnitTypes(container){
 	 var html = "";
 	 $.get("/recipe/getUnitTypes", function(unitTypes){	
 		 $.each(unitTypes, function(i, unitType) {
 	    		html += "<option value="+unitType.name+">"+unitType.label+"</option>";
 	         }); 
-		 return html;
+		 $(container).append(html);
 	 });
 }
 
@@ -155,7 +155,7 @@ $("#add-preparation-button").click(function(){
 	rInput.setAttribute("id", "preparations"+id+".recipe");
 	rInput.setAttribute("name", "preparations["+id+"].recipe");
 	rInput.setAttribute("type", "hidden");
-	var recipeId = document.getElementById("id").value;
+	var recipeId = document.getElementById("modal-recipe-id").value;
 	rInput.setAttribute("value", recipeId);
 	preparation.appendChild(rInput);
 	
@@ -249,7 +249,9 @@ $("#recipeFormModal form").submit(function(event){
 	$.ajax({
 		url: form.attr("action"),
 		type: form.attr("method"),
-		data: form.serialize(),
+		data: new FormData(this),
+		processData: false,
+		contentType: false,
 		success: function(result){
 			$("#recipeFormModal").modal('toggle');
 			window.location.replace("/recipe/myList");

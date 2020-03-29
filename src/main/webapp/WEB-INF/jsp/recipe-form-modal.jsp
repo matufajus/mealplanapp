@@ -17,7 +17,7 @@
       <div class="modal-body">
 	        <div class="container">
 		 	<form action="saveRecipe" method="post" enctype="multipart/form-data">
-		      	<input type="hidden" name="id" id="modal-recipe-id"/>
+		      	<input type="hidden" name="id" id="modal-recipe-id" value="0"/>
 		      	<div class="row">
 			      	<div class="col-md-8 col-lg-6">
 						<div class="form-group">
@@ -118,7 +118,7 @@
 								    
 								</select>
 							</div>
-							<input class="ingredient-id" type="hidden" name="ingredients[0].id"/>
+							<input class="ingredient-id" type="hidden" name="ingredients[0].id" value="0"/>
 							<input class="ingredient-recipe" type="hidden" name="ingredients[0].recipe"/>
 							<div class = "col-1 remove-ingredient-btn">
 								<a class ="remove-ingredient d-none"></a><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
@@ -134,8 +134,8 @@
 			  			<div id ="preparation-0" class ="preparation-container row form-group">
 			  				<p class= "preparation-index col-1">1</p>
 			  				<textarea class="preparation-area form-control col" name="preparations[0].description" required maxlength="1000"></textarea>
-			  				<input class="preparation-id" type="hidden" name="preparations[0].id" />
-							<input class="preparation-recipe" type="hidden" name="preparations[0].recipe"/>
+			  				<input class="preparation-id" type="hidden" name="preparations[0].id" value="0"/>
+							<input class="preparation-recipe" type="hidden" name="preparations[0].recipe" />
 							<div class = "col-1 remove-preparation-button">
 								<a class ="remove-preparation d-none"><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
 							</div>
