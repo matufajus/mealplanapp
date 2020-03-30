@@ -17,6 +17,7 @@ User can:
 * TODO: get randomly generated meal plan.
 * TODO: save the meal plan and use it later.
 * TODO: see and track the nutritional information of their meals' history.
+* TODO: can add more than one recipe to a single meal.
 
 Admin can:
 * view/create/edit/delete public recipes.
