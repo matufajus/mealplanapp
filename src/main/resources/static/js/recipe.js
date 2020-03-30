@@ -331,7 +331,6 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 		});
 //		$("#recipeModal").modal('toggle');
 		$("#recipeFormModal").modal('show');	
-		console.log($("#recipeFormModal form"));
 	});
 });
 
@@ -342,5 +341,14 @@ $("#recipeFormModal").on('shown.bs.modal', function () {
 
 $(document).on('hidden.bs.modal', '.modal', function () {
     $('.modal:visible').length && $(document.body).addClass('modal-open');
+});
+
+$("#add-recipe-link").click(function (){
+	//reset form because it's using the same form for creating and editing
+	//if editing was done before there would be some info left and we need
+	//a fresh new form for adding new recipe
+	$("#recipeFormModal modal-title").html("Sukurti receptą");
+	$("#recipe-form-image").attr("src", "/recipeImages/default.png")
+	document.getElementById("recipe-form").reset();
 });
 

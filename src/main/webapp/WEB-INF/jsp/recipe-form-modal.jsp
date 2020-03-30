@@ -16,7 +16,7 @@
       </div>
       <div class="modal-body">
 	        <div class="container">
-		 	<form action="saveRecipe" method="post" enctype="multipart/form-data">
+		 	<form id="recipe-form" action="saveRecipe" method="post" enctype="multipart/form-data">
 		      	<input type="hidden" name="id" id="modal-recipe-id" value="0"/>
 		      	<div class="row">
 			      	<div class="col-md-8 col-lg-6">

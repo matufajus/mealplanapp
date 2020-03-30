@@ -164,7 +164,7 @@ public class RecipeController {
 			return new ResponseEntity<Object>(map, HttpStatus.BAD_REQUEST);
 		}
 		else {
-			if (recipeDTO.getImageFile() != null) {
+			if (!recipeDTO.getImageFile().isEmpty()) {
 				String prefix = RandomString.make(8);
 				fileService.uploadFile(recipeDTO.getImageFile(), prefix);
 				recipeDTO.setImage("/recipeImages/" + prefix + recipeDTO.getImageFile().getOriginalFilename());
