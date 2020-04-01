@@ -85,14 +85,6 @@ $("#add-ingredient-button").click(function(){
 	iInput.setAttribute("value", 0);
 	ingredient.appendChild(iInput);
 	
-	var rInput = document.createElement("input");
-	rInput.setAttribute("id", "ingredients"+id+".recipe");
-	rInput.setAttribute("name", "ingredients["+id+"].recipe");
-	rInput.setAttribute("type", "hidden");
-	var recipeId = document.getElementById("modal-recipe-id").value;
-	rInput.setAttribute("value", recipeId);
-	ingredient.appendChild(rInput);
-	
 	var button = document.createElement("a");
 	button.setAttribute("class", "remove-ingredient col-1");
 	button.innerHTML = "<img class='icon-m mr-2' src='/images/minus-black.svg'>";
@@ -151,13 +143,6 @@ $("#add-preparation-button").click(function(){
 	iInput.setAttribute("value", 0);
 	preparation.appendChild(iInput);
 	
-	var rInput = document.createElement("input");
-	rInput.setAttribute("id", "preparations"+id+".recipe");
-	rInput.setAttribute("name", "preparations["+id+"].recipe");
-	rInput.setAttribute("type", "hidden");
-	var recipeId = document.getElementById("modal-recipe-id").value;
-	rInput.setAttribute("value", recipeId);
-	preparation.appendChild(rInput);
 	
 	var button = document.createElement("a");
 	button.setAttribute("class", "remove-preparation");
@@ -302,8 +287,6 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 			ingredient.find(".food-product-unit").val(item.unit.name);
 			ingredient.find(".ingredient-id").attr("name", "ingredients["+i+"].id");
 			ingredient.find(".ingredient-id").val(item.id);
-			ingredient.find(".ingredient-recipe").attr("name", "ingredients["+i+"].recipe");
-			ingredient.find(".ingredient-recipe").val(item.recipe);
 			if (i > 0){
 				ingredient.find(".remove-ingredient").removeClass("d-none");
 				ingredient.insertAfter($("#recipeFormModal .ingredient-container").last());
@@ -320,8 +303,6 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 			preparation.find(".preparation-area").val(prep.description);
 			preparation.find(".preparation-id").attr("name", "preparations["+i+"].id");
 			preparation.find(".preparation-id").val(prep.id);
-			preparation.find(".preparation-recipe").attr("name", "preparations["+i+"].recipe");
-			preparation.find(".preparation-recipe").val(prep.recipe);
 			if (i > 0){
 				preparation.find(".remove-preparation").removeClass("d-none");
 				preparation.insertAfter($("#recipeFormModal .preparation-container").last());

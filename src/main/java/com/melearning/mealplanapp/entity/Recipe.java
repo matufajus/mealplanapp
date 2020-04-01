@@ -32,10 +32,12 @@ public class Recipe {
 	@Column(name="description")
 	private String description;
 	
-	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name ="recipe_id", nullable = false)
 	private List<Ingredient> ingredients;
 	
-	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval=true)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
+	@JoinColumn(name ="recipe_id", nullable = false)
 	private List<Preparation> preparations;
 	
 	@ElementCollection(targetClass = MealType.class)

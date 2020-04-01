@@ -19,11 +19,6 @@ public class Preparation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@ManyToOne
-	@JoinColumn(name = "recipe_id")
-	@JsonIgnore
-	private Recipe recipe;
-	
 	@Column(name="description")
 	private String description;
 	
@@ -35,14 +30,6 @@ public class Preparation {
 		this.id = id;
 	}
 
-	public Recipe getRecipe() {
-		return recipe;
-	}
-
-	public void setRecipe(Recipe recipe) {
-		this.recipe = recipe;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -51,9 +38,8 @@ public class Preparation {
 		this.description = description;
 	}
 
-	public Preparation(int id, Recipe recipe, String description) {
+	public Preparation(int id, String description) {
 		this.id = id;
-		this.recipe = recipe;
 		this.description = description;
 	}
 

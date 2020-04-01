@@ -33,10 +33,6 @@ public class Ingredient {
 	@Enumerated(EnumType.ORDINAL)
 	private UnitType unit;
 	
-	@ManyToOne
-	@JoinColumn(name = "recipe_id")
-	@JsonIgnore
-	private Recipe recipe;
 
 	public String getName() {
 		return name;
@@ -53,14 +49,6 @@ public class Ingredient {
 	public void setAmmount(float ammount) {
 		this.ammount = ammount;
 	}
-
-	public Recipe getRecipe() {
-		return recipe;
-	}
-
-	public void setRecipe(Recipe recipe) {
-		this.recipe = recipe;
-	}
 	
 	public Ingredient() {
 		
@@ -71,12 +59,11 @@ public class Ingredient {
 		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);;
 		this.ammount = ammount;
 		this.unit = unit;
-		this.recipe = recipe;
 	}
 
 	@Override
 	public String toString() {
-		return "Ingredient [id=" + id + ", name=" + name + ", ammount=" + ammount + ", recipe=" + recipe + "]";
+		return "Ingredient [id=" + id + ", name=" + name + ", ammount=" + ammount + "]";
 	}
 
 	public int getId() {

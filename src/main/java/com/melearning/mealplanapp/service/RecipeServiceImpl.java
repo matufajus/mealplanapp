@@ -159,8 +159,6 @@ public class RecipeServiceImpl implements RecipeService {
 			copyRecipe.setPublished(true);
 			copyRecipe.getIngredients().forEach(i -> i.setId(0));
 			copyRecipe.getPreparations().forEach(p -> p.setId(0));
-			copyRecipe.getIngredients().forEach(i -> i.setRecipe(copyRecipe));
-			copyRecipe.getPreparations().forEach(p -> p.setRecipe(copyRecipe));
 			save(copyRecipe);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block

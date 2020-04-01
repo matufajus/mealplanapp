@@ -96,7 +96,6 @@
 							</form:select>
 						</div>
 						<form:hidden path="ingredients[${status.index}].id" />
-						<form:hidden path="ingredients[${status.index}].recipe" />
 						<div class = "col-1">
 							<a class ="remove-ingredient"></a><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
 						</div>
@@ -115,7 +114,6 @@
 		  				<p class= "preparation-index col-1">${status.index+1}</p>
 		  				<form:textarea class="preparation-area form-control col" path="preparations[${status.index}].description" required="true" maxlength="1000"/>
 		  				<form:hidden path="preparations[${status.index}].id" />
-						<form:hidden path="preparations[${status.index}].recipe" />
 						<a class ="remove-preparation"><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
 		  			</div>
 		  		</c:forEach>

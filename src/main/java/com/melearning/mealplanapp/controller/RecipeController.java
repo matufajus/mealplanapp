@@ -170,8 +170,6 @@ public class RecipeController {
 				recipeDTO.setImage("/recipeImages/" + prefix + recipeDTO.getImageFile().getOriginalFilename());
 			}
 			Recipe recipe = convertToEntity(recipeDTO);
-			recipe.getIngredients().forEach(i -> i.setRecipe(recipe));
-			recipe.getPreparations().forEach(p -> p.setRecipe(recipe));
 			if (recipe.getId() == 0) {
 				User user = userService.getCurrentUser();
 				recipe.setAuthor(user.getUsername());
