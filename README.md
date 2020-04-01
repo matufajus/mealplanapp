@@ -17,6 +17,7 @@ User can:
 * TODO: get randomly generated meal plan.
 * TODO: save the meal plan and use it later.
 * TODO: see and track the nutritional information of their meals' history.
+* TODO: can add more than one recipe to a single meal.
 
 Admin can:
 * view/create/edit/delete public recipes.
@@ -28,4 +29,13 @@ TODO:
 * enable email verification, forgotten password recovery.
 
 ## Screenshots:
+### Search and filter recipes
+![List of recipes](https://github.com/matufajus/mealplanapp/blob/master/screenshots/recipes.png?raw=true)
+### Create new recipe 
+![Create new recipe](https://github.com/matufajus/mealplanapp/blob/master/screenshots/createRecipe.png?raw=true)
+### Make a meal plan 
+![Planning](https://github.com/matufajus/mealplanapp/blob/master/screenshots/planning.png?raw=true)
+### Check food products you have
+![User products](https://github.com/matufajus/mealplanapp/blob/master/screenshots/kitchen.png?raw=true)
+
 
