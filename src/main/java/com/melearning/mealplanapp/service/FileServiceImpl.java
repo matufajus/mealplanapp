@@ -14,6 +14,8 @@ import java.nio.file.StandardCopyOption;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -24,23 +26,18 @@ public class FileServiceImpl implements FileService {
 
     @Value("${app.upload.dir}")
     public String uploadDir;
+    
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     public void uploadFile(MultipartFile file, String prefix) {
-
         try {
-        	
-//        	 Path copyLocation = Paths
-//                 .get(uploadDir + StringUtils.cleanPath(file.getOriginalFilename()));
-//             Files.copy(file.getInputStream(), copyLocation, StandardCopyOption.REPLACE_EXISTING);
-             
         	InputStream inputStream = file.getInputStream();
 			BufferedImage image = ImageIO.read(inputStream);
 			BufferedImage resized = resize(image, 500, 500);
         	File newImage = new File(uploadDir + StringUtils.cleanPath(prefix + file.getOriginalFilename()));
-			ImageIO.write(resized, "png", newImage);
-           
+			ImageIO.write(resized, "png", newImage);         
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Unable to save the image: "+ e.getMessage());
         }
     }
     

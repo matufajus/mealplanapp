@@ -38,28 +38,28 @@ import com.melearning.mealplanapp.service.UserService;
 @Controller
 @RequestMapping("/plan")
 public class PlanController {
-	
+
 	@Autowired
 	MealService mealService;
-	
+
 	@Autowired
 	RecipeService recipeService;
-	
+
 	@Autowired
 	ShoppingService shoppingService;
-	
+
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	KitchenService kitchenService;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
-	
+
 	@GetMapping("")
 	public String showPlan(Model model) {
 		User user = userService.getCurrentUser();
@@ -76,7 +76,7 @@ public class PlanController {
 		model.addAttribute("planStyle", planStyle);
 		return "meal-plan";
 	}
-	
+
 	@PostMapping("/createMeal")
 	public String createMeal(int recipeId, String date, String mealType, int servings, boolean addIngredients) {
 		Recipe recipe = recipeService.findById(recipeId);
@@ -89,29 +89,30 @@ public class PlanController {
 		}
 		return "redirect:/plan";
 	}
-	
+
 	@PostMapping("/updateShoppingItem")
-	public @ResponseBody String updateShoppingItem(@RequestParam(name = "ids") List<Integer> ids){
+	public @ResponseBody String updateShoppingItem(@RequestParam(name = "ids") List<Integer> ids) {
 		shoppingService.updateShoppingItems(ids);
 		return "updated";
 	}
-	
+
 	@GetMapping("/deleteMeal")
 	public String deleteMeal(@RequestParam("mealId") int mealId) {
 		mealService.deleteMeal(mealId);
 		shoppingService.removeMealIngredientsFromShoppingList(mealId);
 		return "redirect:/plan";
 	}
-	
+
 	@PostMapping("/changePlanSettings")
-	public String changePlanSettings(@RequestParam("quantity") int planDays, @RequestParam("planStyle") String planStyle) {
+	public String changePlanSettings(@RequestParam("quantity") int planDays,
+			@RequestParam("planStyle") String planStyle) {
 		User currentUser = userService.getCurrentUser();
 		currentUser.setPlanDays(planDays);
 		currentUser.setPlanStyle(planStyle);
 		userService.save(currentUser);
 		return "redirect:/plan";
 	}
-	
+
 	@GetMapping("/getShoppingItems")
 	public @ResponseBody List<ShoppingItemDTO> getShoppingItems() {
 		User user = userService.getCurrentUser();
@@ -119,9 +120,9 @@ public class PlanController {
 		List<ShoppingItemDTO> shoppingList = shoppingService.getShoppingListForMeals(meals);
 		return shoppingList;
 	}
-	
+
 	@GetMapping("/getMealsForToday")
-	public @ResponseBody List<Meal> getPlanForToday(){
+	public @ResponseBody List<Meal> getPlanForToday() {
 		User user = userService.getCurrentUser();
 		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), 1);
 		return meals;

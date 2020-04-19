@@ -75,5 +75,4 @@ public class MealServiceImpl implements MealService{
 		mealRepository.deleteById(mealId);
 	}
 
-	
 }

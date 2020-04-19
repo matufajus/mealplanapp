@@ -12,6 +12,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,6 +45,8 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	IngredientRepository ingredientRepository;
 
+	Logger logger = LoggerFactory.getLogger(getClass());
+
 	@Autowired
 	public RecipeServiceImpl(RecipeRepository recipeRepository, FoodProductRepository foodProductRepository,
 			IngredientRepository ingredientRepository) {
@@ -63,6 +67,7 @@ public class RecipeServiceImpl implements RecipeService {
 		if (result.isPresent()) {
 			recipe= result.get();
 		}else {
+			logger.error("Did not find recipe id - " + id);
 			throw new RuntimeException("Did not find recipe id - " + id);
 		}
 		return recipe;
@@ -162,10 +167,10 @@ public class RecipeServiceImpl implements RecipeService {
 			save(copyRecipe);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while creating a copy of recipe: id = "+ recipeId + ", error: " + e.getMessage());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Error while creating a copy of recipe: id = "+ recipeId + ", error: " + e.getMessage());
 		}	
 	}
 	
