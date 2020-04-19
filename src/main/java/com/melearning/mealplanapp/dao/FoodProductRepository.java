@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.melearning.mealplanapp.entity.FoodProduct;
-import com.melearning.mealplanapp.entity.FoodType;
+import com.melearning.mealplanapp.enumeration.FoodType;
 
 public interface FoodProductRepository extends JpaRepository<FoodProduct, Integer>{
 

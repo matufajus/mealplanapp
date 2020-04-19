@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
 @Entity
 @Table(name = "ingredient")

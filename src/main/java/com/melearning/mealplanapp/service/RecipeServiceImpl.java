@@ -29,12 +29,12 @@ import com.melearning.mealplanapp.dao.IngredientRepository;
 import com.melearning.mealplanapp.dao.RecipeRepository;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
-import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.KitchenProduct;
-import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.MealType;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {

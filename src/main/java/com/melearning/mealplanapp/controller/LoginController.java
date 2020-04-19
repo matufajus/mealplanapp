@@ -12,9 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.melearning.mealplanapp.entity.Meal;
-import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.enumeration.MealType;
 import com.melearning.mealplanapp.service.PlanService;
 import com.melearning.mealplanapp.service.UserService;
 

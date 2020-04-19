@@ -34,11 +34,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
 import com.melearning.mealplanapp.entity.Meal;
-import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
 import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.enumeration.MealType;
 import com.melearning.mealplanapp.exception.OverlappingPlanDatesExceptions;
 import com.melearning.mealplanapp.service.KitchenService;
 import com.melearning.mealplanapp.service.PlanService;
@@ -134,18 +134,19 @@ public class PlanController {
 		return "redirect:/plan/meals?id="+plan.getId();
 	}
 
-	@PostMapping("/updateShoppingItem")
-	public @ResponseBody String updateShoppingItem(@RequestParam(name = "ids") List<Integer> ids) {
-		shoppingService.updateShoppingItems(ids);
-		return "updated";
-	}
-
 	@GetMapping("/deleteMeal")
 	public String deleteMeal(@RequestParam("mealId") int mealId) {
 		Plan plan = planService.getPlanByMealId(mealId);
 		planService.deleteMeal(mealId);		
 		shoppingService.removeMealIngredientsFromShoppingList(mealId);
 		return "redirect:/plan/meals?id="+plan.getId();
+	}
+	
+	@GetMapping("/getMealsForToday")
+	public @ResponseBody List<Meal> getMealsForToday() {
+		User user = userService.getCurrentUser();
+		Plan plan = planService.getCurrentPlan(user);
+		return plan.getMealsForToday();
 	}
 
 	@GetMapping("/getShoppingItems")
@@ -155,11 +156,12 @@ public class PlanController {
 		List<ShoppingItemDTO> shoppingList = shoppingService.getShoppingListForMeals(plan.getMeals());
 		return shoppingList;
 	}
-
-	@GetMapping("/getMealsForToday")
-	public @ResponseBody List<Meal> getMealsForToday() {
-		User user = userService.getCurrentUser();
-		Plan plan = planService.getCurrentPlan(user);
-		return plan.getMealsForToday();
+	
+	@PostMapping("/updateShoppingItem")
+	public @ResponseBody String updateShoppingItem(@RequestParam(name = "ids") List<Integer> ids) {
+		shoppingService.updateShoppingItems(ids);
+		return "updated";
 	}
+
+	
 }

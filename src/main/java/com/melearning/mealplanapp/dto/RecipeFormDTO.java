@@ -9,9 +9,9 @@ import javax.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.melearning.mealplanapp.entity.Ingredient;
-import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Preparation;
 import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.enumeration.MealType;
 
 public class RecipeFormDTO {
 	

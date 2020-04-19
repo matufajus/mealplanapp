@@ -1,7 +1,7 @@
 package com.melearning.mealplanapp.dto;
 
-import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.ShoppingItem;
+import com.melearning.mealplanapp.enumeration.FoodType;
 
 public class ShoppingItemDTO {
 	

@@ -14,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.melearning.mealplanapp.enumeration.FoodType;
+
 @Entity
 @Table(name = "kitchen_product")
 public class KitchenProduct {

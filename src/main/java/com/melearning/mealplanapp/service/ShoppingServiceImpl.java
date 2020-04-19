@@ -13,11 +13,11 @@ import com.melearning.mealplanapp.dao.FoodProductRepository;
 import com.melearning.mealplanapp.dao.ShoppingRepository;
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
-import com.melearning.mealplanapp.entity.FoodType;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.ShoppingItem;
 import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.enumeration.FoodType;
 
 @Service
 public class ShoppingServiceImpl implements ShoppingService{

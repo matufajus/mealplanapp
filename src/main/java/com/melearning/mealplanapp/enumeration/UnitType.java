@@ -1,4 +1,4 @@
-package com.melearning.mealplanapp.entity;
+package com.melearning.mealplanapp.enumeration;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;

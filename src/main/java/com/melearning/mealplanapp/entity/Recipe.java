@@ -17,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.melearning.mealplanapp.enumeration.MealType;
+
 @Entity
 @Table(name = "recipe")
 public class Recipe {

@@ -6,8 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
+import com.melearning.mealplanapp.enumeration.MealType;
 
 public interface RecipeRepository extends JpaRepository<Recipe, Integer> {
 	
