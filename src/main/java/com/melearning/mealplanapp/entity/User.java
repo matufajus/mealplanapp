@@ -28,9 +28,6 @@ public class User {
 	inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<Role> roles;
 	
-	@Column(name="plan_days")
-	private int planDays;
-	
 	@Column(name="plan_style")
 	private String planStyle;
 
@@ -89,14 +86,6 @@ public class User {
 
 	public void setRoles(Collection<Role> roles) {
 		this.roles = roles;
-	}
-
-	public int getPlanDays() {
-		return planDays;
-	}
-
-	public void setPlanDays(int planDays) {
-		this.planDays = planDays;
 	}
 
 	public String getPlanStyle() {

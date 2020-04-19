@@ -270,6 +270,7 @@ html{
 
 .blue-bg{
 	background-image: linear-gradient(to left, #81b1ef , #E0E8F3);
+	min-height: 100vh;
 }
 
 #plan.table{
@@ -583,4 +584,9 @@ ul.ui-autocomplete {
 	font-weight: bold;
 	color:black;
 	background-color:transparent;
+}
+
+.clickable-row:hover{
+	background-color:grey;
+	cursor: pointer;
 }

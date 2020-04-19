@@ -18,64 +18,67 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="recipe")
+@Table(name = "recipe")
 public class Recipe {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private int id;
-	
-	@Column(name="title")
+
+	@Column(name = "title")
 	private String title;
-	
-	@Column(name="description")
+
+	@Column(name = "description")
 	private String description;
-	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
-	@JoinColumn(name ="recipe_id", nullable = false)
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "recipe_id", nullable = false)
 	private List<Ingredient> ingredients;
-	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval=true)
-	@JoinColumn(name ="recipe_id", nullable = false)
+
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "recipe_id", nullable = false)
 	private List<Preparation> preparations;
-	
+
 	@ElementCollection(targetClass = MealType.class)
-	@JoinTable(name = "recipe_meal_Type", 
-	joinColumns = @JoinColumn(name = "recipe_id"))
+	@JoinTable(name = "recipe_meal_Type", joinColumns = @JoinColumn(name = "recipe_id"))
 	@Column(name = "meal_type")
 	@Enumerated(EnumType.ORDINAL)
 	private List<MealType> mealTypes;
-	
-	@Column(name="image")
+
+	@Column(name = "image")
 	private String image;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "owner_id")
 	private User owner;
-	
-	//requested to be made public so everyone could see
-	@Column(name="shared")
+
+	// requested to be made public so everyone could see
+	@Column(name = "shared")
 	private boolean shared;
-	
-	//approved by admin
-	@Column(name="inspected")
+
+	// approved by admin
+	@Column(name = "inspected")
 	private boolean inspected;
-	
-	//is public
-	@Column(name="published")
+
+	// is public
+	@Column(name = "published")
 	private boolean published;
-	
-	@Column(name="author")
+
+	@Column(name = "author")
 	private String author;
-	
-	@Column(name="servings")
+
+	@Column(name = "servings")
 	private int servings;
-	
+
 	public Recipe() {
 	}
 	
-	
+	public Recipe(int id, String title) {
+		this.id = id;
+		this.title = title;
+	}
+
 	public Recipe(int id, String title, String description, List<Ingredient> ingredients,
 			List<Preparation> preparations, List<MealType> mealTypes, String image, User owner, boolean shared,
 			boolean inspected, boolean published, String author) {
@@ -92,8 +95,6 @@ public class Recipe {
 		this.published = published;
 		this.author = author;
 	}
-
-
 
 	public int getId() {
 		return id;
@@ -140,11 +141,9 @@ public class Recipe {
 		this.preparations = preparations;
 	}
 
-
 	public String getImage() {
 		return image;
 	}
-
 
 	public void setImage(String image) {
 		this.image = image;
@@ -185,7 +184,7 @@ public class Recipe {
 	public void setAuthor(String author) {
 		this.author = author;
 	}
-	
+
 	public String getAuthor() {
 		return author;
 	}
@@ -198,16 +197,12 @@ public class Recipe {
 		this.published = published;
 	}
 
-
 	public int getServings() {
 		return servings;
 	}
 
-
 	public void setServings(int servings) {
 		this.servings = servings;
 	}
-	
-	
-	
+
 }

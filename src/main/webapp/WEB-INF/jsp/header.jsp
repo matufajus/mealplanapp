@@ -14,3 +14,5 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet">
 <!-- Google fonts -->
 <link href="https://fonts.googleapis.com/css?family=Caveat|Sacramento&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />

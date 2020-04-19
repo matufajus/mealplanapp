@@ -75,8 +75,7 @@ public class RecipeController {
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
-
-		return "list-recipes";
+		return "recipes-list";
 	}
 
 	@GetMapping("/myList")
@@ -85,7 +84,7 @@ public class RecipeController {
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
-		return "list-recipes";
+		return "recipes-list";
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -95,7 +94,7 @@ public class RecipeController {
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
-		return "list-recipes";
+		return "recipes-list";
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -105,7 +104,7 @@ public class RecipeController {
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
-		return "list-recipes";
+		return "recipes-list";
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
@@ -115,7 +114,7 @@ public class RecipeController {
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
-		return "list-recipes";
+		return "recipes-list";
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")

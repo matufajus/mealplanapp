@@ -1,5 +1,6 @@
 package com.melearning.mealplanapp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,8 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealType;
+import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.User;
-import com.melearning.mealplanapp.service.MealService;
+import com.melearning.mealplanapp.service.PlanService;
 import com.melearning.mealplanapp.service.UserService;
 
 
@@ -21,7 +23,7 @@ import com.melearning.mealplanapp.service.UserService;
 public class LoginController {
 	
 	@Autowired
-	MealService mealService;
+	PlanService planService;
 	
 	@Autowired
 	UserService userService;
@@ -34,9 +36,11 @@ public class LoginController {
 	@GetMapping("home")
 	public String showHome(Model model) {
 		User user = userService.getCurrentUser();
-		List<Meal> meals = mealService.getUserMealsFromTodayUntil(user.getId(), 1);
-		model.addAttribute("mealTypes", MealType.values());
-		model.addAttribute("meals", meals);
+		Plan plan = planService.getCurrentPlan(user);
+		if (plan != null) {
+			model.addAttribute("meals", plan.getMealsForToday());
+		}
+		model.addAttribute("mealTypes", MealType.values());	
 		return "home";
 	}
 	

@@ -10,7 +10,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach var="date" items="${dates}" varStatus="status">
+		<c:forEach var="date" items="${plan.dates}" varStatus="status">
 			 <tr class="d-flex">
 			 	<td class="w-20 text-center"><h3 class="py-0">
 			 		<fmt:parseDate  value="${date}"  type="date" pattern="yyyy-MM-dd" var="parsedDate" />
@@ -19,7 +19,7 @@
 			 	</h3></td>
 			 	<c:forEach var="mealType" items="${mealTypes}">
 			 		<c:set var="hasMeal" value="false"/>
-					<c:forEach var="meal" items="${meals}">	
+					<c:forEach var="meal" items="${plan.meals}">	
 				 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
 				 			<c:set var="hasMeal" value="true"/>
 				 			<td class="w-20 text-center" data-test="${meal }" data-meal-type="${mealType}" data-date="${date}">

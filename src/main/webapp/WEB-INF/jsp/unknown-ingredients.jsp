@@ -12,7 +12,6 @@
   <body>
   <%@ include file="navbar.jsp"%>
 	<div class="container top-container">
-		
 		<table class="table">
 		  <thead>
 		    <tr>

@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,11 +28,7 @@ public class Meal {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "recipe_id")
 	@JsonIgnore
@@ -47,6 +44,19 @@ public class Meal {
 	@Column(name = "servings")
 	private int servings;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="plan_id", nullable=false)
+	@JsonIgnore
+	private Plan plan;
+	
+
+	public Plan getPlan() {
+		return plan;
+	}
+
+	public void setPlan(Plan plan) {
+		this.plan = plan;
+	}
 
 	public int getId() {
 		return id;
@@ -54,10 +64,6 @@ public class Meal {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public Recipe getRecipe() {
@@ -84,13 +90,13 @@ public class Meal {
 		this.date = date;
 	}
 
-	public Meal(int id, User user, Recipe recipe, MealType mealType, LocalDate date, int servings) {
+	public Meal(int id, Recipe recipe, MealType mealType, LocalDate date, int servings, Plan plan) {
 		this.id = id;
-		this.user = user;
 		this.recipe = recipe;
 		this.mealType = mealType;
 		this.date = date;
 		this.servings = servings;
+		this.plan = plan;
 	}
 	
 	public Meal() {

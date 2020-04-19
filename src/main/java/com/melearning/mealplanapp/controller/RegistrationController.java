@@ -28,6 +28,7 @@ public class RegistrationController {
 
 	@Autowired
 	private UserService userService;
+	
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	@InitBinder

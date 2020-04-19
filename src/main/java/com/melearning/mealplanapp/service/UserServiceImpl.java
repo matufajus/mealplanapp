@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(userDTO.getUsername());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setEmail(userDTO.getEmail());
-		user.setPlanDays(7);
 
 		// give user default role of "user"
 		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));

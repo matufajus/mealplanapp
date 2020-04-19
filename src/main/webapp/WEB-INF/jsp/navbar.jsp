@@ -15,7 +15,7 @@
         <a class="nav-link" href="${pageContext.request.contextPath}/recipe/myList">Receptai</a>
       </li>
        <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/plan">Planuoti</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/plan/list">Planuoti</a>
       </li>
     </ul>
     <ul class="navbar-nav ml-auto mr-5">

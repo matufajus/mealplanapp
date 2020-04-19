@@ -1,5 +1,5 @@
 <div id="plan" class="m-auto list" style="text-align:center;">
-	<c:forEach var="date" items="${dates}" varStatus="status">
+	<c:forEach var="date" items="${plan.dates}" varStatus="status">
 		<br>
 		<fmt:parseDate  value="${date}"  type="date" pattern="yyyy-MM-dd" var="parsedDate" />
 		<fmt:formatDate value="${parsedDate}" type="date" pattern="EEEE (MM.dd)" var="stdDatum" />
@@ -8,7 +8,7 @@
 			<h4>${mealType.label}</h4>
 
 	 		<c:set var="hasMeal" value="false"/>
-			<c:forEach var="meal" items="${meals}">	
+			<c:forEach var="meal" items="${plan.meals}">	
 		 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
 		 			<c:set var="hasMeal" value="true"/>
 		 			<div data-meal-type="${mealType}" data-date="${date}">

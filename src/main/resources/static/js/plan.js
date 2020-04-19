@@ -1,6 +1,56 @@
+var nowDate = new Date();
+var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
+
 $(document).ready(function() {
-	loadShoppingItems();
+	if (location.pathname.startsWith("/plan/meals")){
+		loadShoppingItems();
+	}
 });
+
+$(".clickable-row").click(function() {
+    window.location = $(this).data("href");
+});
+
+$('input[name="dates"]').daterangepicker({
+	 locale: {
+	        "format": "YYYY-MM-DD",
+	        "separator": " - ",
+	        "applyLabel": "Pasirinkti",
+	        "cancelLabel": "Atšaukti",
+	        "fromLabel": "nuo",
+	        "toLabel": "Iki",
+	        "customRangeLabel": "Custom",
+	        "daysOfWeek": [
+	            "Sekm",
+	            "Pirm",
+	            "Antr",
+	            "Treč",
+	            "Ketv",
+	            "Pekt",
+	            "Šešt"
+	        ],
+	        "monthNames": [
+	            "Sausis",
+	            "Vasaris",
+	            "Kovas",
+	            "Balandis",
+	            "Gegužė",
+	            "Birželis",
+	            "Liepa",
+	            "Rugpjūtis",
+	            "Rugsėjis",
+	            "Spalis",
+	            "Lapkritis",
+	            "Gruodis"
+	        ],
+	        "firstDay": 1
+	    },
+	minDate: today,
+	opens: 'left'
+	}, function(start, end, label) {
+		console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+});
+
 
 $(".add-meal-button").click(showRecipesContainer);
 
@@ -32,7 +82,7 @@ function loadRecipes(page, size){
 	
 	$("#chooseRecipeModal .modal-title").text(`Pasirinkti patiekalą ${month}  ${d}  dienai ${translateMealType(mealType.toLowerCase())}:`);
 
-	var urlString = "recipe/getRecipes?section="+section+"&pageId="+page+"&pageSize="+size;
+	var urlString = "/recipe/getRecipes?section="+section+"&pageId="+page+"&pageSize="+size;
 	
 	$.ajax({
 		type: "GET",
@@ -145,7 +195,7 @@ $("#plan").on("click", ".open-edit-meal-modal", function(){
     var mealId = $(this).data('meal-id');
     $("#editMealModal .modal-body").empty();
     var html ="";
-    $.get("recipe/getRecipe",{recipeId}, function(recipe){
+    $.get("/recipe/getRecipe",{recipeId}, function(recipe){
     	html = "<div class='row'>" +
     				"<div class='col-4'>"+
 						"<img class='modal-img' src='"+recipe.image+"'>"+
@@ -168,7 +218,7 @@ $("#plan").on("click", ".open-edit-meal-modal", function(){
     	$.each(recipe.preparations, function(i, preparation) {
     		$("#editMealModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
          });   	 	
-    	$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='plan/deleteMeal?mealId="+mealId+"'>Pašalinti iš plano</a>");	
+    	$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/deleteMeal?mealId="+mealId+"'>Pašalinti iš plano</a>");	
 	})
 });
 
@@ -178,7 +228,7 @@ $(document).on("click", ".open-add-meal-modal",  function(){
     console.log(recipeId + " " + mealId);
     $("#addMealModal .modal-body").empty();
     var html ="";
-    $.get("recipe/getRecipe",{recipeId}, function(recipe){
+    $.get("/recipe/getRecipe",{recipeId}, function(recipe){
     	html = "<div class='row'>" +
     				"<div class='col-4'>"+
 						"<img class='modal-img' src='"+recipe.image+"'>"+
@@ -236,11 +286,11 @@ function printPlan()
 //-----------------------Shopping List--------------------------------------------------
 
 function loadShoppingItems(){
-	$("#shopping-items").empty();
-	 $.get("plan/getShoppingItems", function(shoppingItemsDTO){
+	 $("#shopping-items").empty();
+	 let planId = $("input[name=planId]").val()
+	 $.get("/plan/getShoppingItems", {planId: planId}, function(shoppingItemsDTO){
 		 shoppingList = removeDuplicateShoppingItems(shoppingItemsDTO);
 		 if ($('#checkKitchenProducts').is(":checked")){
-			 
 			 checkKitchenProducts(shoppingList)
 			  .then(response => {
 			    appendShoppingList(shoppingList);

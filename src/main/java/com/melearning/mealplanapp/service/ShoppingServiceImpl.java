@@ -30,9 +30,13 @@ public class ShoppingServiceImpl implements ShoppingService{
 	
 	@Override
 	public List<ShoppingItemDTO> getShoppingListForMeals(List<Meal> meals){
+		List<ShoppingItemDTO> shoppingItemsDTO = new ArrayList<ShoppingItemDTO>();
+		if (meals == null) {
+			return shoppingItemsDTO;
+		}
 		List<ShoppingItem> shoppingItems = shoppingRepository.findByMealInOrderByName(meals);
 		List<FoodProduct> foodProducts = foodProductRepository.findAll();
-		List<ShoppingItemDTO> shoppingItemsDTO = new ArrayList<ShoppingItemDTO>();
+		
 		for (ShoppingItem shoppingItem : shoppingItems) {
 			FoodType foodType = FoodType.OTHER;
 			for (FoodProduct foodProduct : foodProducts) {
