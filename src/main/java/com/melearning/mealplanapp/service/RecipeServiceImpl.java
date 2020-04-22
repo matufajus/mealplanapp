@@ -38,21 +38,17 @@ import com.melearning.mealplanapp.enumeration.MealType;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
-	
+
 	RecipeRepository recipeRepository;
-	
+
 	FoodProductRepository foodProductRepository;
-	
-	IngredientRepository ingredientRepository;
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	public RecipeServiceImpl(RecipeRepository recipeRepository, FoodProductRepository foodProductRepository,
-			IngredientRepository ingredientRepository) {
+	public RecipeServiceImpl(RecipeRepository recipeRepository, FoodProductRepository foodProductRepository) {
 		this.recipeRepository = recipeRepository;
 		this.foodProductRepository = foodProductRepository;
-		this.ingredientRepository = ingredientRepository;
 	}
 
 	@Override
@@ -65,8 +61,8 @@ public class RecipeServiceImpl implements RecipeService {
 		Optional<Recipe> result = recipeRepository.findById(id);
 		Recipe recipe = null;
 		if (result.isPresent()) {
-			recipe= result.get();
-		}else {
+			recipe = result.get();
+		} else {
 			logger.error("Did not find recipe id - " + id);
 			throw new RuntimeException("Did not find recipe id - " + id);
 		}
@@ -82,7 +78,7 @@ public class RecipeServiceImpl implements RecipeService {
 	public void deleteById(int id) {
 		recipeRepository.deleteById(id);
 	}
-	
+
 	@Override
 	public Recipe findByTitle(String title) {
 		return recipeRepository.findByTitle(title);
@@ -99,16 +95,16 @@ public class RecipeServiceImpl implements RecipeService {
 		}
 		return availableRecipes;
 	}
-	
+
 	private boolean isIngredientInKitchen(Ingredient ingredient, List<KitchenProduct> products) {
-		for(KitchenProduct product: products) {
-			if (ingredient.getName().equals(product.getName())) {
+		for (KitchenProduct product : products) {
+			if (ingredient.getFoodProduct().getName().equals(product.getName())) {
 				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	private boolean areIngredientsInKitchen(List<Ingredient> ingredients, List<KitchenProduct> products) {
 		for (Ingredient ingredient : ingredients) {
 			if (!isIngredientInKitchen(ingredient, products)) {
@@ -117,10 +113,9 @@ public class RecipeServiceImpl implements RecipeService {
 		}
 		return true;
 	}
-	
-	
+
 	@Override
-	public Page<Recipe> getRecipesByPage(int pageId, int pageSize){
+	public Page<Recipe> getRecipesByPage(int pageId, int pageSize) {
 		Pageable pageable = PageRequest.of(pageId, pageSize);
 		return recipeRepository.findAll(pageable);
 	}
@@ -135,15 +130,10 @@ public class RecipeServiceImpl implements RecipeService {
 //			}
 //		return productNames;
 //	}
-	
+
 	@Override
 	public List<String> getNamesLike(String keyword) {
 		return foodProductRepository.findByNameContaining(keyword);
-	}
-	
-	@Override
-	public FoodProduct getFoodProduct(String name) {
-		return foodProductRepository.findByName(name);
 	}
 
 	@Override
@@ -167,13 +157,13 @@ public class RecipeServiceImpl implements RecipeService {
 			save(copyRecipe);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
-			logger.error("Error while creating a copy of recipe: id = "+ recipeId + ", error: " + e.getMessage());
+			logger.error("Error while creating a copy of recipe: id = " + recipeId + ", error: " + e.getMessage());
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
-			logger.error("Error while creating a copy of recipe: id = "+ recipeId + ", error: " + e.getMessage());
-		}	
+			logger.error("Error while creating a copy of recipe: id = " + recipeId + ", error: " + e.getMessage());
+		}
 	}
-	
+
 	@Override
 	public List<Recipe> getRecipesWaitingForInspection() {
 		return recipeRepository.findBySharedAndInspected(true, false);
@@ -183,14 +173,14 @@ public class RecipeServiceImpl implements RecipeService {
 	public List<Recipe> getPublicRecipes() {
 		return recipeRepository.findByPublished(true);
 	}
-	
+
 	@Override
-	public List<Recipe> getPrivateRecipes(){
+	public List<Recipe> getPrivateRecipes() {
 		return recipeRepository.findByShared(false);
 	}
-	
+
 	@Override
-	public List<Recipe> getRejectedRecipes(){
+	public List<Recipe> getRejectedRecipes() {
 		return recipeRepository.findBySharedAndInspectedAndPublished(true, true, false);
 	}
 
@@ -199,40 +189,21 @@ public class RecipeServiceImpl implements RecipeService {
 			List<MealType> selectedMealtypes, List<String> products) {
 		List<Recipe> filteredRecipes;
 		if (selectedMealtypes != null)
-			filteredRecipes = recipes.stream().filter(recipe -> selectedMealtypes.stream()
-					.anyMatch(mealType -> recipe.getMealTypes().contains(mealType))).collect(Collectors.toList());
+			filteredRecipes = recipes.stream().filter(
+					recipe -> selectedMealtypes.stream().anyMatch(mealType -> recipe.getMealTypes().contains(mealType)))
+					.collect(Collectors.toList());
 		else {
 			filteredRecipes = recipes;
 		}
 		if (products != null) {
-			filteredRecipes = filteredRecipes.stream().filter(recipe ->
-				products.stream().allMatch(product ->
-				recipe.getIngredients().stream().map(ingredient ->
-				ingredient.getName().toLowerCase()).anyMatch(ingredient ->
-				ingredient.contains(product.toLowerCase())))).collect(Collectors.toList());
+			filteredRecipes = filteredRecipes.stream()
+					.filter(recipe -> products.stream()
+							.allMatch(product -> recipe.getIngredients().stream()
+									.map(ingredient -> ingredient.getFoodProduct().getName().toLowerCase())
+									.anyMatch(ingredient -> ingredient.contains(product.toLowerCase()))))
+					.collect(Collectors.toList());
 		}
 		return filteredRecipes;
-	}
-
-	@Override
-	public List<Ingredient> getUnkownIngredients() {
-		return ingredientRepository.findUnknownIngredients();
-	}
-
-	@Override
-	public void updateIngredientName(int id, String name) {
-		Optional<Ingredient> result = ingredientRepository.findById(id);
-		if (result.isPresent()) {
-			Ingredient ingredient = result.get();
-			ingredient.setName(name);
-			ingredientRepository.save(ingredient);
-		}
-		
-	}
-
-	@Override
-	public void addFoodProduct(FoodProduct foodProduct) {
-		foodProductRepository.save(foodProduct);
 	}
 
 	@Override
@@ -245,26 +216,6 @@ public class RecipeServiceImpl implements RecipeService {
 	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize) {
 		Pageable pageable = PageRequest.of(pageId, pageSize);
 		return recipeRepository.findByOwnerId(currentUserId, pageable);
-	}
-
-	@Override
-	public List<FoodProduct> getFoodProductsByType(FoodType foodType) {
-		return foodProductRepository.findByFoodType(foodType);
-	}
-	
-	@Override
-	public List<FoodProduct> getFoodProducts() {
-		return foodProductRepository.findAll();
-	}
-
-	@Override
-	public FoodProduct getFoodProduct(int foodProductId) {	
-		Optional<FoodProduct> result = foodProductRepository.findById(foodProductId);
-		if (result.isPresent()) {
-			return result.get();
-		}
-		return null;
-		
 	}
 
 }

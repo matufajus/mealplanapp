@@ -29,8 +29,6 @@ public interface RecipeService {
 	public Page<Recipe> getRecipesByPage(int pageId, int pageSize);
 	
 	public List<String> getNamesLike(String keyword);
-	
-	public FoodProduct getFoodProduct(String name);
 
 	public List<Recipe> findByOwnerIdDesc(long currentUserId);
 
@@ -47,21 +45,8 @@ public interface RecipeService {
 	public List<Recipe> filterRecipesByMealTypesAndSearchProducts(List<Recipe> recipes,
 			List<MealType> selectedMealtypes, List<String> products);
 
-	public List<Ingredient> getUnkownIngredients();
-
-	public void updateIngredientName(int id, String name);
-
-	public void addFoodProduct(FoodProduct foodProduct);
-
 	public Page<Recipe> getPublicRecipes(int pageId, int pageSize);
 
 	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize);
-
-	public List<FoodProduct> getFoodProductsByType(FoodType foodType);
-
-	public List<FoodProduct> getFoodProducts();
-
-	public FoodProduct getFoodProduct(int foodProductId);
-
 
 }

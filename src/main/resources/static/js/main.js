@@ -44,14 +44,7 @@ $(document).ready(function() {
 
 function enableFoodProductAutocomplete(){
 	$('.food-product-name').autocomplete({
-		source : '/recipe/searchProducts',
-		select: function( event, ui ) {
-	    	$.get("/recipe/getFoodProduct", {name: ui.item['value']}, function(foodProduct){
-	    		var unit = $(event.target).parents().siblings().children(".food-product-unit");
-	    		unit.val(foodProduct.unitType.name);
-	    	});
-	    	
-	    }
+		source : '/recipe/searchProducts'
 	});
 }
 

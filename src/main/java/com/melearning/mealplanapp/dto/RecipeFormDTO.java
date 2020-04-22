@@ -22,7 +22,7 @@ public class RecipeFormDTO {
 	private String title;
 	
 	@NotNull(message = "Recepte turi būti bent vienas ingredientas")
-	private List<Ingredient> ingredients;
+	private List<IngredientDTO> ingredients;
 	
 	@NotNull(message = "Recepte turi būti paruošimo instrukcija")
 	private List<Preparation> preparations;
@@ -49,7 +49,6 @@ public class RecipeFormDTO {
 	
 	private int servings;
 
-
 	public String getTitle() {
 		return title;
 	}
@@ -58,11 +57,11 @@ public class RecipeFormDTO {
 		this.title = title;
 	}
 
-	public List<Ingredient> getIngredients() {
+	public List<IngredientDTO> getIngredients() {
 		return ingredients;
 	}
 
-	public void setIngredients(List<Ingredient> ingredients) {
+	public void setIngredients(List<IngredientDTO> ingredients) {
 		this.ingredients = ingredients;
 	}
 

@@ -35,6 +35,7 @@ import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.exception.UniqueProductConstraintValidationException;
+import com.melearning.mealplanapp.service.FoodProductService;
 import com.melearning.mealplanapp.service.KitchenService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.UserService;
@@ -48,6 +49,9 @@ public class KitchenController {
 	
 	@Autowired
 	RecipeService recipeService;
+	
+	@Autowired
+	FoodProductService foodService;
 
 	@Autowired
 	UserService userService;
@@ -91,7 +95,7 @@ public class KitchenController {
 	
 	@GetMapping("/removeProduct")
 	public @ResponseBody String removeProduct(@RequestParam int foodProductId) {
-		FoodProduct foodProduct = recipeService.getFoodProduct(foodProductId);
+		FoodProduct foodProduct = foodService.getFoodProduct(foodProductId);
 		long userId = userService.getCurrentUserId();
 		kitchenService.removeProductByName(userId, foodProduct.getName());
 		return "success";
@@ -99,7 +103,7 @@ public class KitchenController {
 	
 	@GetMapping("/addProduct")
 	public @ResponseBody String addProduct(@RequestParam int foodProductId) {
-		FoodProduct foodProduct = recipeService.getFoodProduct(foodProductId);
+		FoodProduct foodProduct = foodService.getFoodProduct(foodProductId);
 		KitchenProduct kitchenProduct = new KitchenProduct();
 		kitchenProduct.setName(foodProduct.getName());
 		kitchenProduct.setUser(userService.getCurrentUser());

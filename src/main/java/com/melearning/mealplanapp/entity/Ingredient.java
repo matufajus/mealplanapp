@@ -9,8 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.Polymorphism;
+import org.hibernate.annotations.PolymorphismType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.melearning.mealplanapp.enumeration.UnitType;
@@ -18,53 +23,19 @@ import com.melearning.mealplanapp.enumeration.UnitType;
 @Entity
 @Table(name = "ingredient")
 public class Ingredient {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
 	private int id;
-	
-	@Column(name = "name")
-	private String name;
-	
+
 	@Column(name = "ammount")
 	private float ammount;
-	
-	@Column(name = "unit")
-	@Enumerated(EnumType.ORDINAL)
-	private UnitType unit;
-	
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
-	}
-
-	public float getAmmount() {
-		return ammount;
-	}
-
-	public void setAmmount(float ammount) {
-		this.ammount = ammount;
-	}
+	@ManyToOne
+	@JoinColumn(name = "food_product_id")
+	private FoodProduct foodProduct;
 	
 	public Ingredient() {
-		
-	}
-
-	public Ingredient(int id, String name, float ammount, UnitType unit, Recipe recipe) {
-		this.id = id;
-		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);;
-		this.ammount = ammount;
-		this.unit = unit;
-	}
-
-	@Override
-	public String toString() {
-		return "Ingredient [id=" + id + ", name=" + name + ", ammount=" + ammount + "]";
 	}
 
 	public int getId() {
@@ -75,15 +46,22 @@ public class Ingredient {
 		this.id = id;
 	}
 
-	public UnitType getUnit() {
-		return unit;
+	public float getAmmount() {
+		return ammount;
 	}
 
-	public void setUnit(UnitType unit) {
-		this.unit = unit;
+	public void setAmmount(float ammount) {
+		this.ammount = ammount;
 	}
-	
-	
+
+	public FoodProduct getFoodProduct() {
+		return foodProduct;
+	}
+
+	public void setFoodProduct(FoodProduct foodProduct) {
+		this.foodProduct = foodProduct;
+	}
+
 	
 
 }

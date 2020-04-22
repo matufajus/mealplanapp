@@ -54,7 +54,7 @@ public class ShoppingServiceImpl implements ShoppingService{
 	@Override
 	public void addMealIngredientsToShoppingList(Meal meal) {
 		for (Ingredient ingredient : meal.getRecipe().getIngredients()) {
-			ShoppingItem newShoppingItem = new ShoppingItem(0, meal, ingredient.getName(), ingredient.getAmmount() * meal.getServings(), ingredient.getUnit(), false);
+			ShoppingItem newShoppingItem = new ShoppingItem(0, meal, ingredient.getFoodProduct().getName(), ingredient.getAmmount() * meal.getServings(), ingredient.getFoodProduct().getUnitType(), false);
 			shoppingRepository.save(newShoppingItem);
 		}
 		

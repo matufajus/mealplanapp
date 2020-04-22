@@ -1,14 +1,23 @@
 package com.melearning.mealplanapp.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.UnitType;
 
@@ -17,9 +26,8 @@ import com.melearning.mealplanapp.enumeration.UnitType;
 @Table(name="food_product")
 public class FoodProduct {
 	
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private int id;
 	
 	@Column(name="name")
@@ -33,8 +41,11 @@ public class FoodProduct {
 	@Enumerated(EnumType.ORDINAL)
 	private UnitType unitType;
 	
-	@Column(name="kcal")
-	private Integer kcal;
+//	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL)
+    @MapsId
+    @JoinColumn(name = "id")
+	private Nutrition nutrition;
 
 	public int getId() {
 		return id;
@@ -59,21 +70,11 @@ public class FoodProduct {
 	public void setFoodType(FoodType foodType) {
 		this.foodType = foodType;
 	}
-
-	public Integer getKcal() {
-		return kcal;
-	}
-
-	public void setKcal(Integer kcal) {
-		this.kcal = kcal;
-	}
-
-	public FoodProduct(int id, String name, FoodType foodType, Integer kcal) {
-		super();
-		this.id = id;
+	
+	public FoodProduct(String name, FoodType foodType, Nutrition nutrition) {
 		this.name = name;
 		this.foodType = foodType;
-		this.kcal = kcal;
+		this.nutrition = nutrition;
 	}
 	
 	public FoodProduct() {
@@ -86,6 +87,14 @@ public class FoodProduct {
 
 	public void setUnitType(UnitType unitType) {
 		this.unitType = unitType;
+	}
+	
+	public Nutrition getNutrition() {
+		return nutrition;
+	}
+
+	public void setNutrition(Nutrition nutrition) {
+		this.nutrition = nutrition;
 	}
 	
 }

@@ -1,3 +1,6 @@
+
+//------------------------------------RECIPE MODALS-------------------------------------
+
 $( "#ingredient-container" ).on("click", ".remove-ingredient", function() {
 	$(this).parent().remove();
 });
@@ -18,8 +21,6 @@ $( "#preparation-container" ).on("mouseout", ".remove-preparation", function() {
 	$(this).siblings("textarea").css("border", "1px solid #ced4da");
 });
 
-
-
 $( "#preparation-container" ).on("click", ".remove-preparation", function() {
 	var indexes = $(this).parent().nextAll().find("p.preparation-index");
 	indexes.each(function(){
@@ -30,70 +31,24 @@ $( "#preparation-container" ).on("click", ".remove-preparation", function() {
 });
 
 $("#add-ingredient-button").click(function(){
-	var container = document.getElementById("add-ingredient-container");
-	if ($(this).parent().find(".ingredient-container").last().attr("id") != null){
-		var id = parseInt($(this).parent().find(".ingredient-container").last().attr("id").substring(11))+1;
-	} else {
-		var id = 0;
-	}
-	
-	var ingredient = document.createElement("div");
-	ingredient.setAttribute("class", "ingredient-container form-group row");
-	ingredient.setAttribute("id", "ingredient-"+id);
-	
-	var name = document.createElement("div");
-	name.setAttribute("class", "col-6");
-	var nInput = document.createElement("input");
-	nInput.setAttribute("id", "ingredients"+id+".name");
-	nInput.setAttribute("name", "ingredients["+id+"].name");
-	nInput.setAttribute("type", "text");
-	nInput.setAttribute("class", "form-control food-product-name");
-	nInput.setAttribute("required", "true");
-	nInput.setAttribute("maxlength", "50");
-	name.appendChild(nInput);
-	ingredient.appendChild(name);
-	
-	var ammount = document.createElement("div");
-	ammount.setAttribute("class", "col-3");
-	var aInput = document.createElement("input");
-	aInput.setAttribute("id", "ingredients"+id+".ammount");
-	aInput.setAttribute("name", "ingredients["+id+"].ammount");
-	aInput.setAttribute("class", "form-control");
-	aInput.setAttribute("type", "number");
-	aInput.setAttribute("required", "true");
-	aInput.setAttribute("value", 0.0);
-	aInput.setAttribute("step", "0.1");
-	aInput.setAttribute("min", "0.1");
-	ammount.appendChild(aInput);
-	ingredient.appendChild(ammount);
-	
-	var unit = document.createElement("div");
-	unit.setAttribute("class", "col-2");
-	var uInput = document.createElement("select");
-	uInput.setAttribute("id", "ingredients"+id+".unit");
-	uInput.setAttribute("name", "ingredients["+id+"].unit");
-	uInput.setAttribute("class", "form-control food-product-unit");
-	uInput.setAttribute("required", "true");
-	loadUnitTypes(uInput);
-	unit.appendChild(uInput);
-	ingredient.appendChild(unit);
-	
-	var iInput = document.createElement("input");
-	iInput.setAttribute("id", "ingredients"+id+".id");
-	iInput.setAttribute("name", "ingredients["+id+"].id");
-	iInput.setAttribute("type", "hidden");
-	iInput.setAttribute("value", 0);
-	ingredient.appendChild(iInput);
-	
-	var button = document.createElement("a");
-	button.setAttribute("class", "remove-ingredient col-1");
-	button.innerHTML = "<img class='icon-m mr-2' src='/images/minus-black.svg'>";
-	ingredient.appendChild(button);
-	
-	container.appendChild(ingredient);
-	
-	enableFoodProductAutocomplete();
-	$('.food-product-name').autocomplete("option", "appendTo", "#recipeFormModal");
+	let i = parseInt($(this).parent().find(".ingredient-container").last().attr("id").substring(11))+1;
+	let ingredient = $("#recipeFormModal .ingredient-container").last().clone();
+	ingredient.attr("id", "ingredient-"+i);
+	ingredient.find(".ingredient-name").attr("name", "ingredients["+i+"].name");
+	ingredient.find(".ingredient-name").val('');
+	ingredient.find(".ammount").attr("name", "ingredients["+i+"].ammount");
+	ingredient.find(".ammount").val(0);
+	ingredient.find(".food-product-unit").attr("name", "ingredients["+i+"].unit");
+	ingredient.find(".food-product-unit").append(loadUnitTypes());
+	ingredient.find(".food-product-unit").val('');
+	ingredient.find(".ingredient-id").attr("name", "ingredients["+i+"].id");
+	ingredient.find(".ingredient-id").val(0);
+	ingredient.find(".food-product-id").attr("name", "ingredients["+i+"].foodProductId");
+	ingredient.find(".food-product-id").val('');
+	ingredient.find(".remove-ingredient").removeClass("d-none");
+	ingredient.insertAfter($("#recipeFormModal .ingredient-container").last());
+	enableIngredientNameAutocomplete();
+	$('.ingredient-name').autocomplete("option", "appendTo", "#recipeFormModal");
 });
 
 function loadUnitTypes(container){
@@ -107,49 +62,16 @@ function loadUnitTypes(container){
 }
 
 $("#add-preparation-button").click(function(){
-	var container = document.getElementById("add-preparation-container");
-	
-	if ($(this).parent().find(".preparation-container").last().attr("id") != null){
-		var id = parseInt($(this).parent().find(".preparation-container").last().attr("id").substring(12))+1;
-	} else {
-		var id = 0;
-	}
-		
-	var preparation = document.createElement("div");
-	preparation.setAttribute("class", "row form-group preparation-container");
-	preparation.setAttribute("id", "preparation-"+id);
-	
-	var p = document.createElement("p");
-	var prevNumber = parseInt($(this).parent().find(".preparation-container").last().children("p").text());
-	if (isNaN(prevNumber)){
-		prevNumber = 0;
-	}
-	p.textContent=prevNumber+1;
-	p.setAttribute("class","preparation-index col-1");
-	preparation.appendChild(p);
-	
-	var description = document.createElement("textarea");
-	description.setAttribute("class", "preparation-area form-control col");
-	description.setAttribute("name", "preparations["+id+"].description");
-	description.setAttribute("id", "preparations"+id+".description");
-	description.setAttribute("required", "true");
-	description.setAttribute("maxlength", "1000");
-	preparation.appendChild(description);
-	
-	var iInput = document.createElement("input");
-	iInput.setAttribute("id", "preparations"+id+".id");
-	iInput.setAttribute("name", "preparations["+id+"].id");
-	iInput.setAttribute("type", "hidden");
-	iInput.setAttribute("value", 0);
-	preparation.appendChild(iInput);
-	
-	
-	var button = document.createElement("a");
-	button.setAttribute("class", "remove-preparation");
-	button.innerHTML = "<img class='icon-m mr-2' src='/images/minus-black.svg'>";
-	preparation.appendChild(button);
-	
-	container.appendChild(preparation);
+	let i = parseInt($(this).parent().find(".preparation-container").last().attr("id").substring(12))+1;	
+	let preparation = $("#recipeFormModal .preparation-container").last().clone();
+	preparation.attr("id", "preparation-"+i);
+	preparation.find(".preparation-index").html(i+1);
+	preparation.find(".preparation-area").attr("name", "preparations["+i+"].description");
+	preparation.find(".preparation-area").val('');
+	preparation.find(".preparation-id").attr("name", "preparations["+i+"].id");
+	preparation.find(".preparation-id").val(0);
+	preparation.find(".remove-preparation").removeClass("d-none");
+	preparation.insertAfter($("#recipeFormModal .preparation-container").last());
 });
 
 
@@ -199,7 +121,7 @@ $("#recipes-list-container").on("click", ".recipe-modal-link", function () {
 	    	$("#recipeModal .modal-servings").html(recipe.servings);	
 	    	$("#recipeModal .modal-body .modal-ingredients").empty();
 	    	$.each(recipe.ingredients, function(i, ingredient) {
-	    		$("#recipeModal .modal-body .modal-ingredients").append("<p>"+ ingredient.name + ": "+ ingredient.ammount +" "+ ingredient.unit.label +"</p>");
+	    		$("#recipeModal .modal-body .modal-ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ingredient.ammount +" "+ ingredient.foodProduct.unitType.label +"</p>");
 	         });
 	    	$("#recipeModal .modal-body .modal-preparations").empty();
 	    	$.each(recipe.preparations, function(i, preparation) {
@@ -220,10 +142,7 @@ $("#recipes-list-container").on("click", ".recipe-modal-link", function () {
 		})
 })
 
-$("#recipeFormModal").on("shown.bs.modal", function(){
-	enableFoodProductAutocomplete();
-	$('.food-product-name').autocomplete("option", "appendTo", "#recipeFormModal");
-})
+
 
 
 
@@ -275,18 +194,20 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 		
 	
 		
-		$.each(recipe.ingredients, function(i, item){
+		$.each(recipe.ingredients, function(i, ingr){
 			let ingredient = $("#recipeFormModal .ingredient-container").last().clone();
 			ingredient.attr("id", "ingredient-"+i);
-			ingredient.find(".food-product-name").attr("name", "ingredients["+i+"].name");
-			ingredient.find(".food-product-name").val(item.name);
+			ingredient.find(".ingredient-name").attr("name", "ingredients["+i+"].name");
+			ingredient.find(".ingredient-name").val(ingr.foodProduct.name);
 			ingredient.find(".ammount").attr("name", "ingredients["+i+"].ammount");
-			ingredient.find(".ammount").val(item.ammount);
+			ingredient.find(".ammount").val(ingr.ammount);
 			ingredient.find(".food-product-unit").attr("name", "ingredients["+i+"].unit");
 			ingredient.find(".food-product-unit").append(loadUnitTypes());
-			ingredient.find(".food-product-unit").val(item.unit.name);
+			ingredient.find(".food-product-unit").val(ingr.foodProduct.unitType.name);
 			ingredient.find(".ingredient-id").attr("name", "ingredients["+i+"].id");
-			ingredient.find(".ingredient-id").val(item.id);
+			ingredient.find(".ingredient-id").val(ingr.id);
+			ingredient.find(".food-product-id").attr("name", "ingredients["+i+"].foodProductId");
+			ingredient.find(".food-product-id").val(ingr.foodProductId);
 			if (i > 0){
 				ingredient.find(".remove-ingredient").removeClass("d-none");
 				ingredient.insertAfter($("#recipeFormModal .ingredient-container").last());
@@ -318,6 +239,8 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 
 $("#recipeFormModal").on('shown.bs.modal', function () {
 	expandTextAreas();
+	enableIngredientNameAutocomplete();
+	$('.ingredient-name').autocomplete("option", "appendTo", "#recipeFormModal");
 });
 
 $(document).on('hidden.bs.modal', '.modal', function () {
@@ -333,3 +256,23 @@ $("#add-recipe-link").click(function (){
 	document.getElementById("recipe-form").reset();
 });
 
+function enableIngredientNameAutocomplete(){
+	$('.ingredient-name').autocomplete({
+		source : '/recipe/searchProducts',
+		select: function( event, ui ) {
+	    	$.get("/recipe/getFoodProduct", {name: ui.item['value']}, function(foodProduct){
+	    		var unit = $(event.target).parents().siblings().children(".food-product-unit");
+	    		unit.val(foodProduct.unitType.name);
+	    		var foodProductId = $(event.target).parents().siblings().children(".food-product-id");
+	    		foodProductId.val(foodProduct.id);
+	    	});
+	    	
+	    },
+	    change: function(event, ui) {
+	        if (ui.item == null) {
+	          event.currentTarget.value = ''; 
+	          event.currentTarget.focus();
+	        }
+	    }
+	});
+}

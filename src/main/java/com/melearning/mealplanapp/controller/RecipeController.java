@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -32,9 +33,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.melearning.mealplanapp.dto.IngredientDTO;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.Ingredient;
+import com.melearning.mealplanapp.entity.Nutrition;
 import com.melearning.mealplanapp.entity.Preparation;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.User;
@@ -42,9 +45,11 @@ import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
 import com.melearning.mealplanapp.enumeration.UnitType;
 import com.melearning.mealplanapp.service.FileService;
+import com.melearning.mealplanapp.service.FoodProductService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.UserService;
 
+import net.bytebuddy.description.field.FieldDescription.InGenericShape;
 import net.bytebuddy.utility.RandomString;
 
 @Controller
@@ -54,6 +59,9 @@ public class RecipeController {
 	@Autowired
 	private RecipeService recipeService;
 
+	@Autowired
+	FoodProductService foodService;
+	
 	@Autowired
 	private FileService fileService;
 
@@ -167,6 +175,11 @@ public class RecipeController {
 				}
 			}
 			Recipe recipe = convertToEntity(recipeDTO);
+			//-----
+			
+			
+			
+			//-----
 			// for new recipe set user as author and owner
 			if (recipe.getId() == 0) {
 				User user = userService.getCurrentUser();
@@ -213,13 +226,36 @@ public class RecipeController {
 	private RecipeFormDTO convertToDTO(Recipe recipe) {
 		RecipeFormDTO recipeDTO = mapper.map(recipe, RecipeFormDTO.class);
 		recipeDTO.setOwner(recipe.getOwner().getUsername());
+		recipeDTO.setIngredients(convertToDTOList(recipe.getIngredients()));
 		return recipeDTO;
+	}
+
+	private List<IngredientDTO> convertToDTOList(List<Ingredient> ingredients) {
+		List<IngredientDTO> ingredientDTOs = new ArrayList<IngredientDTO>();
+		for (Ingredient ingredient : ingredients) {
+			IngredientDTO ingredientDTO = mapper.map(ingredient, IngredientDTO.class);
+			ingredientDTOs.add(ingredientDTO);
+		}
+		return ingredientDTOs;
 	}
 
 	private Recipe convertToEntity(RecipeFormDTO recipeDTO) {
 		Recipe recipe = mapper.map(recipeDTO, Recipe.class);
-		recipe.setOwner(userService.findByUsername(recipeDTO.getOwner()));
+		recipe.setOwner(userService.findByUsername(recipeDTO.getOwner()));		
+		recipe.setIngredients(convertToEntityList(recipeDTO.getIngredients()));
 		return recipe;
+	}
+	
+	private List<Ingredient> convertToEntityList(List<IngredientDTO> ingredientDTOs){
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
+		for (IngredientDTO ingredientDTO : ingredientDTOs) {
+			Ingredient ingredient = new Ingredient();
+			ingredient.setAmmount(ingredientDTO.getAmmount());
+			FoodProduct foodProduct = foodService.getFoodProduct(ingredientDTO.getFoodProductId());
+			ingredient.setFoodProduct(foodProduct);
+			ingredients.add(ingredient);
+		}
+		return ingredients;
 	}
 
 	@GetMapping("/getRecipe")
@@ -239,7 +275,7 @@ public class RecipeController {
 
 	@GetMapping("/getFoodProduct")
 	public @ResponseBody FoodProduct getFoodProduct(@RequestParam("name") String name) {
-		return recipeService.getFoodProduct(name);
+		return foodService.getFoodProduct(name);
 	}
 
 	@GetMapping("/getFilteredRecipes")
@@ -275,24 +311,9 @@ public class RecipeController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/unknownIngredients")
-	public String showUnknownIngredients(Model model) {
-		model.addAttribute("ingredients", recipeService.getUnkownIngredients());
-		model.addAttribute("foodProduct", new FoodProduct());
-		return "unknown-ingredients";
-	}
-
-	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/editIngredient")
-	public String editIngredient(@RequestParam(name = "id") int id, @RequestParam(name = "name") String name) {
-		recipeService.updateIngredientName(id, name);
-		return "redirect:/recipe/unknownIngredients";
-	}
-
-	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/addFoodProduct")
 	public String addFoodProduct(@ModelAttribute("foodProduct") FoodProduct foodProduct) {
-		recipeService.addFoodProduct(foodProduct);
+		foodService.addFoodProduct(foodProduct);
 		return "redirect:/recipe/unknownIngredients";
 	}
 
@@ -315,14 +336,14 @@ public class RecipeController {
 
 	@GetMapping("/getFoodProducts")
 	public @ResponseBody List<FoodProduct> getFoodProducts() {
-		List<FoodProduct> products = recipeService.getFoodProducts();
+		List<FoodProduct> products = foodService.getFoodProducts();
 		return products;
 	}
 
 	@GetMapping("/getFoodProductsByType")
 	public @ResponseBody List<FoodProduct> getFoodProductsByType(@RequestParam String type) {
 		FoodType foodType = FoodType.valueOf(type);
-		List<FoodProduct> products = recipeService.getFoodProductsByType(foodType);
+		List<FoodProduct> products = foodService.getFoodProductsByType(foodType);
 		return products;
 	}
 

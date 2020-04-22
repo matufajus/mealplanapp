@@ -93,29 +93,31 @@
 			  	<div id="ingredient-container" class ="col-md-8 col-lg-6">
 			  	  <label for="ingredients">Ingredientai</label>
 			  	  <div class="row">
-			  	  	<div class="col-6">
+			  	  	<div class="col-5">
 			  	  		Pavadinimas
 			  	  	</div>
 			  	  	<div class="col-3">
 			  	  		Kiekis
 			  	  	</div>
-			  	  	<div class="col-2">
+			  	  	<div class="col-3">
 			  	  		Vienetai
 			  	  	</div>
 			  	  </div>			
 						<div id ="ingredient-0" class = "ingredient-container row form-group">
-							<div class = "col-6">
-								<input type="text" class="food-product-name form-control" name="ingredients[0].name" required maxlength="50"/>
+							<div class = "col-5">
+								<input type="text" class="ingredient-name form-control" maxlength="50" required/>
 							</div>
 							<div class = "col-3">
 								<input type="number"  class="ammount form-control" name="ingredients[0].ammount" required min="0" step="0.1"/>
 							</div>
-							<div class = "col-2">
-								<select class="food-product-unit form-control" name="ingredients[0].unit" required>
+							<div>
+								<input type="hidden"  class="food-product-id form-control" name="ingredients[0].foodProductId"/>
+							</div>
+							<div class = "col-3">
+								<select class="food-product-unit form-control" name="ingredients[0].unit" disabled>
 									<c:forEach var="unitType" items ="${unitTypes}">
 										<option value="${unitType}">${unitType.label}</option>
 									</c:forEach>
-								    
 								</select>
 							</div>
 							<input class="ingredient-id" type="hidden" name="ingredients[0].id" value="0"/>
