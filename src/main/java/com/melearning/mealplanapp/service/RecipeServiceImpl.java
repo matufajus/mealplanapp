@@ -98,7 +98,7 @@ public class RecipeServiceImpl implements RecipeService {
 
 	private boolean isIngredientInKitchen(Ingredient ingredient, List<KitchenProduct> products) {
 		for (KitchenProduct product : products) {
-			if (ingredient.getFoodProduct().getName().equals(product.getName())) {
+			if (ingredient.getFoodProduct().equals(product.getFoodProduct())) {
 				return true;
 			}
 		}

@@ -13,6 +13,6 @@ public interface KitchenService {
 	
 	public void removeProduct(int id);
 
-	public void removeProductByName(long userId, String name);
+	public void removeKitchenProductByFoodProductId(long userId, int id);
 
 }

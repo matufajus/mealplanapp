@@ -28,7 +28,7 @@ public class KitchenServiceImpl implements KitchenService {
 		try {
 			kitchenRepository.save(product);
 		} catch (DataIntegrityViolationException e) {
-			throw new UniqueProductConstraintValidationException(product.getName());
+			throw new UniqueProductConstraintValidationException(product.getFoodProduct().getName());
 		}
 		
 	}
@@ -37,11 +37,11 @@ public class KitchenServiceImpl implements KitchenService {
 	public void removeProduct(int id) {
 		kitchenRepository.deleteById(id);
 	}
-	
+
 	@Transactional
 	@Override
-	public void removeProductByName(long userId , String name) {
-		kitchenRepository.deleteByUserIdAndName(userId, name);
+	public void removeKitchenProductByFoodProductId(long userId, int id) {
+		kitchenRepository.deleteByUserIdAndFoodProductId(userId, id);
 	}
 
 }

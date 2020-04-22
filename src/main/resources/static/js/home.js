@@ -53,7 +53,7 @@ function loadKitchenProducts(){
 			$products = $(".product");
 			$.each(items, function(index, item){
 				$products.each(function(i, product){
-					if (item.name == $(product).html()){
+					if (item.foodProduct.name == $(product).html()){
 						$(product).addClass("active");
 					}
 				});

@@ -97,7 +97,7 @@ public class KitchenController {
 	public @ResponseBody String removeProduct(@RequestParam int foodProductId) {
 		FoodProduct foodProduct = foodService.getFoodProduct(foodProductId);
 		long userId = userService.getCurrentUserId();
-		kitchenService.removeProductByName(userId, foodProduct.getName());
+		kitchenService.removeKitchenProductByFoodProductId(userId, foodProduct.getId());
 		return "success";
 	}
 	
@@ -105,9 +105,8 @@ public class KitchenController {
 	public @ResponseBody String addProduct(@RequestParam int foodProductId) {
 		FoodProduct foodProduct = foodService.getFoodProduct(foodProductId);
 		KitchenProduct kitchenProduct = new KitchenProduct();
-		kitchenProduct.setName(foodProduct.getName());
 		kitchenProduct.setUser(userService.getCurrentUser());
-		kitchenProduct.setFoodType(foodProduct.getFoodType());
+		kitchenProduct.setFoodProduct(foodProduct);
 		kitchenService.addProduct(kitchenProduct);
 		return "success";
 	}

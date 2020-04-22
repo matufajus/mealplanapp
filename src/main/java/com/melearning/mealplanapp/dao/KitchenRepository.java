@@ -10,6 +10,6 @@ public interface KitchenRepository extends JpaRepository<KitchenProduct, Integer
 	
 	List<KitchenProduct> findByUserId(long userId);
 
-	void deleteByUserIdAndName(long userId, String name);
+	void deleteByUserIdAndFoodProductId(long userId, int id);
 	
 }

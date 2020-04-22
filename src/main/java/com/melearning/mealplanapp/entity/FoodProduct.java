@@ -41,8 +41,7 @@ public class FoodProduct {
 	@Enumerated(EnumType.ORDINAL)
 	private UnitType unitType;
 	
-//	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id")
 	private Nutrition nutrition;

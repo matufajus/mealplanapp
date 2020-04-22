@@ -28,18 +28,18 @@ public class KitchenProduct {
 	@JoinColumn(name = "user_id")
 	private User user;
 	
-	@Column(name="name")
-	private String name;
+	@ManyToOne
+	@JoinColumn(name = "food_product_id")
+	private FoodProduct foodProduct;
 	
-	@Column(name="quantity")
-	private String quantity;
+	@Column(name="ammount")
+	private float ammount;
 	
 	@Column(name="expiration_date")
-	private Date expirationDate;
-	
-	@Column(name="food_type")
-	@Enumerated(EnumType.ORDINAL)
-	private FoodType foodType;
+	private Date expirationDate;	
+
+	public KitchenProduct() {
+	}
 
 	public int getId() {
 		return id;
@@ -57,21 +57,6 @@ public class KitchenProduct {
 		this.user = user;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
-	}
-
-	public String getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(String quantity) {
-		this.quantity = quantity;
-	}
 
 	public Date getExpirationDate() {
 		return expirationDate;
@@ -81,25 +66,20 @@ public class KitchenProduct {
 		this.expirationDate = expirationDate;
 	}
 
-	public FoodType getFoodType() {
-		return foodType;
+	public FoodProduct getFoodProduct() {
+		return foodProduct;
 	}
 
-	public void setFoodType(FoodType foodType) {
-		this.foodType = foodType;
-	}
-	
-	public KitchenProduct() {
-		
+	public void setFoodProduct(FoodProduct foodProduct) {
+		this.foodProduct = foodProduct;
 	}
 
-	public KitchenProduct(User user, String name, String quantity, Date expirationDate, String location,
-			FoodType foodType) {
-		this.user = user;
-		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
-		this.quantity = quantity;
-		this.expirationDate = expirationDate;
-		this.foodType = foodType;
+	public float getAmmount() {
+		return ammount;
+	}
+
+	public void setAmmount(float ammount) {
+		this.ammount = ammount;
 	}
 
 }
