@@ -247,7 +247,7 @@ $(document).on("click", ".open-add-meal-modal",  function(){
         $("#addMealModal .modal-body").append(html);     
     	$("#addMealModal .modal-title").text(recipe.title);   	    	
     	$.each(recipe.ingredients, function(i, ingredient) {
-    		$("#addMealModal .modal-body #ingredients").append("<p>"+ ingredient.name + ": "+ ingredient.ammount +"</p>");
+    		$("#addMealModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ingredient.ammount +"</p>");
          });
     	$.each(recipe.preparations, function(i, preparation) {
     		$("#addMealModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
@@ -361,8 +361,8 @@ function checkKitchenProducts(shoppingList){
 		$.get("/kitchen/getUserProducts", function(products){
 			$.each(products, function(i, product){
 				$.each(shoppingList, function(j, item){
-					//TODO: add checking if product.quantity > shoppingItem.quantity
-					if (product.name == item.shoppingItem.name){
+					//TODO: add checking if product.ammount > shoppingItem.ammount
+					if (product.foodProduct.name == item.shoppingItem.name){
 						item.shoppingItem.done = true;
 					}
 				});
