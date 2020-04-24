@@ -19,9 +19,10 @@ function loadFoodTypes(){
 			foodTypes = result;
 			let container = $("#kitchen-products .list-group");
 			$.each(foodTypes, function(i, foodType){
+				console.log(foodType);
 				$("<a>").attr({class:"list-group-item list-group-item-action", 'data-toggle': "list",
 		    		href:"#list-"+foodType.position, role:"tab", "aria-controls":foodType.label,
-		    		style:"background-image: url('/images/foodTypes/"+foodType.position+".jpg');"})
+		    		style:"background-image: url('/images/foodTypes/"+foodType.value+".jpg');"})
 		    		.html("<div class='blurry'></div><span>"+foodType.label+"</span>")
 		    		.appendTo(container);
 			})

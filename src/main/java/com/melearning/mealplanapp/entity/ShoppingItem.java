@@ -1,46 +1,37 @@
 package com.melearning.mealplanapp.entity;
 
-import java.time.LocalDate;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.melearning.mealplanapp.enumeration.UnitType;
+
 
 @Entity
-@Table(name ="shopping_item")
+@Table(name = "shopping_item")
 public class ShoppingItem {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@ManyToOne
-	@JoinColumn(name = "meal_id")
-	private Meal meal;
-	
-	@Column(name = "name")
-	private String name;
-	
-	@Column(name = "ammount")
-	private float ammount;
-	
-	@Column(name = "unit")
-	@Enumerated(EnumType.ORDINAL)
-	private UnitType unit;
-	
+
+	@OneToOne
+	@JoinColumn(name = "ingredient_id")
+	private Ingredient ingredient;
+
 	@Column(name = "is_done")
 	private boolean done;
-	
+
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "plan_id")
+	private Plan plan;
 
 	public int getId() {
 		return id;
@@ -48,23 +39,6 @@ public class ShoppingItem {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public float getAmmount() {
-		return ammount;
-	}
-
-	public void setAmmount(float ammount) {
-		this.ammount = ammount;
 	}
 
 	public boolean isDone() {
@@ -75,38 +49,31 @@ public class ShoppingItem {
 		this.done = done;
 	}
 
-
-	public ShoppingItem(int id, Meal meal, String name, float ammount, UnitType unit, boolean done) {
-		this.id = id;
-		this.meal = meal;
-		this.name = name;
-		this.ammount = ammount;
-		this.unit = unit;
-		this.done = done;
-	}
-
 	public ShoppingItem() {
-	
+
 	}
 
-	public Meal getMeal() {
-		return meal;
+	public ShoppingItem(int id, Ingredient ingredient, boolean done, Plan plan) {
+		this.id = id;
+		this.ingredient = ingredient;
+		this.done = done;
+		this.plan = plan;
 	}
 
-	public void setMeal(Meal meal) {
-		this.meal = meal;
+	public Ingredient getIngredient() {
+		return ingredient;
 	}
 
-	public UnitType getUnit() {
-		return unit;
+	public void setIngredient(Ingredient ingredient) {
+		this.ingredient = ingredient;
 	}
 
-	public void setUnit(UnitType unit) {
-		this.unit = unit;
+	public Plan getPlan() {
+		return plan;
 	}
 
-	
-	
-	
-	
+	public void setPlan(Plan plan) {
+		this.plan = plan;
+	}
+
 }

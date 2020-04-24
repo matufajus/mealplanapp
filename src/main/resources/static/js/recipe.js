@@ -171,6 +171,8 @@ $("#recipeFormModal form").submit(function(event){
 });
 
 $("#recipeModal").on("click", ".edit-recipe-btn", function(){
+	$("#recipeFormModal .ingredient-container.remove-after").remove();
+	$("#recipeFormModal .preparation-container.remove-after").remove();
 	let recipeId = $(this).data("recipe-id");	
 	$.get("getRecipe",{recipeId}, function(recipe){
 		$("#recipeFormModal .modal-title").html("Redaguoti receptą");
@@ -193,9 +195,8 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 		$("#recipeFormModal input[name=image]").val(recipe.image);
 		
 	
-		
 		$.each(recipe.ingredients, function(i, ingr){
-			let ingredient = $("#recipeFormModal .ingredient-container").last().clone();
+			let ingredient = $("#recipeFormModal .ingredient-container").first().clone();
 			ingredient.attr("id", "ingredient-"+i);
 			ingredient.find(".ingredient-name").attr("name", "ingredients["+i+"].name");
 			ingredient.find(".ingredient-name").val(ingr.foodProduct.name);
@@ -210,6 +211,7 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 			ingredient.find(".food-product-id").val(ingr.foodProductId);
 			if (i > 0){
 				ingredient.find(".remove-ingredient").removeClass("d-none");
+				ingredient.addClass("remove-after");
 				ingredient.insertAfter($("#recipeFormModal .ingredient-container").last());
 			}else{
 				$("#recipeFormModal .ingredient-container").replaceWith(ingredient);
@@ -217,7 +219,7 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 		});
 		
 		$.each(recipe.preparations, function(i, prep){
-			let preparation = $("#recipeFormModal .preparation-container").last().clone();
+			let preparation = $("#recipeFormModal .preparation-container").first().clone();
 			preparation.attr("id", "preparation-"+i);
 			preparation.find(".preparation-index").html(i+1);
 			preparation.find(".preparation-area").attr("name", "preparations["+i+"].description");
@@ -226,6 +228,7 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 			preparation.find(".preparation-id").val(prep.id);
 			if (i > 0){
 				preparation.find(".remove-preparation").removeClass("d-none");
+				preparation.addClass("remove-after");
 				preparation.insertAfter($("#recipeFormModal .preparation-container").last());
 			}else{
 				$("#recipeFormModal .preparation-container").replaceWith(preparation);
@@ -254,6 +257,8 @@ $("#add-recipe-link").click(function (){
 	$("#recipeFormModal modal-title").html("Sukurti receptą");
 	$("#recipe-form-image").attr("src", "/recipeImages/default.png")
 	document.getElementById("recipe-form").reset();
+	$("#recipeFormModal .ingredient-container.remove-after").remove();
+	$("#recipeFormModal .preparation-container.remove-after").remove();
 });
 
 function enableIngredientNameAutocomplete(){

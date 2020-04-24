@@ -37,6 +37,9 @@ public class Plan {
 	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Meal> meals;
 	
+	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ShoppingItem> shoppingItems;
+	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
@@ -52,8 +55,6 @@ public class Plan {
 		this.meals = meals;
 		this.user = user;
 	}
-
-
 
 	public int getId() {
 		return id;
@@ -104,6 +105,14 @@ public class Plan {
 		return endDate;
 	}
 	
+	public List<ShoppingItem> getShoppingItems() {
+		return shoppingItems;
+	}
+
+	public void setShoppingItems(List<ShoppingItem> shoppingItems) {
+		this.shoppingItems = shoppingItems;
+	}
+	
 	public long getDuration() {
 		return ChronoUnit.DAYS.between(startDate, endDate)+1;
 	}
@@ -121,5 +130,5 @@ public class Plan {
 			      .mapToObj(i -> startDate.plusDays(i))
 			      .collect(Collectors.toList());
 	}
-	
+
 }

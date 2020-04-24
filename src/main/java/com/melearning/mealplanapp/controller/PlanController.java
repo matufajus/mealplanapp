@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import javax.validation.Valid;
@@ -38,12 +39,12 @@ import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
 import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
 import com.melearning.mealplanapp.exception.OverlappingPlanDatesExceptions;
 import com.melearning.mealplanapp.service.KitchenService;
 import com.melearning.mealplanapp.service.PlanService;
 import com.melearning.mealplanapp.service.RecipeService;
-import com.melearning.mealplanapp.service.ShoppingService;
 import com.melearning.mealplanapp.service.UserService;
 
 @Controller
@@ -54,25 +55,22 @@ public class PlanController {
 	RecipeService recipeService;
 
 	@Autowired
-	ShoppingService shoppingService;
-
-	@Autowired
 	UserService userService;
 
 	@Autowired
 	KitchenService kitchenService;
-	
+
 	@Autowired
 	PlanService planService;
 
 	Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
-	
+
 	@GetMapping("/list")
 	public String getUserPlans(@ModelAttribute String errorMessage, Model model) {
 		User user = userService.getCurrentUser();
@@ -83,10 +81,10 @@ public class PlanController {
 		model.addAttribute("upcomingPlans", upcomingPlans);
 		if (!errorMessage.isEmpty()) {
 			model.addAttribute("errorMessage", errorMessage);
-		}	
+		}
 		return "plans";
 	}
-	
+
 	@GetMapping("/meals")
 	public String showPlan(@RequestParam int id, Model model) {
 		User user = userService.getCurrentUser();
@@ -96,7 +94,7 @@ public class PlanController {
 		model.addAttribute("plan", plan);
 		return "plan-meals";
 	}
-	
+
 	@PostMapping("/createPlan")
 	public String saveNewPlan(String title, String dates, RedirectAttributes redirectAttrs) {
 		try {
@@ -106,42 +104,39 @@ public class PlanController {
 			plan.setStartDate(LocalDate.parse(datesArray[0]));
 			plan.setEndDate(LocalDate.parse(datesArray[1]));
 			plan.setUser(userService.getCurrentUser());
-			logger.info("Creating plan name: " +plan.getTitle()+ ", from: " + plan.getStartDate()+", to: " +
-					plan.getEndDate() + ", for user with id: ", plan.getUser().getId());
+			logger.info("Creating plan name: " + plan.getTitle() + ", from: " + plan.getStartDate() + ", to: "
+					+ plan.getEndDate() + ", for user with id: ", plan.getUser().getId());
 			planService.save(plan);
-			logger.info("Plan created with id: "+ plan.getId());
-			return "redirect:/plan/meals?id="+plan.getId();
+			logger.info("Plan created with id: " + plan.getId());
+			return "redirect:/plan/meals?id=" + plan.getId();
 		} catch (OverlappingPlanDatesExceptions e) {
 			logger.warn("User already has a plan for specified dates");
 			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
-			//TODO: show message to user
+			// TODO: show message to user
 			return "redirect:/plan/list";
 		}
 	}
-	
+
 	@PostMapping("/createMeal")
-	public String createMeal(int recipeId, String date, String mealType, int servings, boolean addIngredients, int planId) {
+	public String createMeal(int recipeId, String date, String mealType, int servings, int planId) {
 		Recipe recipe = recipeService.findById(recipeId);
 		MealType type = MealType.valueOf(mealType);
 		LocalDate mealDate = LocalDate.parse(date);
 		Plan plan = planService.getPlanById(planId);
 		Meal meal = new Meal(0, recipe, type, mealDate, servings, plan);
 		planService.saveMeal(meal);
-		logger.info("New meal(id: " + meal.getId() + ") added to plan(id: "+ plan.getId() + ")");
-		if (addIngredients) {
-			shoppingService.addMealIngredientsToShoppingList(meal);
-		}
-		return "redirect:/plan/meals?id="+plan.getId();
+		logger.info("New meal(id: " + meal.getId() + ") added to plan(id: " + plan.getId() + ")");
+		return "redirect:/plan/meals?id=" + plan.getId();
 	}
 
 	@GetMapping("/deleteMeal")
 	public String deleteMeal(@RequestParam("mealId") int mealId) {
 		Plan plan = planService.getPlanByMealId(mealId);
-		planService.deleteMeal(mealId);		
-		shoppingService.removeMealIngredientsFromShoppingList(mealId);
-		return "redirect:/plan/meals?id="+plan.getId();
+		Meal meal = planService.getMeal(mealId);
+		planService.deleteMeal(mealId);
+		return "redirect:/plan/meals?id=" + plan.getId();
 	}
-	
+
 	@GetMapping("/getMealsForToday")
 	public @ResponseBody List<Meal> getMealsForToday() {
 		User user = userService.getCurrentUser();
@@ -150,18 +145,18 @@ public class PlanController {
 	}
 
 	@GetMapping("/getShoppingItems")
-	public @ResponseBody List<ShoppingItemDTO> getShoppingItems(@RequestParam int planId) {
+	public @ResponseBody Map<String, List<ShoppingItemDTO>> getShoppingItems(@RequestParam int planId) {
 		User user = userService.getCurrentUser();
 		Plan plan = planService.getPlanById(planId);
-		List<ShoppingItemDTO> shoppingList = shoppingService.getShoppingListForMeals(plan.getMeals());
+		Map<String, List<ShoppingItemDTO>> shoppingList = planService.getPreparedShoppingList(planId);
 		return shoppingList;
 	}
-	
+
 	@PostMapping("/updateShoppingItem")
-	public @ResponseBody String updateShoppingItem(@RequestParam(name = "ids") List<Integer> ids) {
-		shoppingService.updateShoppingItems(ids);
+	public @ResponseBody String updateShoppingItem(@RequestParam int planId, @RequestParam String ingredientName,
+			@RequestParam boolean isDone) {
+		planService.updateShoppingItems(planId, ingredientName, isDone);
 		return "updated";
 	}
 
-	
 }

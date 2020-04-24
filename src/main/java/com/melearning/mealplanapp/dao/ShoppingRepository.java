@@ -10,10 +10,14 @@ import com.melearning.mealplanapp.entity.ShoppingItem;
 
 public interface ShoppingRepository extends JpaRepository<ShoppingItem, Integer> {
 	
-	List<ShoppingItem> findByMealInOrderByName(List<Meal> meals);
-	
-	List<ShoppingItem> findByNameAndMealIn(String name, List<Meal> meals);
+//	List<ShoppingItem> findByMealInOrderByName(List<Meal> meals);
+//	
+//	List<ShoppingItem> findByNameAndMealIn(String name, List<Meal> meals);
 
-	public void deleteByMealId(int mealId);
+	void deleteFirstByPlanIdAndIngredientId(int id, int id2);
+
+	List<ShoppingItem> findAllByPlanId(int planId);
+
+	List<ShoppingItem> findAllByPlanIdAndIngredientFoodProductNameAndDone(int planId, String ingredientName, boolean isDone);
 
 }

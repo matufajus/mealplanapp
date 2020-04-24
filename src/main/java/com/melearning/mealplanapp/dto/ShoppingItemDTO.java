@@ -2,32 +2,55 @@ package com.melearning.mealplanapp.dto;
 
 import com.melearning.mealplanapp.entity.ShoppingItem;
 import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
 public class ShoppingItemDTO {
-	
-	private ShoppingItem shoppingItem;
-	
-	private FoodType foodType;
 
-	public ShoppingItemDTO(ShoppingItem shoppingItem, FoodType foodType) {
-		this.shoppingItem = shoppingItem;
-		this.foodType = foodType;
+	private String name;
+
+	private float ammount;
+
+	private String units;
+
+	private boolean isDone;
+
+	public ShoppingItemDTO(String name, float ammount, String units, boolean isDone) {
+		this.name = name;
+		this.ammount = ammount;
+		this.setUnits(units);
+		this.isDone = isDone;
 	}
 
-	public ShoppingItem getShoppingItem() {
-		return shoppingItem;
+	public String getName() {
+		return name;
 	}
 
-	public void setShoppingItem(ShoppingItem shoppingItem) {
-		this.shoppingItem = shoppingItem;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public FoodType getFoodType() {
-		return foodType;
+	public float getAmmount() {
+		return ammount;
 	}
 
-	public void setFoodType(FoodType foodType) {
-		this.foodType = foodType;
+	public void setAmmount(float ammount) {
+		this.ammount = ammount;
+	}
+
+	public boolean isDone() {
+		return isDone;
+	}
+
+	public void setDone(boolean isDone) {
+		this.isDone = isDone;
+	}
+
+	public String getUnits() {
+		return units;
+	}
+
+	public void setUnits(String units) {
+		this.units = units;
 	}
 
 }
