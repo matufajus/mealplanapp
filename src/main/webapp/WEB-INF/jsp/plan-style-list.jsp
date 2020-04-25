@@ -6,27 +6,21 @@
 		<h2>${stdDatum}</h2>
 		<c:forEach var="mealType" items="${mealTypes}">
 			<h4>${mealType.label}</h4>
-
-	 		<c:set var="hasMeal" value="false"/>
-			<c:forEach var="meal" items="${plan.meals}">	
-		 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
-		 			<c:set var="hasMeal" value="true"/>
-		 			<div data-meal-type="${mealType}" data-date="${date}">
-<%-- 		 				<a class="remove-recipe" href="plan/deleteMeal?mealId=${meal.id}">&#10006;</a> --%>
-			 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" 
-			 				data-content="<div><img class='img-thmbnl' src='${meal.recipe.image}'></div>">
-								<a class="open-edit-meal-modal" data-toggle="modal" href="#editMealModal" data-recipe-id="${meal.recipe.id }" data-meal-id="${meal.id }">${meal.recipe.title}</a>
-						</p>
-	<!-- 									 			<div> -->
-	<%-- 									 				<img onerror="this.onerror=null;this.src='/recipeImages/default.png';" src="${meal.recipe.image}" style="object-fit:cover; width:100px;"> --%>
-	<!-- 									 			</div> -->
-		 			</div>
-		 		</c:if> 		
-	 		</c:forEach>
-	 		<c:if test="${hasMeal == false}">
-	 			<div data-meal-type="${mealType}" data-date="${date}"><a class="add-meal-button" data-toggle="modal" href="#chooseRecipeModal"><img class="icon-m" src="/images/plus-sign.svg"></a></div>
-	 		</c:if>
-
+			<div data-meal-type="${mealType}" data-date="${date}">
+				<c:forEach var="meal" items="${plan.meals}">	
+			 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">	
+		 				<c:forEach var="recipe" items="${meal.recipes}">
+				 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" 
+				 				data-content="<div><img class='img-thmbnl' src='${recipe.image}'></div>">
+									<a class="open-edit-meal-modal" data-toggle="modal" href="#editMealModal" data-recipe-id="${recipe.id }" data-meal-id="${meal.id }">${recipe.title}</a>
+							</p>
+			 			</c:forEach>
+			 		</c:if> 		
+		 		</c:forEach>
+	 			<a class="add-meal-button" data-toggle="modal" href="#chooseRecipeModal">
+	 				<img class="icon-m" src="/images/plus-sign.svg">
+ 				</a>
+	 		</div>
 		</c:forEach>
 		<hr/>
 	</c:forEach>

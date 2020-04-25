@@ -219,7 +219,7 @@ $("#plan").on("click", ".open-edit-meal-modal", function(){
 		$.each(recipe.preparations, function(i, preparation) {
 			$("#editMealModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
 		 });   	 	
-		$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/deleteMeal?mealId="+mealId+"'>Pašalinti iš plano</a>");	
+		$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/removeRecipe?mealId="+mealId+"$recipeId="+recipe.id+"'>Pašalinti iš plano</a>");	
 
     	})
     		})

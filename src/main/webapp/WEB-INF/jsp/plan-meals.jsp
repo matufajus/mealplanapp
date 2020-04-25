@@ -32,6 +32,11 @@
 					<p>Dienos: ${plan.getDuration()}</p>
 					<p>Kalorijos: ${plan.getCalories()}</p>
 				</div>
+				<c:if test="${errorMessage ne null}">
+					<div class="alert alert-danger" role="alert">
+						${errorMessage}
+					</div>
+				</c:if>
 				<c:if test="${planStyle == 'table' }">
 					<%@ include file="plan-style-table.jsp"%>
 				</c:if>
@@ -64,7 +69,7 @@
 					</div>
 				</div>	
 			</div>
-			<form name="saveMeal" action="/plan/createMeal" method="POST">
+			<form name="saveMeal" action="/plan/addRecipe" method="POST">
 				<input type="hidden" name="recipeId"/>		
 				<input type="hidden" name="date"/>		
 				<input type="hidden" name="mealType"/>		

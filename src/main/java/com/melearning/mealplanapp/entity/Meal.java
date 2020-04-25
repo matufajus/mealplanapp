@@ -15,6 +15,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -30,10 +32,14 @@ public class Meal {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@ManyToOne
-	@JoinColumn(name = "recipe_id")
+	@ManyToMany
+	@JoinTable(
+	        name = "meal_recipe", 
+	        joinColumns = { @JoinColumn(name = "meal_id") }, 
+	        inverseJoinColumns = { @JoinColumn(name = "recipe_id") }
+	    )
 	@JsonIgnore
-	private Recipe recipe;
+	private List<Recipe> recipes;
 	
 	@Column(name = "meal_type")
 	@Enumerated(EnumType.ORDINAL)
@@ -67,12 +73,12 @@ public class Meal {
 		this.id = id;
 	}
 
-	public Recipe getRecipe() {
-		return recipe;
+	public List<Recipe> getRecipes() {
+		return recipes;
 	}
 
-	public void setRecipe(Recipe recipe) {
-		this.recipe = recipe;
+	public void setRecipes(List<Recipe> recipe) {
+		this.recipes = recipes;
 	}
 
 	public MealType getMealType() {
@@ -91,9 +97,9 @@ public class Meal {
 		this.date = date;
 	}
 
-	public Meal(int id, Recipe recipe, MealType mealType, LocalDate date, int servings, Plan plan) {
+	public Meal(int id, List<Recipe> recipes, MealType mealType, LocalDate date, int servings, Plan plan) {
 		this.id = id;
-		this.recipe = recipe;
+		this.recipes = recipes;
 		this.mealType = mealType;
 		this.date = date;
 		this.servings = servings;
@@ -113,7 +119,19 @@ public class Meal {
 	}
 	
 	public float getCalories() {
-		return recipe.getCalories() * servings;
+		float calories = 0;
+		for (Recipe recipe : recipes) {
+			calories = calories + recipe.getCalories() * servings;
+		}
+		return calories;
+	}
+	
+	public void addRecipe(Recipe recipe) {
+		recipes.add(recipe);
+	}
+	
+	public void removeRecipe(Recipe recipe) {
+		recipes.remove(recipe);
 	}
 
 }

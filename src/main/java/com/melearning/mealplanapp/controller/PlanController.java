@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -41,6 +42,7 @@ import com.melearning.mealplanapp.entity.ShoppingItem;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
+import com.melearning.mealplanapp.exception.DuplicateRecipeInMealException;
 import com.melearning.mealplanapp.exception.OverlappingPlanDatesExceptions;
 import com.melearning.mealplanapp.service.KitchenService;
 import com.melearning.mealplanapp.service.PlanService;
@@ -86,7 +88,7 @@ public class PlanController {
 	}
 
 	@GetMapping("/meals")
-	public String showPlan(@RequestParam int id, Model model) {
+	public String showPlan(@ModelAttribute String errorMessage, @RequestParam int id, Model model) {
 		User user = userService.getCurrentUser();
 		Plan plan = planService.getPlanById(id);
 		model.addAttribute("planStyle", user.getPlanStyle());
@@ -112,31 +114,43 @@ public class PlanController {
 		} catch (OverlappingPlanDatesExceptions e) {
 			logger.warn("User already has a plan for specified dates");
 			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
-			// TODO: show message to user
 			return "redirect:/plan/list";
 		}
 	}
 
-	@PostMapping("/createMeal")
-	public String createMeal(int recipeId, String date, String mealType, int servings, int planId) {
-		Recipe recipe = recipeService.findById(recipeId);
+	@PostMapping("/addRecipe")
+	public String addRecipeToMeal(int recipeId, String date, String mealType, int servings, int planId, RedirectAttributes redirectAttrs) {
 		MealType type = MealType.valueOf(mealType);
 		LocalDate mealDate = LocalDate.parse(date);
-		Plan plan = planService.getPlanById(planId);
-		Meal meal = new Meal(0, recipe, type, mealDate, servings, plan);
-		planService.saveMeal(meal);
-		logger.info("New meal(id: " + meal.getId() + ") added to plan(id: " + plan.getId() + ")");
+		// get meal if exists by plan id, date and mealType
+		Meal meal = planService.getMeal(planId, mealDate, type);
+		// if meal doesn't exist create new
+		if (meal == null) {
+			Plan plan = planService.getPlanById(planId);
+			meal = new Meal(0, new ArrayList<Recipe>(), type, mealDate, servings, plan);
+		}
+		// add recipe to recipes list in a meal
+		try {
+			Recipe recipe = recipeService.findById(recipeId);
+			planService.addRecipeToMeal(meal, recipe);
+		} catch (DuplicateRecipeInMealException e) {
+			logger.warn("User already has this recipe in meal the same date and same type");
+			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
+			return "redirect:/plan/meals?id=" + planId;
+		}
+		logger.info("New meal(id: " + meal.getId() + ") added to plan(id: " + planId + ")");
+		return "redirect:/plan/meals?id=" + planId;
+	}
+
+	@GetMapping("/removeRecipe")
+	public String removeRecipeFromMeal(@RequestParam("mealId") int mealId, @RequestParam("recipeId") int recipeId) {
+		Meal meal = planService.getMeal(mealId);
+		Recipe recipe = recipeService.findById(recipeId);
+		planService.removeRecipeFromMeal(meal, recipe);
+		Plan plan = planService.getPlanByMealId(mealId);
 		return "redirect:/plan/meals?id=" + plan.getId();
 	}
 
-	@GetMapping("/deleteMeal")
-	public String deleteMeal(@RequestParam("mealId") int mealId) {
-		Plan plan = planService.getPlanByMealId(mealId);
-		Meal meal = planService.getMeal(mealId);
-		planService.deleteMeal(mealId);
-		return "redirect:/plan/meals?id=" + plan.getId();
-	}
-	
 	@GetMapping("/getMeal")
 	public @ResponseBody Meal getMeal(@RequestParam("mealId") int id) {
 		return planService.getMeal(id);
