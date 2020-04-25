@@ -27,6 +27,11 @@
 						<img class="icon-sm" src="/images/printer-white.svg"> Spausdinti
 					</button>
 				</div>
+				<div id="plan-info">
+					<p>Pavadinimas: ${plan.title}</p>
+					<p>Dienos: ${plan.getDuration()}</p>
+					<p>Kalorijos: ${plan.getCalories()}</p>
+				</div>
 				<c:if test="${planStyle == 'table' }">
 					<%@ include file="plan-style-table.jsp"%>
 				</c:if>

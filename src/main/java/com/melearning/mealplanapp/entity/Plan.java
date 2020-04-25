@@ -130,5 +130,13 @@ public class Plan {
 			      .mapToObj(i -> startDate.plusDays(i))
 			      .collect(Collectors.toList());
 	}
+	
+	public float getCalories() {
+		float calories = 0;
+		for (Meal meal : meals) {
+			calories = calories + meal.getCalories();
+		}
+		return calories;
+	}
 
 }

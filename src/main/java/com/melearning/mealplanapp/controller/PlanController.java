@@ -136,6 +136,11 @@ public class PlanController {
 		planService.deleteMeal(mealId);
 		return "redirect:/plan/meals?id=" + plan.getId();
 	}
+	
+	@GetMapping("/getMeal")
+	public @ResponseBody Meal getMeal(@RequestParam("mealId") int id) {
+		return planService.getMeal(id);
+	}
 
 	@GetMapping("/getMealsForToday")
 	public @ResponseBody List<Meal> getMealsForToday() {

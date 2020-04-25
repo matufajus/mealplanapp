@@ -130,11 +130,11 @@ public class PlanServiceImpl implements PlanService {
 		
 		//convert shoppingItems to shoppingItemsDTO, merge similar items by name and group by foodType
 		for (ShoppingItem item : shoppingItems) {
-			String name = item.getIngredient().getFoodProduct().getName();
-			float ammount = item.getIngredient().getAmmount();
-			String units = item.getIngredient().getFoodProduct().getUnitType().getLabel();
+			String name = item.getFoodProduct().getName();
+			float ammount = item.getAmmount();
+			String units = item.getFoodProduct().getUnitType().getLabel();
 			boolean isDone = item.isDone();
-			FoodType foodType = item.getIngredient().getFoodProduct().getFoodType();
+			FoodType foodType = item.getFoodProduct().getFoodType();
 			
 			//getting list for specific foodType
 			List<ShoppingItemDTO> shoppingItemsDTO = groupedShoppingList.get(foodType.label);
@@ -158,7 +158,7 @@ public class PlanServiceImpl implements PlanService {
 
 	@Override
 	public void updateShoppingItems(int planId, String foodProductName, boolean isDone) {
-		List<ShoppingItem> shoppingItems = shoppingRepository.findAllByPlanIdAndIngredientFoodProductNameAndDone(planId, foodProductName, isDone);
+		List<ShoppingItem> shoppingItems = shoppingRepository.findAllByPlanIdAndFoodProductNameAndDone(planId, foodProductName, isDone);
 		for (ShoppingItem shoppingItem : shoppingItems) {
 			if (!shoppingItem.isDone())
 				shoppingItem.setDone(true);
@@ -169,14 +169,15 @@ public class PlanServiceImpl implements PlanService {
 	
 	public void addMealIngredientsToShoppingList(Meal meal) {
 		for (Ingredient ingredient : meal.getRecipe().getIngredients()) {
-			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient, false, meal.getPlan());
+			float ammount = (ingredient.getAmmount() / meal.getRecipe().getServings()) * meal.getServings();
+			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient.getFoodProduct(), ammount, false, meal.getPlan());
 			shoppingRepository.save(shoppingItem);
 		}
 	}
 
 	public void removeMealIngredientsFromShoppingList(Meal meal) {
 		for (Ingredient ingredient : meal.getRecipe().getIngredients()) {
-			shoppingRepository.deleteFirstByPlanIdAndIngredientId(meal.getPlan().getId(), ingredient.getId());
+			shoppingRepository.deleteFirstByPlanIdAndFoodProductId(meal.getPlan().getId(), ingredient.getFoodProduct().getId());
 		}
 	}
 	

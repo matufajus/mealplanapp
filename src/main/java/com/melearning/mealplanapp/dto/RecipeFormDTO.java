@@ -48,6 +48,8 @@ public class RecipeFormDTO {
 	private boolean published;
 	
 	private int servings;
+	
+	private float calories;
 
 	public String getTitle() {
 		return title;
@@ -162,6 +164,14 @@ public class RecipeFormDTO {
 
 	public void setServings(int servings) {
 		this.servings = servings;
+	}
+
+	public float getCalories() {
+		return calories;
+	}
+
+	public void setCalories(float calories) {
+		this.calories = calories;
 	}
 	
 	

@@ -194,30 +194,35 @@ $("#plan").on("click", ".open-edit-meal-modal", function(){
     $("#editMealModal .modal-body").empty();
     var html ="";
     $.get("/recipe/getRecipe",{recipeId}, function(recipe){
-    	html = "<div class='row'>" +
-    				"<div class='col-4'>"+
+    	$.get("/plan/getMeal", {mealId}, function(meal){
+    		html = "<div class='row'>" +
+					"<div class='col-4'>"+
 						"<img class='modal-img' src='"+recipe.image+"'>"+
 					"</div>"+
 					"<div class='col-8'>"+
 						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
-						"<div class='row'>Porcijos: "+recipe.servings+"</div>"+
+						"<div class='row'>Kalorijos:<p class='ml-3'>"+meal.calories+" kcal</p></div>"+
+						"<div class='row'>Porcijos: "+meal.servings+"</div>"+
 						"<div class='row mt-2' id='buttons'></div>"+
 					"</div>"+
 				"</div>"+
-	    		"<div class='row'>" +
+				"<div class='row'>" +
 		    		"<div class='col' id='ingredients'>Reikės:</div>"+    
 		    		"<div class='col' id='preparations'>Paruošimo būdas:</div>"+  
-	    		"</div>";
-        $("#editMealModal .modal-body").append(html);       
-    	$("#editMealModal .modal-title").text(recipe.title);    	    	
-    	$.each(recipe.ingredients, function(i, ingredient) {
-    		$("#editMealModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ingredient.ammount +"</p>");
-         });
-    	$.each(recipe.preparations, function(i, preparation) {
-    		$("#editMealModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
-         });   	 	
-    	$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/deleteMeal?mealId="+mealId+"'>Pašalinti iš plano</a>");	
-	})
+				"</div>";
+		$("#editMealModal .modal-body").append(html);       
+		$("#editMealModal .modal-title").text(recipe.title);    	    	
+		$.each(recipe.ingredients, function(i, ingredient) {
+			let ammount = (ingredient.ammount / recipe.servings) * meal.servings;
+			$("#editMealModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ammount +"</p>");
+		 });
+		$.each(recipe.preparations, function(i, preparation) {
+			$("#editMealModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
+		 });   	 	
+		$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/deleteMeal?mealId="+mealId+"'>Pašalinti iš plano</a>");	
+
+    	})
+    		})
 });
 
 $(document).on("click", ".open-add-meal-modal",  function(){
@@ -226,13 +231,16 @@ $(document).on("click", ".open-add-meal-modal",  function(){
     $("#addMealModal .modal-body").empty();
     var html ="";
     $.get("/recipe/getRecipe",{recipeId}, function(recipe){
+    	console.log(recipe);
     	html = "<div class='row'>" +
     				"<div class='col-4'>"+
 						"<img class='modal-img' src='"+recipe.image+"'>"+
 					"</div>"+
 					"<div class='col-8'>"+
 						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
-    					"<div class='row'>Porcijos:<input type='number' id='numberOfServings' min='1' max='100' value='1'></div>"+
+						"<div class='row'>Kalorijos:<p class='ml-3'><span id='calories'>"+recipe.calories+"</span> kcal</p></div>"+
+    					"<div class='row'>Porcijos:<input type='number' id='numberOfServings' min='1' max='100' value='"+recipe.servings+"' " +
+    							"data-servings='"+recipe.servings+"'></div>"+
     					"<div class='row mt-2' id='buttons'></div>"+
 					"</div>"+
 				"</div>"+
@@ -241,9 +249,10 @@ $(document).on("click", ".open-add-meal-modal",  function(){
 		    		"<div class='col' id='preparations'>Paruošimo būdas:</div>"+  
 	    		"</div>";
         $("#addMealModal .modal-body").append(html);     
-    	$("#addMealModal .modal-title").text(recipe.title);  
+    	$("#addMealModal .modal-title").text(recipe.title);
     	$.each(recipe.ingredients, function(i, ingredient) {
-    		$("#addMealModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ingredient.ammount +"</p>");
+    		$("#addMealModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": " +
+    				"<span class='ingredient-ammount'>"+ ingredient.ammount +"</span></p>");
          });
     	$.each(recipe.preparations, function(i, preparation) {
     		$("#addMealModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
@@ -252,6 +261,26 @@ $(document).on("click", ".open-add-meal-modal",  function(){
     	
 	})
 });
+
+function changeIngredientsAmmounts(oldServings, newServings){
+	$(".ingredient-ammount").each(function(i, ingredient){
+		let newAmmount = (parseFloat($(ingredient).text()) / oldServings) * newServings;
+		$(ingredient).text(newAmmount);
+	});
+}
+
+function changeCalories(oldServings, newServings){
+	let newCalories = (parseFloat($("#calories").text()) / oldServings) * newServings;
+	$("#calories").text(newCalories);
+}
+
+$("#addMealModal").on("change", "#numberOfServings", function(){
+	let newServings = $(this).val();
+	let oldServings= $(this).data("servings");
+	$(this).data("servings", newServings);
+	changeIngredientsAmmounts(oldServings, newServings);
+	changeCalories(oldServings, newServings);
+})
 
 $('#addMealModal').on('hidden.bs.modal', function () {
 	$('#chooseRecipeModal').modal("show");

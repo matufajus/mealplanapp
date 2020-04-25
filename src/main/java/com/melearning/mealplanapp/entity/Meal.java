@@ -111,5 +111,9 @@ public class Meal {
 	public void setServings(int servings) {
 		this.servings = servings;
 	}
+	
+	public float getCalories() {
+		return recipe.getCalories() * servings;
+	}
 
 }

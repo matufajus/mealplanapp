@@ -8,6 +8,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,7 +52,7 @@ public class Recipe {
 	@Column(name = "image")
 	private String image;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "owner_id")
 	private User owner;
 
@@ -205,6 +206,16 @@ public class Recipe {
 
 	public void setServings(int servings) {
 		this.servings = servings;
+	}
+
+	public float getCalories() {
+		float calories = 0;
+		for (Ingredient ingredient : ingredients) {
+			int kcal = ingredient.getFoodProduct().getNutrition().getKcal();
+			float ammount = ingredient.getAmmount();
+			calories = calories + kcal * ammount;
+		}
+		return calories;
 	}
 
 }

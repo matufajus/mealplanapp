@@ -22,8 +22,11 @@ public class ShoppingItem {
 	private int id;
 
 	@OneToOne
-	@JoinColumn(name = "ingredient_id")
-	private Ingredient ingredient;
+	@JoinColumn(name = "foodProduct_id")
+	private FoodProduct foodProduct;
+	
+	@JoinColumn(name = "ammount")
+	private float ammount;
 
 	@Column(name = "is_done")
 	private boolean done;
@@ -53,19 +56,20 @@ public class ShoppingItem {
 
 	}
 
-	public ShoppingItem(int id, Ingredient ingredient, boolean done, Plan plan) {
+	public ShoppingItem(int id, FoodProduct foodProduct, float ammount, boolean done, Plan plan) {
 		this.id = id;
-		this.ingredient = ingredient;
+		this.foodProduct = foodProduct;
+		this.ammount = ammount;
 		this.done = done;
 		this.plan = plan;
 	}
 
-	public Ingredient getIngredient() {
-		return ingredient;
+	public FoodProduct getFoodProduct() {
+		return foodProduct;
 	}
 
-	public void setIngredient(Ingredient ingredient) {
-		this.ingredient = ingredient;
+	public void setFoodProduct(FoodProduct foodProduct) {
+		this.foodProduct = foodProduct;
 	}
 
 	public Plan getPlan() {
@@ -74,6 +78,14 @@ public class ShoppingItem {
 
 	public void setPlan(Plan plan) {
 		this.plan = plan;
+	}
+
+	public float getAmmount() {
+		return ammount;
+	}
+
+	public void setAmmount(float ammount) {
+		this.ammount = ammount;
 	}
 
 }
