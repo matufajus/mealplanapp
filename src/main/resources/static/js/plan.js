@@ -1,11 +1,8 @@
+
+//--------------------------LIST OF PLANS-----------------------------------
+
 var nowDate = new Date();
 var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
-
-$(document).ready(function() {
-	if (location.pathname.startsWith("/plan/meals")){
-		loadShoppingItems();
-	}
-});
 
 $(".clickable-row").click(function() {
     window.location = $(this).data("href");
@@ -51,39 +48,46 @@ $('input[name="dates"]').daterangepicker({
 		console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
 });
 
+//--------------------------PLAN MEALS-----------------------------------
+
+$(document).ready(function() {
+	if (location.pathname.startsWith("/plan/meals")){
+		loadShoppingItems();
+	}
+});
 
 $(".add-meal-button").click(showRecipesContainer);
 
 function showRecipesContainer(){
-	window.scrollTo(0, 0);
 	var date = $(this).parent().data("date");
 	var mealType = $(this).parent().data("meal-type");
-	$("#meal-recipes-container").data("date", date);
-	$("#meal-recipes-container").data("meal-type", mealType);
+	$("#meal-components-container").data("date", date);
+	$("#meal-components-container").data("meal-type", mealType);
+	$(".recipes-section a.active").removeClass("active");
+	$(".recipes-section a[data-section=public]").addClass("active");
+	setChooseMealComponentModalTitle();
 	loadRecipes();
 }
 
-function loadRecipes(page, size){
-	var recipesContainer = $("#recipes-list-container");
-	var date = $("#meal-recipes-container").data("date");
-	var mealType = $("#meal-recipes-container").data("meal-type");
+function setChooseMealComponentModalTitle(){
+	var date = $("#meal-components-container").data("date");
+	var mealType = $("#meal-components-container").data("meal-type");
 	var formattedDate = new Date(date);
 	var d = formattedDate.getDate();
 	var m =  formattedDate.getMonth();
 	var month = getNameOfTheMonth(m);
 	m += 1; 
-	var section = $("#meal-recipes-container .recipes-section .active").data("section");
-	
+	$("#chooseMealComponentModal .modal-title").text(`Pasirinkti patiekalą ${month}  ${d}  dienai ${translateMealType(mealType.toLowerCase())}:`);
+}
+
+function loadRecipes(page, size){
+	var recipesContainer = $("#meal-components-list-container");
 	if ((typeof page == "undefined") && (typeof page == "undefined")){
 		var page = 0;
 		var size = 16 
 	}
-	
-	
-	$("#chooseRecipeModal .modal-title").text(`Pasirinkti patiekalą ${month}  ${d}  dienai ${translateMealType(mealType.toLowerCase())}:`);
-
-	var urlString = "/recipe/getRecipes?section="+section+"&pageId="+page+"&pageSize="+size;
-	
+	var section = $("#meal-components-container .recipes-section .active").data("section");
+	var urlString = "/recipe/getRecipes?section="+section+"&pageId="+page+"&pageSize="+size;	
 	$.ajax({
 		type: "GET",
 		url: urlString,
@@ -97,13 +101,12 @@ function loadRecipes(page, size){
 	        	}
 	            if (recipe.image == null)
 	            	recipe.image = "/recipeImages/default.png";
-	            html += "<div class='col-3'><a class='open-add-meal-modal' data-dismiss='modal' data-toggle='modal' href='#addMealModal' data-recipe-id="+recipe.id+" data-meal-id='0'>"+
+	            html += "<div class='col-3'><a class='open-add-recipe-meal-modal' data-dismiss='modal' data-recipe-id="+recipe.id+">"+
 			             		"<img class='img-thmbnl' src='"+recipe.image+"'>" +
 			             		"<span>"+recipe.title+"</span>" +
 		             		"</a></div>";            
 	         });
 	        html +="</div>";
-	        
 	        recipesContainer.append(html);
 	        },
 	    error: function(){
@@ -112,26 +115,40 @@ function loadRecipes(page, size){
 	})
 }
 
-$(document).on("click", ".add-meal", function() {
-	var recipeId = $(this).data("recipe-id");
-	var date = $("#meal-recipes-container").data("date");
-	var mealType = $("#meal-recipes-container").data("meal-type");
-	var servings = $("#numberOfServings").val();
-	
-	$("input[name='recipeId']").attr("value", recipeId);
-	$("input[name='date']").attr("value", date);
-	$("input[name='mealType']").attr("value", mealType);
-	$("input[name='servings']").attr("value", servings);
-	
-	$("form[name='saveMeal']").submit();
-});
+function loadProducts(){
+	var productsContainer = $("#meal-components-list-container");
+	var urlString = "/foodProduct/getAll";	
+	$.ajax({
+		type: "GET",
+		url: urlString,
+		success: function (data) {
+			productsContainer.empty();
+			var html = "";
+	        $.each(data, function(i, product) {
+	            html += "<div class='col-3 product'><a class='open-add-product-meal-modal' data-dismiss='modal'" +
+	            		" data-product-id="+product.id+">"+
+			             		"<span>"+product.name+"</span>" +
+		             		"</a></div>";            
+	         });
+	        productsContainer.append(html);
+	        },
+	    error: function(){
+	    	console.log("Nepavyko įkelti receptų");
+	    }
+	})
+}
 
-//meal plan chosen public or private section 
+
+
+//switching section of recipes when choosing a recipe for a meal
 $(".recipes-section a").click(function(){
 	$(".recipes-section a.active").removeClass("active");
 	$(this).addClass("active");
-	let page = $("#pagination-nav .page-link .active").text();
-	loadRecipes(page, 16);
+	if ($(this).data("section") == ("products")){
+		loadProducts();
+	}else{
+		loadRecipes();
+	}
 });
 
 function getNameOfTheMonth(d){
@@ -191,7 +208,7 @@ $("#pagination-nav").on("click", ".page-link", function() {
 $("#plan").on("click", ".open-edit-meal-modal", function(){
 	var recipeId = $(this).data('recipe-id');
     var mealId = $(this).data('meal-id');
-    $("#editMealModal .modal-body").empty();
+    $("#mealComponentModal .modal-body").empty();
     var html ="";
     $.get("/recipe/getRecipe",{recipeId}, function(recipe){
     	$.get("/plan/getMeal", {mealId}, function(meal){
@@ -210,28 +227,27 @@ $("#plan").on("click", ".open-edit-meal-modal", function(){
 		    		"<div class='col' id='ingredients'>Reikės:</div>"+    
 		    		"<div class='col' id='preparations'>Paruošimo būdas:</div>"+  
 				"</div>";
-		$("#editMealModal .modal-body").append(html);       
-		$("#editMealModal .modal-title").text(recipe.title);    	    	
+		$("#mealComponentModal .modal-body").append(html);       
+		$("#mealComponentModal .modal-title").text(recipe.title);    	    	
 		$.each(recipe.ingredients, function(i, ingredient) {
 			let ammount = (ingredient.ammount / recipe.servings) * meal.servings;
-			$("#editMealModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ammount +"</p>");
+			$("#mealComponentModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ammount +"</p>");
 		 });
 		$.each(recipe.preparations, function(i, preparation) {
-			$("#editMealModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
+			$("#mealComponentModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
 		 });   	 	
-		$("#editMealModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/removeRecipe?mealId="+mealId+"$recipeId="+recipe.id+"'>Pašalinti iš plano</a>");	
+		$("#mealComponentModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/removeRecipe?mealId="+mealId+"$recipeId="+recipe.id+"'>Pašalinti iš plano</a>");	
 
     	})
     		})
 });
 
-$(document).on("click", ".open-add-meal-modal",  function(){
+$(document).on("click", ".open-add-recipe-meal-modal",  function(){
 	var recipeId = $(this).data('recipe-id');
     var mealId = $(this).data('meal-id');
-    $("#addMealModal .modal-body").empty();
+    $("#mealComponentModal .modal-body").empty();
     var html ="";
     $.get("/recipe/getRecipe",{recipeId}, function(recipe){
-    	console.log(recipe);
     	html = "<div class='row'>" +
     				"<div class='col-4'>"+
 						"<img class='modal-img' src='"+recipe.image+"'>"+
@@ -248,18 +264,52 @@ $(document).on("click", ".open-add-meal-modal",  function(){
 		    		"<div class='col' id='ingredients'>Reikės:</div>"+    
 		    		"<div class='col' id='preparations'>Paruošimo būdas:</div>"+  
 	    		"</div>";
-        $("#addMealModal .modal-body").append(html);     
-    	$("#addMealModal .modal-title").text(recipe.title);
+        $("#mealComponentModal .modal-body").append(html);     
+    	$("#mealComponentModal .modal-title").text(recipe.title);
     	$.each(recipe.ingredients, function(i, ingredient) {
-    		$("#addMealModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": " +
+    		$("#mealComponentModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": " +
     				"<span class='ingredient-ammount'>"+ ingredient.ammount +"</span></p>");
          });
     	$.each(recipe.preparations, function(i, preparation) {
-    		$("#addMealModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
+    		$("#mealComponentModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
          });   	
-    	$("#addMealModal .modal-body #buttons").append("<a class='add-meal btn btn-success' data-recipe-id="+recipeId+">Pridėti prie plano</a>");
-    	
+    	$("#mealComponentModal .modal-body #buttons").append("<a class='add-meal btn btn-success' data-recipe-id="+recipeId+">Pridėti prie plano</a>");
+    	$('#mealComponentModal').modal("show");
 	})
+});
+
+$(document).on("click", ".open-add-product-meal-modal",  function(){
+	var productId = $(this).data('product-id');
+    var mealId = $(this).data('meal-id');
+    $("#mealComponentModal .modal-body").empty();
+    var html ="";
+    $.get("/foodProduct/get",{productId}, function(product){
+    	console.log(product);
+    	html = "<div class='col'>" +
+//					"<div class='row'>Kalorijos:<p class='ml-3'><span id='calories'>"+product.nutrition.calories+"</span> kcal</p></div>"+
+					"<div class='row'><span class='mx-2'>Kiekis: </span><input type='number' id='food-product-ammount' step='0.25' value='1'> "+product.unitType.label+"</div>"+
+					"<div class='row mt-2' id='buttons'></div>"+
+				"</div>";
+        $("#mealComponentModal .modal-body").append(html);     
+    	$("#mealComponentModal .modal-title").text(product.name);
+    	$("#mealComponentModal .modal-body #buttons").append("<a class='add-meal btn btn-success' data-product-id="+productId+">Pridėti prie plano</a>");
+    	$('#mealComponentModal').modal("show");
+	})
+});
+
+
+$(document).on("click", ".add-meal", function() {
+	var recipeId = $(this).data("recipe-id");
+	var date = $("#meal-components-container").data("date");
+	var mealType = $("#meal-components-container").data("meal-type");
+	var servings = $("#numberOfServings").val();
+	
+	$("input[name='recipeId']").attr("value", recipeId);
+	$("input[name='date']").attr("value", date);
+	$("input[name='mealType']").attr("value", mealType);
+	$("input[name='servings']").attr("value", servings);
+	
+	$("form[name='saveMeal']").submit();
 });
 
 function changeIngredientsAmmounts(oldServings, newServings){
@@ -274,7 +324,7 @@ function changeCalories(oldServings, newServings){
 	$("#calories").text(newCalories);
 }
 
-$("#addMealModal").on("change", "#numberOfServings", function(){
+$("#mealComponentModal").on("change", "#numberOfServings", function(){
 	let newServings = $(this).val();
 	let oldServings= $(this).data("servings");
 	$(this).data("servings", newServings);
@@ -282,8 +332,8 @@ $("#addMealModal").on("change", "#numberOfServings", function(){
 	changeCalories(oldServings, newServings);
 })
 
-$('#addMealModal').on('hidden.bs.modal', function () {
-	$('#chooseRecipeModal').modal("show");
+$('#mealComponentModal').on('hidden.bs.modal', function () {
+	$('#chooseMealComponentModal').modal("show");
 });
 
 function printPlan()
@@ -310,7 +360,6 @@ function loadShoppingItems(){
 	 $("#shopping-items").empty();
 	 let planId = $("input[name=planId]").val()
 	 $.get("/plan/getShoppingItems", {planId: planId}, function(shoppingList){
-		 console.log(shoppingList);
 		 $.each(shoppingList, function(i, foodType){	
 			 if (foodType.length > 0){
 				 let html = "<div>"+i;

@@ -24,13 +24,13 @@
 					 				<c:forEach var="recipe" items="${meal.recipes}">
 							 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" 
 							 				data-content="<div><img class='img-thmbnl' src='${recipe.image}'></div>">
-											<a class="open-edit-meal-modal" data-toggle="modal" href="#editMealModal" data-recipe-id="${recipe.id }" data-meal-id="${meal.id }">${recipe.title}</a>
+											<a class="open-edit-meal-modal" data-toggle="modal" href="#mealComponentModal" data-recipe-id="${recipe.id }" data-meal-id="${meal.id }">${recipe.title}</a>
 										</p>
 									</c:forEach>					 			
 					 			
 					 		</c:if> 		
 				 		</c:forEach>
-			 			<a class="add-meal-button" data-toggle="modal" href="#chooseRecipeModal">
+			 			<a class="add-meal-button" data-toggle="modal" href="#chooseMealComponentModal">
 			 				<img class="icon-m" src="/images/plus-sign.svg">
 			 			</a>
 			 		</td>

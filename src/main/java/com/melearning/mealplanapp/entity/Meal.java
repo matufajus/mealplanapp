@@ -77,7 +77,7 @@ public class Meal {
 		return recipes;
 	}
 
-	public void setRecipes(List<Recipe> recipe) {
+	public void setRecipes(List<Recipe> recipes) {
 		this.recipes = recipes;
 	}
 

@@ -590,3 +590,7 @@ ul.ui-autocomplete {
 	background-color:grey;
 	cursor: pointer;
 }
+
+.link:hover{
+	cursor:pointer;
+}

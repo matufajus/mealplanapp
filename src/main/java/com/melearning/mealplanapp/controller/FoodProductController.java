@@ -37,9 +37,14 @@ public class FoodProductController {
 		foodProductService.addFoodProduct(foodProduct);
 	}
 	
-	@GetMapping("/get")
-	public @ResponseBody List<FoodProduct> getFoodProduct() {
+	@GetMapping("/getAll")
+	public @ResponseBody List<FoodProduct> getFoodProducts() {
 		return foodProductService.getFoodProducts();
+	}
+	
+	@GetMapping("/get")
+	public @ResponseBody FoodProduct getFoodProduct(@RequestParam(name="productId") int id) {
+		return foodProductService.getFoodProduct(id);
 	}
 	
 	
