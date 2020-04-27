@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
+import com.melearning.mealplanapp.entity.Dish;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.Recipe;
@@ -35,9 +36,9 @@ public interface PlanService {
 
 	public Map<String, List<ShoppingItemDTO>> getPreparedShoppingList(int planId);
 
-	void addRecipeToMeal(Meal meal, Recipe recipe);
+	void addDishToMeal(Meal meal, Dish dish);
 
-	void removeRecipeFromMeal(Meal meal, Recipe recipe);
+	void removeDishFromMeal(Meal meal, Dish dish);
 
 	
 

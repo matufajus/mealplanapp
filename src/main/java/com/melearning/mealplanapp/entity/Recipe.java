@@ -22,7 +22,7 @@ import com.melearning.mealplanapp.enumeration.MealType;
 
 @Entity
 @Table(name = "recipe")
-public class Recipe {
+public class Recipe extends Dish{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -211,9 +211,7 @@ public class Recipe {
 	public float getCalories() {
 		float calories = 0;
 		for (Ingredient ingredient : ingredients) {
-			int kcal = ingredient.getFoodProduct().getNutrition().getKcal();
-			float ammount = ingredient.getAmmount();
-			calories = calories + kcal * ammount;
+			calories = calories + ingredient.getCalories();
 		}
 		return calories;
 	}

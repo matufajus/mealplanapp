@@ -132,7 +132,7 @@ public class PlanController {
 		// add recipe to recipes list in a meal
 		try {
 			Recipe recipe = recipeService.findById(recipeId);
-			planService.addRecipeToMeal(meal, recipe);
+			planService.addDishToMeal(meal, recipe);
 		} catch (DuplicateRecipeInMealException e) {
 			logger.warn("User already has this recipe in meal the same date and same type");
 			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
@@ -146,7 +146,7 @@ public class PlanController {
 	public String removeRecipeFromMeal(@RequestParam("mealId") int mealId, @RequestParam("recipeId") int recipeId) {
 		Meal meal = planService.getMeal(mealId);
 		Recipe recipe = recipeService.findById(recipeId);
-		planService.removeRecipeFromMeal(meal, recipe);
+		planService.removeDishFromMeal(meal, recipe);
 		Plan plan = planService.getPlanByMealId(mealId);
 		return "redirect:/plan/meals?id=" + plan.getId();
 	}

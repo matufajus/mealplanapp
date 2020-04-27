@@ -19,6 +19,7 @@ import com.melearning.mealplanapp.dao.MealRepository;
 import com.melearning.mealplanapp.dao.PlanRepository;
 import com.melearning.mealplanapp.dao.ShoppingRepository;
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
+import com.melearning.mealplanapp.entity.Dish;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.Plan;
@@ -27,6 +28,7 @@ import com.melearning.mealplanapp.entity.ShoppingItem;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
+import com.melearning.mealplanapp.exception.DuplicateDishInMealException;
 import com.melearning.mealplanapp.exception.DuplicateRecipeInMealException;
 import com.melearning.mealplanapp.exception.OverlappingPlanDatesExceptions;
 
@@ -85,20 +87,20 @@ public class PlanServiceImpl implements PlanService {
 	
 	@Transactional
 	@Override
-	public void addRecipeToMeal(Meal meal, Recipe recipe) {
-		if (meal.getRecipes().contains(recipe)) {
-			throw new DuplicateRecipeInMealException(recipe, meal);
+	public void addDishToMeal(Meal meal, Dish dish) {
+		if (meal.getDishes().contains(dish)) {
+			throw new DuplicateDishInMealException(dish, meal);
 		}
-		meal.addRecipe(recipe);
+		meal.addDish(dish);
 		mealRepository.save(meal);
-		addRecipeIngredientsToShoppingList(meal, recipe);
+		addDishIngredientsToShoppingList(meal, dish);
 	}
 
 	@Transactional
 	@Override
-	public void removeRecipeFromMeal(Meal meal, Recipe recipe) {
-		meal.removeRecipe(recipe);
-		removeRecipeIngredientsFromShoppingList(meal, recipe);
+	public void removeDishFromMeal(Meal meal, Dish dish) {
+		meal.removeDish(dish);
+		removeDishIngredientsFromShoppingList(meal, dish);
 		mealRepository.save(meal);
 	}
 
@@ -179,16 +181,17 @@ public class PlanServiceImpl implements PlanService {
 		shoppingRepository.saveAll(shoppingItems);
 	}
 	
-	public void addRecipeIngredientsToShoppingList(Meal meal, Recipe recipe) {
-		for (Ingredient ingredient : recipe.getIngredients()) {
-			float ammount = (ingredient.getAmmount() / recipe.getServings()) * meal.getServings();
+	public void addDishIngredientsToShoppingList(Meal meal, Dish dish) {
+		for (Ingredient ingredient : dish.getIngredients()) {
+			float ammount = (ingredient.getAmmount() / dish.getServings()) * meal.getServings();
+			float ammount = ingredient.getAmmount();
 			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient.getFoodProduct(), ammount, false, meal.getPlan());
 			shoppingRepository.save(shoppingItem);
 		}
 	}
 
-	public void removeRecipeIngredientsFromShoppingList(Meal meal, Recipe recipe) {
-		for (Ingredient ingredient : recipe.getIngredients()) {
+	public void removeDishIngredientsFromShoppingList(Meal meal, Dish dish) {
+		for (Ingredient ingredient : dish.getIngredients()) {
 			shoppingRepository.deleteFirstByPlanIdAndFoodProductId(meal.getPlan().getId(), ingredient.getFoodProduct().getId());
 		}
 	}

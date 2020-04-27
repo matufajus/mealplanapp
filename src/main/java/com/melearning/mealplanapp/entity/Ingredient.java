@@ -38,6 +38,11 @@ public class Ingredient {
 	public Ingredient() {
 	}
 
+	public Ingredient(float ammount, FoodProduct foodProduct) {
+		this.ammount = ammount;
+		this.foodProduct = foodProduct;
+	}
+
 	public int getId() {
 		return id;
 	}
@@ -62,6 +67,9 @@ public class Ingredient {
 		this.foodProduct = foodProduct;
 	}
 
+	public float getCalories() {
+		return foodProduct.getNutrition().getKcal() * ammount;
+	}
 	
 
 }

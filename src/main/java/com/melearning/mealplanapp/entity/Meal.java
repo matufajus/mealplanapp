@@ -36,10 +36,10 @@ public class Meal {
 	@JoinTable(
 	        name = "meal_recipe", 
 	        joinColumns = { @JoinColumn(name = "meal_id") }, 
-	        inverseJoinColumns = { @JoinColumn(name = "recipe_id") }
+	        inverseJoinColumns = { @JoinColumn(name = "dish_id") }
 	    )
 	@JsonIgnore
-	private List<Recipe> recipes;
+	private List<Dish> dishes;
 	
 	@Column(name = "meal_type")
 	@Enumerated(EnumType.ORDINAL)
@@ -73,12 +73,12 @@ public class Meal {
 		this.id = id;
 	}
 
-	public List<Recipe> getRecipes() {
-		return recipes;
+	public List<Dish> getDishes() {
+		return dishes;
 	}
 
-	public void setRecipes(List<Recipe> recipes) {
-		this.recipes = recipes;
+	public void setRecipes(List<Dish> dishes) {
+		this.dishes = dishes;
 	}
 
 	public MealType getMealType() {
@@ -97,9 +97,9 @@ public class Meal {
 		this.date = date;
 	}
 
-	public Meal(int id, List<Recipe> recipes, MealType mealType, LocalDate date, int servings, Plan plan) {
+	public Meal(int id, List<Dish> dishes, MealType mealType, LocalDate date, int servings, Plan plan) {
 		this.id = id;
-		this.recipes = recipes;
+		this.dishes = dishes;
 		this.mealType = mealType;
 		this.date = date;
 		this.servings = servings;
@@ -120,18 +120,18 @@ public class Meal {
 	
 	public float getCalories() {
 		float calories = 0;
-		for (Recipe recipe : recipes) {
-			calories = calories + recipe.getCalories() * servings;
+		for (Dish dish : dishes) {
+			calories = calories + dish.getCalories() * servings;
 		}
 		return calories;
 	}
 	
-	public void addRecipe(Recipe recipe) {
-		recipes.add(recipe);
+	public void addDish(Dish dish) {
+		dishes.add(dish);
 	}
 	
-	public void removeRecipe(Recipe recipe) {
-		recipes.remove(recipe);
+	public void removeDish(Dish dish) {
+		dishes.remove(dish);
 	}
 
 }
