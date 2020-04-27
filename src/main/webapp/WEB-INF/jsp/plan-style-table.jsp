@@ -21,10 +21,10 @@
 			 		<td class="w-20 text-center" data-test="${meal }" data-meal-type="${mealType}" data-date="${date}">
 						<c:forEach var="meal" items="${plan.meals}">	
 					 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">
-					 				<c:forEach var="recipe" items="${meal.recipes}">
+					 				<c:forEach var="mealRecipe" items="${meal.mealRecipes}">
 							 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" 
-							 				data-content="<div><img class='img-thmbnl' src='${recipe.image}'></div>">
-											<a class="open-edit-meal-modal" data-toggle="modal" href="#editMealModal" data-recipe-id="${recipe.id }" data-meal-id="${meal.id }">${recipe.title}</a>
+							 				data-content="<div><img class='img-thmbnl' src='${mealRecipe.recipe.image}'></div>">
+											<a class="open-edit-meal-modal" data-toggle="modal" href="#editMealModal" data-recipe-id="${mealRecipe.recipe.id }" data-meal-id="${meal.id }">${mealRecipe.recipe.title}</a>
 										</p>
 									</c:forEach>					 			
 					 			

@@ -14,6 +14,7 @@ import java.util.TimeZone;
 
 import javax.validation.Valid;
 
+import org.hibernate.hql.internal.ast.tree.MapKeyEntityFromElement;
 import org.modelmapper.spi.ErrorMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
 import com.melearning.mealplanapp.entity.Meal;
+import com.melearning.mealplanapp.entity.MealRecipe;
 import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
@@ -127,18 +129,18 @@ public class PlanController {
 		// if meal doesn't exist create new
 		if (meal == null) {
 			Plan plan = planService.getPlanById(planId);
-			meal = new Meal(0, new ArrayList<Recipe>(), type, mealDate, servings, plan);
+			meal = new Meal(0, new ArrayList<MealRecipe>(), type, mealDate, plan);
 		}
 		// add recipe to recipes list in a meal
 		try {
 			Recipe recipe = recipeService.findById(recipeId);
-			planService.addRecipeToMeal(meal, recipe);
+			planService.addRecipeToMeal(meal, recipe, servings);
 		} catch (DuplicateRecipeInMealException e) {
 			logger.warn("User already has this recipe in meal the same date and same type");
 			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
 			return "redirect:/plan/meals?id=" + planId;
 		}
-		logger.info("New meal(id: " + meal.getId() + ") added to plan(id: " + planId + ")");
+		logger.info("New recipe added to meal(id: " + meal.getId() + ") in plan(id: " + planId + ")");
 		return "redirect:/plan/meals?id=" + planId;
 	}
 
@@ -154,6 +156,14 @@ public class PlanController {
 	@GetMapping("/getMeal")
 	public @ResponseBody Meal getMeal(@RequestParam("mealId") int id) {
 		return planService.getMeal(id);
+	}
+	
+	@GetMapping("/getMealRecipe")
+	public @ResponseBody MealRecipe getMealRecipe(@RequestParam("mealId") int mealId,
+											@RequestParam("recipeId") int recipeId) {
+		Meal meal = planService.getMeal(mealId);
+		Recipe recipe =  recipeService.findById(recipeId);
+		return meal.findMealRecipe(recipe);
 	}
 
 	@GetMapping("/getMealsForToday")

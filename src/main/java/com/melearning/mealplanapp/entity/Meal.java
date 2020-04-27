@@ -32,14 +32,9 @@ public class Meal {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@ManyToMany
-	@JoinTable(
-	        name = "meal_recipe", 
-	        joinColumns = { @JoinColumn(name = "meal_id") }, 
-	        inverseJoinColumns = { @JoinColumn(name = "recipe_id") }
-	    )
+	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
-	private List<Recipe> recipes;
+	private List<MealRecipe> mealRecipes;
 	
 	@Column(name = "meal_type")
 	@Enumerated(EnumType.ORDINAL)
@@ -47,9 +42,6 @@ public class Meal {
 	
 	@Column(name = "date")
 	private LocalDate date;
-	
-	@Column(name = "servings")
-	private int servings;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="plan_id", nullable=false)
@@ -73,12 +65,12 @@ public class Meal {
 		this.id = id;
 	}
 
-	public List<Recipe> getRecipes() {
-		return recipes;
+	public List<MealRecipe> getMealRecipes() {
+		return mealRecipes;
 	}
 
-	public void setRecipes(List<Recipe> recipe) {
-		this.recipes = recipes;
+	public void setMealRecipes(List<MealRecipe> mealRecipes) {
+		this.mealRecipes = mealRecipes;
 	}
 
 	public MealType getMealType() {
@@ -97,41 +89,52 @@ public class Meal {
 		this.date = date;
 	}
 
-	public Meal(int id, List<Recipe> recipes, MealType mealType, LocalDate date, int servings, Plan plan) {
+	public Meal(int id, List<MealRecipe> mealRecipes, MealType mealType, LocalDate date, Plan plan) {
 		this.id = id;
-		this.recipes = recipes;
+		this.mealRecipes = mealRecipes;
 		this.mealType = mealType;
 		this.date = date;
-		this.servings = servings;
 		this.plan = plan;
 	}
 	
 	public Meal() {
 		
 	}
-
-	public int getServings() {
-		return servings;
-	}
-
-	public void setServings(int servings) {
-		this.servings = servings;
-	}
 	
 	public float getCalories() {
 		float calories = 0;
-		for (Recipe recipe : recipes) {
-			calories = calories + recipe.getCalories() * servings;
+		for (MealRecipe mealRecipe : mealRecipes) {
+			calories = calories + mealRecipe.getRecipe().getCalories() * mealRecipe.getServings();
 		}
 		return calories;
 	}
 	
-	public void addRecipe(Recipe recipe) {
-		recipes.add(recipe);
+	public void addRecipe(Recipe recipe, int servings) {
+		MealRecipe mealRecipe = new MealRecipe(this, recipe, servings);
+		mealRecipes.add(mealRecipe);
 	}
 	
 	public void removeRecipe(Recipe recipe) {
-		recipes.remove(recipe);
+		for (MealRecipe mealRecipe : mealRecipes) {
+			if (mealRecipe.getRecipe().equals(recipe)) {
+				mealRecipes.remove(mealRecipe);
+				return;
+			}
+		}
 	}
 
+	public MealRecipe findMealRecipe(Recipe recipe) {
+		for (MealRecipe mealRecipe : mealRecipes) {
+			if (mealRecipe.getRecipe().equals(recipe)) {
+				return mealRecipe;
+			}
+		}
+		return null;
+	}
+
+	public boolean hasRecipe(Recipe recipe) {
+		if (findMealRecipe(recipe) != null)
+			return true;
+		else return false;
+	}
 }

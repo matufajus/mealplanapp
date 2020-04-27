@@ -21,6 +21,7 @@ import com.melearning.mealplanapp.dao.ShoppingRepository;
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.Meal;
+import com.melearning.mealplanapp.entity.MealRecipe;
 import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
@@ -85,13 +86,13 @@ public class PlanServiceImpl implements PlanService {
 	
 	@Transactional
 	@Override
-	public void addRecipeToMeal(Meal meal, Recipe recipe) {
-		if (meal.getRecipes().contains(recipe)) {
+	public void addRecipeToMeal(Meal meal, Recipe recipe, int servings) {
+		if (meal.hasRecipe(recipe)) {
 			throw new DuplicateRecipeInMealException(recipe, meal);
 		}
-		meal.addRecipe(recipe);
+		meal.addRecipe(recipe, servings);
 		mealRepository.save(meal);
-		addRecipeIngredientsToShoppingList(meal, recipe);
+		addRecipeIngredientsToShoppingList(meal, recipe, servings);
 	}
 
 	@Transactional
@@ -179,9 +180,9 @@ public class PlanServiceImpl implements PlanService {
 		shoppingRepository.saveAll(shoppingItems);
 	}
 	
-	public void addRecipeIngredientsToShoppingList(Meal meal, Recipe recipe) {
+	public void addRecipeIngredientsToShoppingList(Meal meal, Recipe recipe, int servings) {
 		for (Ingredient ingredient : recipe.getIngredients()) {
-			float ammount = (ingredient.getAmmount() / recipe.getServings()) * meal.getServings();
+			float ammount = (ingredient.getAmmount() / recipe.getServings()) * servings;
 			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient.getFoodProduct(), ammount, false, meal.getPlan());
 			shoppingRepository.save(shoppingItem);
 		}
