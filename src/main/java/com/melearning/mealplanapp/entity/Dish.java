@@ -24,5 +24,17 @@ public abstract class Dish {
 	public abstract String getTitle();
 	
 	public abstract List<Ingredient> getIngredients();
+	
+	public abstract int getServings();
+
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 
 }

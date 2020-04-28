@@ -29,7 +29,6 @@ import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
 import com.melearning.mealplanapp.exception.DuplicateDishInMealException;
-import com.melearning.mealplanapp.exception.DuplicateRecipeInMealException;
 import com.melearning.mealplanapp.exception.OverlappingPlanDatesExceptions;
 
 @Service
@@ -87,13 +86,13 @@ public class PlanServiceImpl implements PlanService {
 	
 	@Transactional
 	@Override
-	public void addDishToMeal(Meal meal, Dish dish) {
-		if (meal.getDishes().contains(dish)) {
+	public void addDishToMeal(Meal meal, Dish dish, int servings) {
+		if (meal.hasDish(dish)) {
 			throw new DuplicateDishInMealException(dish, meal);
 		}
-		meal.addDish(dish);
+		meal.addDish(dish, servings);
 		mealRepository.save(meal);
-		addDishIngredientsToShoppingList(meal, dish);
+		addDishIngredientsToShoppingList(meal, dish, servings);
 	}
 
 	@Transactional
@@ -181,10 +180,9 @@ public class PlanServiceImpl implements PlanService {
 		shoppingRepository.saveAll(shoppingItems);
 	}
 	
-	public void addDishIngredientsToShoppingList(Meal meal, Dish dish) {
+	public void addDishIngredientsToShoppingList(Meal meal, Dish dish, int servings) {
 		for (Ingredient ingredient : dish.getIngredients()) {
-			float ammount = (ingredient.getAmmount() / dish.getServings()) * meal.getServings();
-			float ammount = ingredient.getAmmount();
+			float ammount = (ingredient.getAmmount() / dish.getServings()) * servings;
 			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient.getFoodProduct(), ammount, false, meal.getPlan());
 			shoppingRepository.save(shoppingItem);
 		}
