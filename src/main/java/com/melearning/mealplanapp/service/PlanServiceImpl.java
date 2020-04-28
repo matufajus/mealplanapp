@@ -18,13 +18,16 @@ import com.melearning.mealplanapp.dao.FoodProductRepository;
 import com.melearning.mealplanapp.dao.MealRepository;
 import com.melearning.mealplanapp.dao.PlanRepository;
 import com.melearning.mealplanapp.dao.ShoppingRepository;
+import com.melearning.mealplanapp.dao.SingleDishProductRepository;
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
 import com.melearning.mealplanapp.entity.Dish;
+import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
+import com.melearning.mealplanapp.entity.SingleDishProduct;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
@@ -45,6 +48,9 @@ public class PlanServiceImpl implements PlanService {
 	
 	@Autowired
 	FoodProductRepository foodProductRepository;
+	
+	@Autowired
+	SingleDishProductRepository singleDishProductRepository;
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -130,6 +136,23 @@ public class PlanServiceImpl implements PlanService {
 	}
 	
 	@Override
+	public void saveSingleDish(SingleDishProduct singleDish) {
+		singleDishProductRepository.save(singleDish);
+	}
+	
+	@Override
+	public SingleDishProduct getSingleDishProduct(int id) {
+		return singleDishProductRepository.findById(id).get();
+	}
+	
+	@Override
+	public void deleteSingleDish(SingleDishProduct singleDishProduct) {
+		singleDishProductRepository.delete(singleDishProduct);
+	};
+	
+	//--------------SHOPPING LIST-------------
+	
+	@Override
 	public Map<String, List<ShoppingItemDTO>> getPreparedShoppingList(int planId){
 		List<ShoppingItem> shoppingItems = shoppingRepository.findAllByPlanId(planId);
 		
@@ -183,14 +206,14 @@ public class PlanServiceImpl implements PlanService {
 	public void addDishIngredientsToShoppingList(Meal meal, Dish dish, int servings) {
 		for (Ingredient ingredient : dish.getIngredients()) {
 			float ammount = (ingredient.getAmmount() / dish.getServings()) * servings;
-			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient.getFoodProduct(), ammount, false, meal.getPlan());
+			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient.getFoodProduct(), dish, ammount, false, meal.getPlan());
 			shoppingRepository.save(shoppingItem);
 		}
 	}
 
 	public void removeDishIngredientsFromShoppingList(Meal meal, Dish dish) {
 		for (Ingredient ingredient : dish.getIngredients()) {
-			shoppingRepository.deleteFirstByPlanIdAndFoodProductId(meal.getPlan().getId(), ingredient.getFoodProduct().getId());
+			shoppingRepository.deleteByPlanIdAndDishIdAndFoodProductId(meal.getPlan().getId(), dish.getId(), ingredient.getFoodProduct().getId());
 		}
 	}
 

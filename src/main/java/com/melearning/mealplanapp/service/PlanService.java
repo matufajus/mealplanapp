@@ -10,6 +10,7 @@ import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealDish;
 import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.Recipe;
+import com.melearning.mealplanapp.entity.SingleDishProduct;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.enumeration.MealType;
 
@@ -40,5 +41,11 @@ public interface PlanService {
 	void addDishToMeal(Meal meal, Dish dish, int servings);
 
 	void removeDishFromMeal(Meal meal, Dish dish);
+
+	void saveSingleDish(SingleDishProduct singleDish);
+
+	SingleDishProduct getSingleDishProduct(int id);
+
+	void deleteSingleDish(SingleDishProduct singleDishProduct);
 	
 }

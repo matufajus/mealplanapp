@@ -14,10 +14,10 @@ public interface ShoppingRepository extends JpaRepository<ShoppingItem, Integer>
 //	
 //	List<ShoppingItem> findByNameAndMealIn(String name, List<Meal> meals);
 
-	void deleteFirstByPlanIdAndFoodProductId(int id, int id2);
-
 	List<ShoppingItem> findAllByPlanId(int planId);
 
 	List<ShoppingItem> findAllByPlanIdAndFoodProductNameAndDone(int planId, String ingredientName, boolean isDone);
+
+	void deleteByPlanIdAndDishIdAndFoodProductId(int id, int id2, int id3);
 
 }

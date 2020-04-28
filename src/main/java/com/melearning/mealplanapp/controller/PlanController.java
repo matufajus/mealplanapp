@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -100,6 +101,9 @@ public class PlanController {
 	public String showPlan(@ModelAttribute String errorMessage, @RequestParam int id, Model model) {
 		User user = userService.getCurrentUser();
 		Plan plan = planService.getPlanById(id);
+		for (Meal meal : plan.getMeals()) {
+			Collections.sort(meal.getMealDishes());
+		}
 		model.addAttribute("planStyle", user.getPlanStyle());
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("plan", plan);
@@ -127,8 +131,8 @@ public class PlanController {
 		}
 	}
 
-	@PostMapping("/addRecipe")
-	public String addRecipeToMeal(int recipeId, int foodProductId,  float ammount, String date, String mealType, int servings, int planId, RedirectAttributes redirectAttrs) {
+	@PostMapping("/addDish")
+	public String addDishToMeal(Integer recipeId, Integer foodProductId,  Float ammount, String date, String mealType, int servings, int planId, RedirectAttributes redirectAttrs) {
 		MealType type = MealType.valueOf(mealType);
 		LocalDate mealDate = LocalDate.parse(date);
 		// get meal if exists by plan id, date and mealType
@@ -139,13 +143,13 @@ public class PlanController {
 			meal = new Meal(0, new ArrayList<MealDish>(), type, mealDate, plan);
 		}
 		try {
-			if (recipeId != 0) {
+			if (recipeId != null) {
 				Dish dish = recipeService.findById(recipeId);
 				planService.addDishToMeal(meal, dish, servings);
-			}
-			if (foodProductId != 0) {
+			}else if (foodProductId != null) {
 				FoodProduct foodProduct = foodProductService.getFoodProduct(foodProductId);
-				Dish dish = new SingleDishProduct(0 , foodProduct, ammount);
+				SingleDishProduct dish = new SingleDishProduct(0 , foodProduct, ammount);
+				planService.saveSingleDish(dish);
 				planService.addDishToMeal(meal, dish, servings);
 			}	
 		} catch (DuplicateDishInMealException e) {
@@ -165,18 +169,32 @@ public class PlanController {
 		Plan plan = planService.getPlanByMealId(mealId);
 		return "redirect:/plan/meals?id=" + plan.getId();
 	}
+	
+	@GetMapping("/removeSingleDish")
+	public String removeSingleDish(@RequestParam("mealId") int mealId, @RequestParam("singleDishId") int singleDishId) {
+		Meal meal = planService.getMeal(mealId);
+		SingleDishProduct singleDishProduct = planService.getSingleDishProduct(singleDishId);
+		planService.removeDishFromMeal(meal, singleDishProduct);
+		planService.deleteSingleDish(singleDishProduct);
+		Plan plan = planService.getPlanByMealId(mealId);
+		return "redirect:/plan/meals?id=" + plan.getId();
+	}
 
 	@GetMapping("/getMeal")
 	public @ResponseBody Meal getMeal(@RequestParam("mealId") int id) {
 		return planService.getMeal(id);
 	}
 	
-	@GetMapping("/getMealRecipe")
-	public @ResponseBody MealDish getMealRecipe(@RequestParam("mealId") int mealId,
-											@RequestParam("recipeId") int recipeId) {
+	@GetMapping("/getSingleDish")
+	public @ResponseBody SingleDishProduct getSingleDish(@RequestParam("productId") int id) {
+		return planService.getSingleDishProduct(id);
+	}
+	
+	@GetMapping("/getMealDishServings")
+	public @ResponseBody int getMealDish(@RequestParam("mealId") int mealId, @RequestParam("recipeId") Integer recipeId) {
 		Meal meal = planService.getMeal(mealId);
-		Recipe recipe =  recipeService.findById(recipeId);
-		return meal.findMealDish(recipe);
+		Recipe recipe = recipeService.findById(recipeId);
+		return meal.findMealDish(recipe).getServings();
 	}
 
 	@GetMapping("/getMealsForToday")

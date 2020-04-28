@@ -30,6 +30,11 @@ public class ShoppingItem {
 
 	@Column(name = "is_done")
 	private boolean done;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name = "dish_id")
+	private Dish dish;
 
 	@JsonIgnore
 	@ManyToOne
@@ -56,9 +61,10 @@ public class ShoppingItem {
 
 	}
 
-	public ShoppingItem(int id, FoodProduct foodProduct, float ammount, boolean done, Plan plan) {
+	public ShoppingItem(int id, FoodProduct foodProduct, Dish dish, float ammount, boolean done, Plan plan) {
 		this.id = id;
 		this.foodProduct = foodProduct;
+		this.dish = dish;
 		this.ammount = ammount;
 		this.done = done;
 		this.plan = plan;
@@ -86,6 +92,14 @@ public class ShoppingItem {
 
 	public void setAmmount(float ammount) {
 		this.ammount = ammount;
+	}
+
+	public Dish getDish() {
+		return dish;
+	}
+
+	public void setDish(Dish dish) {
+		this.dish = dish;
 	}
 
 }

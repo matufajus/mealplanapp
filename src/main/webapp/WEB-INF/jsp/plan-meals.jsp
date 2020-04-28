@@ -28,6 +28,7 @@
 					</button>
 				</div>
 				<div id="plan-info">
+					<input id="plan-id" type="hidden" value="${plan.id}">
 					<p>Pavadinimas: ${plan.title}</p>
 					<p>Dienos: ${plan.getDuration()}</p>
 					<p>Kalorijos: ${plan.getCalories()}</p>
@@ -69,20 +70,12 @@
 					</div>
 				</div>	
 			</div>
-			<form name="saveMeal" action="/plan/addRecipe" method="POST">
-				<input type="hidden" name="recipeId"/>		
-				<input type="hidden" name="date"/>		
-				<input type="hidden" name="mealType"/>		
-				<input type="hidden" name="servings"/>	
-				<input type="hidden" name="planId" value="${plan.id}"/>	
-				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>	
-			</form>
 		</div>
 	</div>
 	
 	<!-- Modals -->
 		
-	<div class="modal" id="chooseMealComponentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal" id="chooseDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -92,13 +85,13 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	      	 <div id="meal-components-container">
+	      	 <div id="dishes-container">
 				<div class='recipes-section btn-group my-4 mx-5' role='group'>
 					<a class='btn btn-light active' data-section="public">Visi receptai</a>							
 					<a class='btn btn-light' data-section="private"> Mano receptai</a>
 					<a class='btn btn-light' data-section="products"> Maisto produktai</a>
 				</div>
-				<div id="meal-components-list-container">
+				<div id="dishes-list-container">
 				</div>
 				<br/>
 				<nav id="pagination-nav" aria-label="Page navigation">
@@ -110,8 +103,24 @@
 	    </div>
 	  </div>
 	</div>
+	
+	<div class="modal fade" id="addDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-lg" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel"></h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	      	 
+	      </div>
+	    </div>
+	  </div>
+	</div>
 		
-	<div class="modal" id="mealComponentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal" id="editDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
