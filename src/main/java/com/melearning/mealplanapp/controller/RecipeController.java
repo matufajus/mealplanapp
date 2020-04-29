@@ -76,12 +76,16 @@ public class RecipeController {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
+	
+	@ModelAttribute
+	public void addAttributes(Model model) {
+		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
+	}
 
 	@GetMapping("/list")
 	public String listPublishedRecipes(Model model) {
 		List<Recipe> recipes = recipeService.getPublicRecipes();
-		model.addAttribute("mealTypes", MealType.values());
-		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
 		return "recipes-list";
 	}
@@ -89,8 +93,6 @@ public class RecipeController {
 	@GetMapping("/myList")
 	public String listUserRecipes(Model model) {
 		List<Recipe> recipes = recipeService.findByOwnerIdDesc(userService.getCurrentUserId());
-		model.addAttribute("mealTypes", MealType.values());
-		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
 		return "recipes-list";
 	}
@@ -99,8 +101,6 @@ public class RecipeController {
 	@GetMapping("/sharedList")
 	public String listSharedRecipes(Model model) {
 		List<Recipe> recipes = recipeService.getRecipesWaitingForInspection();
-		model.addAttribute("mealTypes", MealType.values());
-		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
 		return "recipes-list";
 	}
@@ -109,8 +109,6 @@ public class RecipeController {
 	@GetMapping("/privateList")
 	public String listUsersPrivateRecipes(Model model) {
 		List<Recipe> recipes = recipeService.getPrivateRecipes();
-		model.addAttribute("mealTypes", MealType.values());
-		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
 		return "recipes-list";
 	}
@@ -119,8 +117,6 @@ public class RecipeController {
 	@GetMapping("/rejectedList")
 	public String listRejectedRecipes(Model model) {
 		List<Recipe> recipes = recipeService.getRejectedRecipes();
-		model.addAttribute("mealTypes", MealType.values());
-		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("recipes", recipes);
 		return "recipes-list";
 	}
@@ -152,8 +148,6 @@ public class RecipeController {
 			recipeDTO.setPublished(true);
 		}
 		model.addAttribute("recipe", recipeDTO);
-		model.addAttribute("mealTypes", MealType.values());
-		model.addAttribute("unitTypes", UnitType.values());
 		return "recipe-form";
 	}
 
