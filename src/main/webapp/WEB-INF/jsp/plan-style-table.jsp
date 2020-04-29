@@ -25,12 +25,12 @@
 					 					<c:if test="${mealDish.dish['class'].simpleName == 'Recipe'}" >
 							 				<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" 
 								 				data-content="<div><img class='img-thmbnl' src='${mealDish.dish.image}'></div>">
-								 				<a class="open-edit-recipe-modal" data-toggle="modal" data-dish-id="${mealDish.dish.id }" data-meal-id="${meal.id }">${mealDish.dish.title}</a>
+								 				<a  class="open-edit-recipe-modal" href="javascript:void(0);" data-toggle="modal" data-dish-id="${mealDish.dish.id }" data-meal-id="${meal.id }">${mealDish.dish.title}</a>
 											</p>
 										</c:if>
 										<c:if test="${mealDish.dish['class'].simpleName == 'SingleDishProduct'}">
 											<p>
-												<a class="open-edit-single-dish-modal" data-toggle="modal" data-dish-id="${mealDish.dish.id }" data-meal-id="${meal.id }">${mealDish.dish.title}</a>
+												<a class="open-edit-single-dish-modal" href="javascript:void(0);" data-toggle="modal" data-dish-id="${mealDish.dish.id }" data-meal-id="${meal.id }">${mealDish.dish.title}</a>
 											</p>
 										</c:if>												
 									</c:forEach>					 							 			

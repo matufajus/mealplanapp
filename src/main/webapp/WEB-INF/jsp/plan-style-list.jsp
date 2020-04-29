@@ -11,14 +11,16 @@
 			 		<c:if test="${(meal.date == date) && (meal.mealType == mealType)}">	
 		 				<c:forEach var="mealDish" items="${meal.mealDishes}">
 			 				<c:if test="${mealDish.dish['class'].simpleName == 'Recipe'}" >
-					 			<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="top" data-html="true" 
-					 				data-content="<div><img class='img-thmbnl' src='${mealDish.dish.image}'></div>">
-					 		</c:if>
-					 		<c:if test="${mealDish.dish['class'].simpleName == 'SingleDishProduct'}">
-								<p>
-							</c:if>
-									<a class="open-edit-meal-modal" data-toggle="modal" href="#mealComponentModal" data-recipe-id="${mealDish.dish.id }" data-meal-id="${meal.id }">${mealDish.dish.title}</a>
-								</p>
+							 				<p data-container="body" data-toggle="popover" data-trigger="hover" data-placement="right" data-html="true" 
+								 				data-content="<div><img class='img-thmbnl' src='${mealDish.dish.image}'></div>">
+								 				<a class="open-edit-recipe-modal" href="javascript:void(0);" data-toggle="modal" data-dish-id="${mealDish.dish.id }" data-meal-id="${meal.id }">${mealDish.dish.title}</a>
+											</p>
+										</c:if>
+										<c:if test="${mealDish.dish['class'].simpleName == 'SingleDishProduct'}">
+											<p>
+												<a class="open-edit-single-dish-modal" href="javascript:void(0);" data-toggle="modal" data-dish-id="${mealDish.dish.id }" data-meal-id="${meal.id }">${mealDish.dish.title}</a>
+											</p>
+										</c:if>		
 			 			</c:forEach>
 			 		</c:if> 		
 		 		</c:forEach>

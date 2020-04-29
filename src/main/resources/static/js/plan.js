@@ -125,7 +125,7 @@ function loadProducts(){
 			productsContainer.empty();
 			var html = "";
 	        $.each(data, function(i, product) {
-	            html += "<div class='col-3 product'><a class='open-add-product-meal-modal' data-dismiss='modal'" +
+	            html += "<div class='col-3 product'><a class='open-add-product-meal-modal' href='javascript:void(0);' data-dismiss='modal'" +
 	            		" data-product-id="+product.id+">"+
 			             		"<span>"+product.name+"</span>" +
 		             		"</a></div>";            
@@ -212,7 +212,8 @@ $("#plan").on("click", ".open-edit-recipe-modal", function(){
     var html ="";
     $.get("/recipe/getRecipe",{recipeId}, function(recipe){
     	$.get("/plan/getMealDishServings", {mealId, recipeId}, function(servings){
-    		console.log(recipe);
+    		if (recipe.description == null)
+    			recipe.description="-";
     		let calories = recipe.calories / recipe.servings * servings;
 			html = "<div class='row'>" +
 					"<div class='col-4'>"+
@@ -268,6 +269,8 @@ $(document).on("click", ".open-add-recipe-meal-modal",  function(){
     $("#editDishModal .modal-body").empty();
     var html ="";
     $.get("/recipe/getRecipe",{recipeId}, function(recipe){
+    	if (recipe.description == null)
+			recipe.description="-";
     	html = "<div class='row'>" +
     				"<div class='col-4'>"+
 						"<img class='modal-img' src='"+recipe.image+"'>"+
