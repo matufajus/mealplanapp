@@ -27,6 +27,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.melearning.mealplanapp.dao.FoodProductRepository;
 import com.melearning.mealplanapp.dao.IngredientRepository;
 import com.melearning.mealplanapp.dao.RecipeRepository;
+import com.melearning.mealplanapp.dao.UserRepository;
+import com.melearning.mealplanapp.dto.IngredientDTO;
 import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.Ingredient;
@@ -39,9 +41,20 @@ import com.melearning.mealplanapp.enumeration.MealType;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
+	@Autowired
 	RecipeRepository recipeRepository;
 
+	@Autowired
 	FoodProductRepository foodProductRepository;
+	
+	@Autowired
+	UserRepository userRepository;
+	
+	@Autowired
+	UserService userService;
+	
+	@Autowired
+	ModelMapper mapper;
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -70,8 +83,28 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public void save(Recipe recipe) {
+	public void save(RecipeFormDTO recipeFormDTO) {
+		Recipe recipe = convertToEntity(recipeFormDTO);
+		// for new recipe set user as author and owner
+		if (recipe.getId() == 0) {
+			User user = userService.getCurrentUser();
+			recipe.setAuthor(user.getUsername());
+			recipe.setOwner(user);
+			if (recipe.getImage() == null) {
+				recipe.setImage("/recipeImages/default.png");
+			}
+			if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
+				recipe.setInspected(true);
+				recipe.setPublished(true);
+			}
+		}
 		recipeRepository.save(recipe);
+	}
+	
+	@Override
+	public RecipeFormDTO getRecipeFormDTO(int id) {
+		Recipe recipe = recipeRepository.findById(id).get();
+		return convertToDTO(recipe);
 	}
 
 	@Override
@@ -145,7 +178,7 @@ public class RecipeServiceImpl implements RecipeService {
 	public void makeRecipePublic(int recipeId, User publisher) {
 		Recipe recipe = findById(recipeId);
 		recipe.setInspected(true);
-		save(recipe);
+		recipeRepository.save(recipe);
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
 			Recipe copyRecipe = objectMapper.readValue(objectMapper.writeValueAsString(recipe), Recipe.class);
@@ -154,7 +187,7 @@ public class RecipeServiceImpl implements RecipeService {
 			copyRecipe.setPublished(true);
 			copyRecipe.getIngredients().forEach(i -> i.setId(0));
 			copyRecipe.getPreparations().forEach(p -> p.setId(0));
-			save(copyRecipe);
+			recipeRepository.save(copyRecipe);
 		} catch (JsonMappingException e) {
 			// TODO Auto-generated catch block
 			logger.error("Error while creating a copy of recipe: id = " + recipeId + ", error: " + e.getMessage());
@@ -162,6 +195,14 @@ public class RecipeServiceImpl implements RecipeService {
 			// TODO Auto-generated catch block
 			logger.error("Error while creating a copy of recipe: id = " + recipeId + ", error: " + e.getMessage());
 		}
+	}
+	
+	@Override
+	public void makeRecipePrivate(int recipeId) {
+		Recipe recipe = recipeRepository.findById(recipeId).get();
+		recipe.setInspected(true);
+		recipe.setPublished(false);
+		recipeRepository.save(recipe);
 	}
 
 	@Override
@@ -216,6 +257,41 @@ public class RecipeServiceImpl implements RecipeService {
 	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize) {
 		Pageable pageable = PageRequest.of(pageId, pageSize);
 		return recipeRepository.findByOwnerId(currentUserId, pageable);
+	}
+	
+	private RecipeFormDTO convertToDTO(Recipe recipe) {
+		RecipeFormDTO recipeDTO = mapper.map(recipe, RecipeFormDTO.class);
+		recipeDTO.setOwner(recipe.getOwner().getUsername());
+		recipeDTO.setIngredients(convertToDTOList(recipe.getIngredients()));
+		return recipeDTO;
+	}
+
+	private Recipe convertToEntity(RecipeFormDTO recipeDTO) {
+		Recipe recipe = mapper.map(recipeDTO, Recipe.class);
+		recipe.setOwner(userRepository.findByUsername(recipeDTO.getOwner()));		
+		recipe.setIngredients(convertToEntityList(recipeDTO.getIngredients()));
+		return recipe;
+	}
+	
+	private List<IngredientDTO> convertToDTOList(List<Ingredient> ingredients) {
+		List<IngredientDTO> ingredientDTOs = new ArrayList<IngredientDTO>();
+		for (Ingredient ingredient : ingredients) {
+			IngredientDTO ingredientDTO = mapper.map(ingredient, IngredientDTO.class);
+			ingredientDTOs.add(ingredientDTO);
+		}
+		return ingredientDTOs;
+	}
+	
+	private List<Ingredient> convertToEntityList(List<IngredientDTO> ingredientDTOs){
+		List<Ingredient> ingredients = new ArrayList<Ingredient>();
+		for (IngredientDTO ingredientDTO : ingredientDTOs) {
+			Ingredient ingredient = new Ingredient();
+			ingredient.setAmmount(ingredientDTO.getAmmount());
+			FoodProduct foodProduct = foodProductRepository.findById(ingredientDTO.getFoodProductId()).get();
+			ingredient.setFoodProduct(foodProduct);
+			ingredients.add(ingredient);
+		}
+		return ingredients;
 	}
 
 }

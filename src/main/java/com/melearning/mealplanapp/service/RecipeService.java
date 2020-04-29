@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.KitchenProduct;
@@ -18,7 +19,9 @@ public interface RecipeService {
 	
 	public Recipe findById(int id);
 	
-	public void save(Recipe recipe);
+	public void save(RecipeFormDTO recipeFormDTO);
+	
+	public RecipeFormDTO getRecipeFormDTO(int id);
 	
 	public void deleteById(int id);
 	
@@ -39,6 +42,8 @@ public interface RecipeService {
 	public List<Recipe> getPrivateRecipes();
 
 	public void makeRecipePublic(int recipeId, User publisher);
+	
+	public void makeRecipePrivate(int recipeId);
 
 	public List<Recipe> getRejectedRecipes();
 
