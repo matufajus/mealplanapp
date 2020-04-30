@@ -275,13 +275,6 @@ public class RecipeController {
 		return recipes;
 	}
 
-	@PreAuthorize("hasRole('ADMIN')")
-	@PostMapping("/addFoodProduct")
-	public String addFoodProduct(@ModelAttribute("foodProduct") FoodProduct foodProduct) {
-		foodService.addFoodProduct(foodProduct);
-		return "redirect:/recipe/unknownIngredients";
-	}
-
 	@GetMapping("/checkAuthorizationForRecipe")
 	public @ResponseBody boolean checkIfuserIsAuthorizedForRecipe(@RequestParam int recipeId) {
 		Recipe recipe = recipeService.findById(recipeId);

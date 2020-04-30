@@ -41,10 +41,6 @@
 			</div>
 			<br>
 		</div>
-		
-		<security:authorize access="hasRole('ADMIN')">
-			<p>Jūs naudojatės administratoriaus teisėmis</p>
-		</security:authorize>
 	</div>
 	<%@ include file="kitchen.jsp"%>
 	<%@ include file="footer.jsp"%>

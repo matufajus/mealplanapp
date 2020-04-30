@@ -19,4 +19,6 @@ public interface FoodProductService {
 	
 	public void addFoodProduct(FoodProduct foodProduct);
 
+	public void deleteFoodProduct(int id);
+
 }

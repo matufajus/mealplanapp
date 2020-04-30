@@ -10,10 +10,15 @@
     <ul class="navbar-nav">
       <li class="nav-item active">
         <a class="nav-link" href="${pageContext.request.contextPath}/home">Pagrindinis <span class="sr-only">(current)</span></a>
-      </li>
+      </li>   
       <li class="nav-item">
-        <a class="nav-link" href="${pageContext.request.contextPath}/recipe/myList">Receptai</a>
+        <a class="nav-link" href="${pageContext.request.contextPath}/recipe/list">Receptai</a>
       </li>
+      <security:authorize access="hasRole('ADMIN')">
+       <li class="nav-item">
+       		<a class="nav-link" href="${pageContext.request.contextPath}/foodProduct/list">Produktai</a>
+       </li>
+        </security:authorize>
        <li class="nav-item">
         <a class="nav-link" href="${pageContext.request.contextPath}/plan/list">Planuoti</a>
       </li>

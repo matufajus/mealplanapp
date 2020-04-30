@@ -48,5 +48,10 @@ public class FoodProductServiceImpl implements FoodProductService {
 		return null;
 	}
 
+	@Override
+	public void deleteFoodProduct(int id) {
+		foodProductRepository.deleteById(id);
+	}
+
 
 }

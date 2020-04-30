@@ -13,8 +13,7 @@ public enum UnitType {
 	TABLE_SPOON("šaukšt."),
 	TEA_SPOON("šaukštel."),
 	WHOLE("vnt."),
-	CUP("stiklin."),
-	OTHER("kita");
+	CUP("stiklin.");
 	
 	public final String label;
 	
