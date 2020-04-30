@@ -61,37 +61,6 @@ public class KitchenController {
 		StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
-
-//	@GetMapping("/")
-//	public String showKitchen(@ModelAttribute("errorMessage") String errorMessage, Model model) {
-//		List<KitchenProduct> products =  kitchenService.getAllProductsForUser(userService.getCurrentUserId());
-//		model.addAttribute("products", products);
-//		model.addAttribute("recipes", recipeService.getRecipesForUserProducts(products));
-//		model.addAttribute("foodTypes", FoodType.values());
-//		model.addAttribute("newProduct", new KitchenProduct());
-//		if(errorMessage != null) {
-//	        model.addAttribute("errorMessage", errorMessage);
-//	    }
-//		return "kitchen";
-//	}
-	
-//	@PostMapping("/addProduct")
-//	public String addProduct(@Valid @ModelAttribute("newProduct") KitchenProduct product, BindingResult bindingResult,
-//			RedirectAttributes redirectAttrs) {
-//		if (bindingResult.hasErrors()) {
-//			System.err.println(bindingResult.toString());
-//			return "kitchen";
-//		}
-//		product.setUser(userService.getCurrentUser());
-//		try {
-//			kitchenService.addProduct(product);
-//		} catch (UniqueProductConstraintValidationException e) {
-//			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
-//			return "redirect:/kitchen/showProducts";
-//		}
-//		
-//		return "redirect:/kitchen/showProducts";
-//	}
 	
 	@GetMapping("/removeProduct")
 	public @ResponseBody String removeProduct(@RequestParam int foodProductId) {

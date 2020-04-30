@@ -201,16 +201,6 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public List<Recipe> getPrivateRecipes() {
-		return recipeRepository.findByShared(false);
-	}
-
-	@Override
-	public List<Recipe> getRejectedRecipes() {
-		return recipeRepository.findBySharedAndInspectedAndPublished(true, true, false);
-	}
-
-	@Override
 	public List<Recipe> filterRecipesByMealTypesAndSearchProducts(List<Recipe> recipes,
 			List<MealType> selectedMealtypes, List<String> products) {
 		List<Recipe> filteredRecipes;

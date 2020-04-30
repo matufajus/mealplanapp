@@ -106,22 +106,6 @@ public class RecipeController {
 	}
 
 	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/privateList")
-	public String listUsersPrivateRecipes(Model model) {
-		List<Recipe> recipes = recipeService.getPrivateRecipes();
-		model.addAttribute("recipes", recipes);
-		return "recipes-list";
-	}
-
-	@PreAuthorize("hasRole('ADMIN')")
-	@GetMapping("/rejectedList")
-	public String listRejectedRecipes(Model model) {
-		List<Recipe> recipes = recipeService.getRejectedRecipes();
-		model.addAttribute("recipes", recipes);
-		return "recipes-list";
-	}
-
-	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/approveRecipe")
 	public String makeRecipePublic(@RequestParam("recipeId") int recipeId) {
 		User publisher = userService.getCurrentUser();
@@ -283,14 +267,6 @@ public class RecipeController {
 		case "sharedList":
 			if (userService.hasCurrentUserRole("ROLE_ADMIN"))
 				recipes = recipeService.getRecipesWaitingForInspection();
-			break;
-		case "privateList":
-			if (userService.hasCurrentUserRole("ROLE_ADMIN"))
-				recipes = recipeService.getPrivateRecipes();
-			break;
-		case "rejectedList":
-			if (userService.hasCurrentUserRole("ROLE_ADMIN"))
-				recipes = recipeService.getRejectedRecipes();
 			break;
 		default:
 			break;

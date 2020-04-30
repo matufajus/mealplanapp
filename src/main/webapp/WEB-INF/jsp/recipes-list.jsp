@@ -84,12 +84,8 @@
 						<security:authorize access="hasRole('ADMIN')">
 							<div class="btn-group my-4 mx-5" role="group" aria-label="Basic example">
 								<a href="list" class="btn btn-light">Patvirtinti receptai</a>
-								<a href="privateList" class="btn btn-light">Privatūs receptai</a>
 								<a href="sharedList" class="btn btn-light"> Laukiantys patvirtinimo</a>
-								<a href="rejectedList" class="btn btn-light">Atmesti receptai</a>
 							</div>
-							
-							<a class="btn btn-light my-4 mx-2" href="unknownIngredients">Neatpažinti ingredientai</a>
 						</security:authorize>
 <!-- 						<a id="add-recipe-link" class="btn btn-light my-4 mx-5" href="showForm"> -->
 						<a id="add-recipe-link" class="btn btn-light my-4 mx-5" data-toggle="modal" href="#recipeFormModal">

@@ -37,13 +37,9 @@ public interface RecipeService {
 
 	public List<Recipe> getPublicRecipes();
 
-	public List<Recipe> getPrivateRecipes();
-
 	public void makeRecipePublic(int recipeId, User publisher);
 	
 	public void makeRecipePrivate(int recipeId);
-
-	public List<Recipe> getRejectedRecipes();
 
 	public List<Recipe> filterRecipesByMealTypesAndSearchProducts(List<Recipe> recipes,
 			List<MealType> selectedMealtypes, List<String> products);
