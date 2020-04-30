@@ -138,5 +138,9 @@ public class Plan {
 		}
 		return calories;
 	}
+	
+	public float getAverageCaloriesPerDay() {
+		return getCalories() / getDuration();
+	}
 
 }

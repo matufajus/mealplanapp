@@ -30,8 +30,8 @@
 		    <tr>
 		      <th scope="col">#</th>
 		      <th scope="col">Pavadinimas</th>
-		      <th scope="col">Nuo</th>
-		      <th scope="col">Iki</th>
+		      <th scope="col">Nuo - Iki</th>
+		      <th scope="col">Kalorijos per dieną</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -41,8 +41,8 @@
 					<td>
 						${plan.title} 
 					</td>
-					<td>${plan.startDate}</td>
-					<td>${plan.endDate}</td> 
+					<td>${plan.startDate} - ${plan.endDate}</td>
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.averageCaloriesPerDay}"/></td> 
 				</tr>
 			</c:forEach>
 		  </tbody>
@@ -53,8 +53,8 @@
 		    <tr>
 		      <th scope="col">#</th>
 		      <th scope="col">Pavadinimas</th>
-		      <th scope="col">Nuo</th>
-		      <th scope="col">Iki</th>
+		      <th scope="col">Nuo - Iki</th>
+		      <th scope="col">Kalorijos per dieną</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -64,8 +64,8 @@
 					<td>
 						${plan.title} 
 					</td>
-					<td>${plan.startDate}</td>
-					<td>${plan.endDate}</td> 
+					<td>${plan.startDate} - ${plan.endDate}</td>
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.averageCaloriesPerDay}"/></td> 
 				</tr>
 			</c:forEach>
 		  </tbody>

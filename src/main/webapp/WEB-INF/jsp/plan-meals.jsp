@@ -29,9 +29,9 @@
 				</div>
 				<div id="plan-info">
 					<input id="plan-id" type="hidden" value="${plan.id}">
-					<p>Pavadinimas: ${plan.title}</p>
-					<p>Dienos: ${plan.getDuration()}</p>
-					<p>Kalorijos: ${plan.getCalories()}</p>
+<%-- 					<p>Pavadinimas: ${plan.title}</p> --%>
+<%-- 					<p>Dienos: ${plan.getDuration()}</p> --%>
+<%-- 					<p>Kalorijos: ${plan.getCalories()}</p> --%>
 				</div>
 				<c:if test="${errorMessage ne null}">
 					<div class="alert alert-danger" role="alert">
