@@ -19,9 +19,7 @@ public interface RecipeService {
 	
 	public Recipe findById(int id);
 	
-	public void save(RecipeFormDTO recipeFormDTO);
-	
-	public RecipeFormDTO getRecipeFormDTO(int id);
+	public void save(Recipe recipe);
 	
 	public void deleteById(int id);
 	

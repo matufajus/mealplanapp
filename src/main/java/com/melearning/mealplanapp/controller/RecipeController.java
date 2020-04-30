@@ -169,11 +169,6 @@ public class RecipeController {
 				}
 			}
 			Recipe recipe = convertToEntity(recipeDTO);
-			//-----
-			
-			
-			
-			//-----
 			// for new recipe set user as author and owner
 			if (recipe.getId() == 0) {
 				User user = userService.getCurrentUser();

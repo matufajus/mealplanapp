@@ -83,8 +83,7 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public void save(RecipeFormDTO recipeFormDTO) {
-		Recipe recipe = convertToEntity(recipeFormDTO);
+	public void save(Recipe recipe) {
 		// for new recipe set user as author and owner
 		if (recipe.getId() == 0) {
 			User user = userService.getCurrentUser();
@@ -99,12 +98,6 @@ public class RecipeServiceImpl implements RecipeService {
 			}
 		}
 		recipeRepository.save(recipe);
-	}
-	
-	@Override
-	public RecipeFormDTO getRecipeFormDTO(int id) {
-		Recipe recipe = recipeRepository.findById(id).get();
-		return convertToDTO(recipe);
 	}
 
 	@Override
@@ -257,41 +250,6 @@ public class RecipeServiceImpl implements RecipeService {
 	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize) {
 		Pageable pageable = PageRequest.of(pageId, pageSize);
 		return recipeRepository.findByOwnerId(currentUserId, pageable);
-	}
-	
-	private RecipeFormDTO convertToDTO(Recipe recipe) {
-		RecipeFormDTO recipeDTO = mapper.map(recipe, RecipeFormDTO.class);
-		recipeDTO.setOwner(recipe.getOwner().getUsername());
-		recipeDTO.setIngredients(convertToDTOList(recipe.getIngredients()));
-		return recipeDTO;
-	}
-
-	private Recipe convertToEntity(RecipeFormDTO recipeDTO) {
-		Recipe recipe = mapper.map(recipeDTO, Recipe.class);
-		recipe.setOwner(userRepository.findByUsername(recipeDTO.getOwner()));		
-		recipe.setIngredients(convertToEntityList(recipeDTO.getIngredients()));
-		return recipe;
-	}
-	
-	private List<IngredientDTO> convertToDTOList(List<Ingredient> ingredients) {
-		List<IngredientDTO> ingredientDTOs = new ArrayList<IngredientDTO>();
-		for (Ingredient ingredient : ingredients) {
-			IngredientDTO ingredientDTO = mapper.map(ingredient, IngredientDTO.class);
-			ingredientDTOs.add(ingredientDTO);
-		}
-		return ingredientDTOs;
-	}
-	
-	private List<Ingredient> convertToEntityList(List<IngredientDTO> ingredientDTOs){
-		List<Ingredient> ingredients = new ArrayList<Ingredient>();
-		for (IngredientDTO ingredientDTO : ingredientDTOs) {
-			Ingredient ingredient = new Ingredient();
-			ingredient.setAmmount(ingredientDTO.getAmmount());
-			FoodProduct foodProduct = foodProductRepository.findById(ingredientDTO.getFoodProductId()).get();
-			ingredient.setFoodProduct(foodProduct);
-			ingredients.add(ingredient);
-		}
-		return ingredients;
 	}
 
 }
