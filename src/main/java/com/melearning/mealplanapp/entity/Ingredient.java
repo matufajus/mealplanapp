@@ -42,6 +42,11 @@ public class Ingredient {
 		this.ammount = ammount;
 		this.foodProduct = foodProduct;
 	}
+	
+	public Ingredient(Ingredient ingredient) {
+		this.ammount = ingredient.ammount;
+		this.foodProduct = ingredient.foodProduct;
+	}
 
 	public int getId() {
 		return id;

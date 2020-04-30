@@ -1,5 +1,6 @@
 package com.melearning.mealplanapp.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -82,21 +83,19 @@ public class Recipe extends Dish{
 		this.title = title;
 	}
 
-	public Recipe(int id, String title, String description, List<Ingredient> ingredients,
-			List<Preparation> preparations, List<MealType> mealTypes, String image, User owner, boolean shared,
-			boolean inspected, boolean published, String author) {
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.ingredients = ingredients;
-		this.preparations = preparations;
-		this.mealTypes = mealTypes;
-		this.image = image;
-		this.owner = owner;
-		this.shared = shared;
-		this.inspected = inspected;
-		this.published = published;
-		this.author = author;
+	public Recipe(Recipe recipe) {
+		this.title = recipe.title;
+		this.description = recipe.description;
+		this.ingredients = cloneIngredients(recipe.ingredients);;
+		this.preparations = clonePreparations(recipe.preparations);
+		this.mealTypes = new ArrayList<MealType>(recipe.mealTypes);
+		this.image = recipe.image;
+		this.owner = recipe.owner;
+		this.shared = recipe.shared;
+		this.servings = recipe.servings;
+		this.inspected = recipe.inspected;
+		this.published = recipe.published;
+		this.author = recipe.author;
 	}
 
 	public int getId() {
@@ -214,6 +213,22 @@ public class Recipe extends Dish{
 			calories = calories + ingredient.getCalories();
 		}
 		return calories;
+	}
+	
+	private List<Ingredient> cloneIngredients(List<Ingredient> ingredients) {
+		List<Ingredient> copyOfIngredients = new ArrayList<Ingredient>();
+		for (Ingredient ingredient : ingredients) {
+			copyOfIngredients.add(new Ingredient(ingredient));
+		}
+		return copyOfIngredients;
+	}
+	
+	private List<Preparation> clonePreparations(List<Preparation> preparations) {
+		List<Preparation> copyOfPreparations = new ArrayList<Preparation>();
+		for (Preparation preparation : preparations) {
+			copyOfPreparations.add(new Preparation(preparation));
+		}
+		return copyOfPreparations;
 	}
 
 }

@@ -171,23 +171,15 @@ public class RecipeServiceImpl implements RecipeService {
 	public void makeRecipePublic(int recipeId, User publisher) {
 		Recipe recipe = findById(recipeId);
 		recipe.setInspected(true);
+		createPublicRecipeCopy(recipe, publisher);
 		recipeRepository.save(recipe);
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			Recipe copyRecipe = objectMapper.readValue(objectMapper.writeValueAsString(recipe), Recipe.class);
-			copyRecipe.setId(0);
-			copyRecipe.setOwner(publisher);
-			copyRecipe.setPublished(true);
-			copyRecipe.getIngredients().forEach(i -> i.setId(0));
-			copyRecipe.getPreparations().forEach(p -> p.setId(0));
-			recipeRepository.save(copyRecipe);
-		} catch (JsonMappingException e) {
-			// TODO Auto-generated catch block
-			logger.error("Error while creating a copy of recipe: id = " + recipeId + ", error: " + e.getMessage());
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			logger.error("Error while creating a copy of recipe: id = " + recipeId + ", error: " + e.getMessage());
-		}
+	}
+	
+	private void createPublicRecipeCopy(Recipe recipe, User publisher) {
+		Recipe copyRecipe = new Recipe(recipe);
+		copyRecipe.setOwner(publisher);
+		copyRecipe.setPublished(true);
+		recipeRepository.save(copyRecipe);
 	}
 	
 	@Override

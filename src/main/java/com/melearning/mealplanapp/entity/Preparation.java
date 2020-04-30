@@ -22,6 +22,18 @@ public class Preparation {
 	@Column(name="description")
 	private String description;
 	
+	public Preparation() {
+	}
+	
+	public Preparation(int id, String description) {
+		this.id = id;
+		this.description = description;
+	}
+
+	public Preparation(Preparation preparation) {
+		this.description = preparation.description;
+	}
+	
 	public int getId(){
 		return id;
 	}
@@ -37,14 +49,5 @@ public class Preparation {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Preparation(int id, String description) {
-		this.id = id;
-		this.description = description;
-	}
-
-	public Preparation() {
-	}
 	
-
 }
