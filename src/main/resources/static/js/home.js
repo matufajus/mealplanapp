@@ -19,9 +19,8 @@ function loadFoodTypes(){
 			foodTypes = result;
 			let container = $("#kitchen-products .list-group");
 			$.each(foodTypes, function(i, foodType){
-				console.log(foodType);
 				$("<a>").attr({class:"list-group-item list-group-item-action", 'data-toggle': "list",
-		    		href:"#list-"+foodType.position, role:"tab", "aria-controls":foodType.label,
+		    		href:"#list-"+foodType.value, role:"tab", "aria-controls":foodType.label,
 		    		style:"background-image: url('/images/foodTypes/"+foodType.value+".jpg');"})
 		    		.html("<div class='blurry'></div><span>"+foodType.label+"</span>")
 		    		.appendTo(container);
@@ -35,10 +34,10 @@ function loadFoodProducts(){
 	return new Promise((resolve) => {
 		$.get("/recipe/getFoodProducts", function(products){
 			let container = $("#kitchen-products .tab-content");
-			$.each(foodTypes, function(i, foodType){		 	
-				let list = $("<div>").attr({id: "list-"+foodType.position, "class": "tab-pane fade", role:"tabpanel"}).appendTo(container);
+			$.each(foodTypes, function(i, foodType){
+				let list = $("<div>").attr({id: "list-"+foodType.value, "class": "tab-pane fade", role:"tabpanel"}).appendTo(container);
 				$.each(products, function(i, product){
-					if(product.foodType.position == foodType.position){
+					if(product.foodType.value == foodType.value){
 						let item = $("<div>").attr({class:"product", style:"background-image:"+product.image, "data-id":product.id}).html(product.name).appendTo(list);
 					}
 				});
