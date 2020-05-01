@@ -12,7 +12,7 @@ public enum UnitType {
 	MILILITRE("ml."),
 	TABLE_SPOON("šaukšt."),
 	TEA_SPOON("šaukštel."),
-	WHOLE("vnt."),
+//	WHOLE("vnt."),
 	CUP("stiklin.");
 	
 	public final String label;

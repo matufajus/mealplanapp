@@ -15,7 +15,13 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter @Setter @NoArgsConstructor
 @Entity
 @Table(name = "kitchen_product")
 public class KitchenProduct {
@@ -37,49 +43,5 @@ public class KitchenProduct {
 	
 	@Column(name="expiration_date")
 	private Date expirationDate;	
-
-	public KitchenProduct() {
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
-	public FoodProduct getFoodProduct() {
-		return foodProduct;
-	}
-
-	public void setFoodProduct(FoodProduct foodProduct) {
-		this.foodProduct = foodProduct;
-	}
-
-	public float getAmmount() {
-		return ammount;
-	}
-
-	public void setAmmount(float ammount) {
-		this.ammount = ammount;
-	}
 
 }

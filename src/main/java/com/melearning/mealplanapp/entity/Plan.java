@@ -17,6 +17,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "plan")
 public class Plan {
@@ -27,94 +39,25 @@ public class Plan {
 
 	@Column(name = "title")
 	private String title;
-	
+
 	@Column(name = "start")
 	private LocalDate startDate;
 
 	@Column(name = "end")
 	private LocalDate endDate;
-	
+
 	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Meal> meals;
-	
+
 	@OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ShoppingItem> shoppingItems;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public Plan() {
-	}	
-
-	public Plan(int id, String title, LocalDate fromDate, LocalDate endDate, List<Meal> meals, User user) {
-		this.id = id;
-		this.title = title;
-		this.startDate = fromDate;
-		this.endDate = endDate;
-		this.meals = meals;
-		this.user = user;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
-
-	public List<Meal> getMeals() {
-		return meals;
-	}
-
-	public void setMeals(List<Meal> meals) {
-		this.meals = meals;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	public LocalDate getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(LocalDate fromDate) {
-		this.startDate = fromDate;
-	}
-	
-	public void setEndDate(LocalDate endDate) {
-		this.endDate = endDate;
-	}
-	
-	public LocalDate getEndDate() {
-		return endDate;
-	}
-	
-	public List<ShoppingItem> getShoppingItems() {
-		return shoppingItems;
-	}
-
-	public void setShoppingItems(List<ShoppingItem> shoppingItems) {
-		this.shoppingItems = shoppingItems;
-	}
-	
 	public long getDuration() {
-		return ChronoUnit.DAYS.between(startDate, endDate)+1;
+		return ChronoUnit.DAYS.between(startDate, endDate) + 1;
 	}
 
 	public List<Meal> getMealsForToday() {
@@ -123,14 +66,12 @@ public class Plan {
 		}
 		return getMeals().stream().filter(meal -> (meal.getDate() == LocalDate.now())).collect(Collectors.toList());
 	}
-	
+
 	public List<LocalDate> getDates() {
-		return IntStream.iterate(0, i -> i + 1)
-			      .limit(getDuration())
-			      .mapToObj(i -> startDate.plusDays(i))
-			      .collect(Collectors.toList());
+		return IntStream.iterate(0, i -> i + 1).limit(getDuration()).mapToObj(i -> startDate.plusDays(i))
+				.collect(Collectors.toList());
 	}
-	
+
 	public float getCalories() {
 		float calories = 0;
 		for (Meal meal : meals) {
@@ -138,7 +79,7 @@ public class Plan {
 		}
 		return calories;
 	}
-	
+
 	public float getAverageCaloriesPerDay() {
 		return getCalories() / getDuration();
 	}

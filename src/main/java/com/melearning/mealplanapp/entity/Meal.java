@@ -24,12 +24,23 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "meal")
 public class Meal {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -37,71 +48,18 @@ public class Meal {
 	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
 	private List<MealDish> mealDishes;
-	
+
 	@Column(name = "meal_type")
 	@Enumerated(EnumType.ORDINAL)
 	private MealType mealType;
-	
+
 	@Column(name = "date")
 	private LocalDate date;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="plan_id", nullable=false)
+	@JoinColumn(name = "plan_id", nullable = false)
 	@JsonIgnore
 	private Plan plan;
-	
-
-	public Plan getPlan() {
-		return plan;
-	}
-
-	public void setPlan(Plan plan) {
-		this.plan = plan;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public List<MealDish> getMealDishes() {
-		return mealDishes;
-	}
-
-	public void setMealDishes(List<MealDish> mealDishes) {
-		this.mealDishes = mealDishes;
-	}
-
-	public MealType getMealType() {
-		return mealType;
-	}
-
-	public void setMealType(MealType mealType) {
-		this.mealType = mealType;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public Meal(int id, List<MealDish> mealDishes, MealType mealType, LocalDate date, Plan plan) {
-		this.id = id;
-		this.mealDishes = mealDishes;
-		this.mealType = mealType;
-		this.date = date;
-		this.plan = plan;
-	}
-	
-	public Meal() {
-		
-	}
 
 	public float getCalories() {
 		float calories = 0;
@@ -110,12 +68,12 @@ public class Meal {
 		}
 		return calories;
 	}
-	
+
 	public void addDish(Dish dish, int servings) {
 		MealDish mealDish = new MealDish(this, dish, servings);
 		mealDishes.add(mealDish);
 	}
-	
+
 	public void removeDish(Dish dish) {
 		MealDish mealDish = findMealDish(dish);
 		mealDishes.remove(mealDish);
@@ -133,6 +91,7 @@ public class Meal {
 	public boolean hasDish(Dish dish) {
 		if (findMealDish(dish) != null)
 			return true;
-		else return false;
+		else
+			return false;
 	}
 }

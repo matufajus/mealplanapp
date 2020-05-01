@@ -14,6 +14,16 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "nutrition")
 public class Nutrition {
@@ -35,9 +45,6 @@ public class Nutrition {
 	@Column(name = "fat")
 	private Integer fat;
 
-	public Nutrition() {
-	}
-
 	public Nutrition(Integer kcal, Integer protein, Integer carbs, Integer fat) {
 		this.kcal = kcal;
 		this.protein = protein;
@@ -45,43 +52,4 @@ public class Nutrition {
 		this.fat = fat;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Integer getKcal() {
-		return kcal;
-	}
-
-	public void setKcal(Integer kcal) {
-		this.kcal = kcal;
-	}
-
-	public Integer getProtein() {
-		return protein;
-	}
-
-	public void setProtein(Integer protein) {
-		this.protein = protein;
-	}
-
-	public Integer getCarbs() {
-		return carbs;
-	}
-
-	public void setCarbs(Integer carbs) {
-		this.carbs = carbs;
-	}
-
-	public Integer getFat() {
-		return fat;
-	}
-
-	public void setFat(Integer fat) {
-		this.fat = fat;
-	}
 }

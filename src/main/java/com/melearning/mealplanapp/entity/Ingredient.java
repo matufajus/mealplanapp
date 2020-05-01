@@ -18,8 +18,16 @@ import org.hibernate.annotations.Polymorphism;
 import org.hibernate.annotations.PolymorphismType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "ingredient")
 public class Ingredient {
@@ -34,47 +42,19 @@ public class Ingredient {
 	@ManyToOne
 	@JoinColumn(name = "food_product_id")
 	private FoodProduct foodProduct;
-	
-	public Ingredient() {
-	}
 
 	public Ingredient(float ammount, FoodProduct foodProduct) {
 		this.ammount = ammount;
 		this.foodProduct = foodProduct;
 	}
-	
+
 	public Ingredient(Ingredient ingredient) {
 		this.ammount = ingredient.ammount;
 		this.foodProduct = ingredient.foodProduct;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public float getAmmount() {
-		return ammount;
-	}
-
-	public void setAmmount(float ammount) {
-		this.ammount = ammount;
-	}
-
-	public FoodProduct getFoodProduct() {
-		return foodProduct;
-	}
-
-	public void setFoodProduct(FoodProduct foodProduct) {
-		this.foodProduct = foodProduct;
-	}
-
 	public float getCalories() {
 		return foodProduct.getNutrition().getKcal() * ammount;
 	}
-	
 
 }

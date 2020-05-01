@@ -13,8 +13,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 import com.sun.xml.fastinfoset.algorithm.IntegerEncodingAlgorithm;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "meal_dish")
 public class MealDish implements Comparable<MealDish> {
@@ -34,9 +43,6 @@ public class MealDish implements Comparable<MealDish> {
 	@Column(name = "servings")
 	private int servings;
 
-	public MealDish() {
-	}
-
 	public MealDish(Meal meal, Dish dish, int servings) {
 		this.meal = meal;
 		this.dish = dish;
@@ -48,41 +54,9 @@ public class MealDish implements Comparable<MealDish> {
 		this.dish = dish;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public Meal getMeal() {
-		return meal;
-	}
-
-	public void setMeal(Meal meal) {
-		this.meal = meal;
-	}
-
-	public Dish getDish() {
-		return dish;
-	}
-
-	public void setDish(Dish dish) {
-		this.dish = dish;
-	}
-
-	public int getServings() {
-		return servings;
-	}
-
-	public void setServings(int servings) {
-		this.servings = servings;
-	}
-
 	@Override
 	public int compareTo(MealDish o) {
-		 return Integer.compare(this.getId(), o.getId());
+		return Integer.compare(this.getId(), o.getId());
 	}
 
 }

@@ -21,7 +21,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name="food_product")
 public class FoodProduct {
@@ -45,54 +52,10 @@ public class FoodProduct {
     @MapsId
     @JoinColumn(name = "id")
 	private Nutrition nutrition;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public FoodType getFoodType() {
-		return foodType;
-	}
-
-	public void setFoodType(FoodType foodType) {
-		this.foodType = foodType;
-	}
 	
 	public FoodProduct(String name, FoodType foodType, Nutrition nutrition) {
 		this.name = name;
 		this.foodType = foodType;
-		this.nutrition = nutrition;
-	}
-	
-	public FoodProduct() {
-		
-	}
-
-	public UnitType getUnitType() {
-		return unitType;
-	}
-
-	public void setUnitType(UnitType unitType) {
-		this.unitType = unitType;
-	}
-	
-	public Nutrition getNutrition() {
-		return nutrition;
-	}
-
-	public void setNutrition(Nutrition nutrition) {
 		this.nutrition = nutrition;
 	}
 	

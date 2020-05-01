@@ -206,7 +206,7 @@ public class PlanServiceImpl implements PlanService {
 	public void addDishIngredientsToShoppingList(Meal meal, Dish dish, int servings) {
 		for (Ingredient ingredient : dish.getIngredients()) {
 			float ammount = (ingredient.getAmmount() / dish.getServings()) * servings;
-			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient.getFoodProduct(), dish, ammount, false, meal.getPlan());
+			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient.getFoodProduct(), ammount, false, dish, meal.getPlan());
 			shoppingRepository.save(shoppingItem);
 		}
 	}

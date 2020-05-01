@@ -19,11 +19,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "recipe")
-public class Recipe extends Dish{
+public class Recipe extends Dish {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -75,9 +84,6 @@ public class Recipe extends Dish{
 	@Column(name = "servings")
 	private int servings;
 
-	public Recipe() {
-	}
-	
 	public Recipe(int id, String title) {
 		this.id = id;
 		this.title = title;
@@ -86,7 +92,8 @@ public class Recipe extends Dish{
 	public Recipe(Recipe recipe) {
 		this.title = recipe.title;
 		this.description = recipe.description;
-		this.ingredients = cloneIngredients(recipe.ingredients);;
+		this.ingredients = cloneIngredients(recipe.ingredients);
+		;
 		this.preparations = clonePreparations(recipe.preparations);
 		this.mealTypes = new ArrayList<MealType>(recipe.mealTypes);
 		this.image = recipe.image;
@@ -98,115 +105,6 @@ public class Recipe extends Dish{
 		this.author = recipe.author;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	@Override
-	public String toString() {
-		return "Recipe [id=" + id + ", title=" + title + ", description=" + description + "]";
-	}
-
-	public List<Ingredient> getIngredients() {
-		return ingredients;
-	}
-
-	public void setIngredients(List<Ingredient> ingredients) {
-		this.ingredients = ingredients;
-	}
-
-	public List<Preparation> getPreparations() {
-		return preparations;
-	}
-
-	public void setPreparations(List<Preparation> preparations) {
-		this.preparations = preparations;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public List<MealType> getMealTypes() {
-		return mealTypes;
-	}
-
-	public void setMealTypes(List<MealType> mealTypes) {
-		this.mealTypes = mealTypes;
-	}
-
-	public boolean isShared() {
-		return shared;
-	}
-
-	public void setShared(boolean shared) {
-		this.shared = shared;
-	}
-
-	public boolean isInspected() {
-		return inspected;
-	}
-
-	public void setInspected(boolean inspected) {
-		this.inspected = inspected;
-	}
-
-	public User getOwner() {
-		return owner;
-	}
-
-	public void setOwner(User owner) {
-		this.owner = owner;
-	}
-
-	public void setAuthor(String author) {
-		this.author = author;
-	}
-
-	public String getAuthor() {
-		return author;
-	}
-
-	public boolean isPublished() {
-		return published;
-	}
-
-	public void setPublished(boolean published) {
-		this.published = published;
-	}
-
-	public int getServings() {
-		return servings;
-	}
-
-	public void setServings(int servings) {
-		this.servings = servings;
-	}
-
 	public float getCalories() {
 		float calories = 0;
 		for (Ingredient ingredient : ingredients) {
@@ -214,7 +112,7 @@ public class Recipe extends Dish{
 		}
 		return calories;
 	}
-	
+
 	private List<Ingredient> cloneIngredients(List<Ingredient> ingredients) {
 		List<Ingredient> copyOfIngredients = new ArrayList<Ingredient>();
 		for (Ingredient ingredient : ingredients) {
@@ -222,7 +120,7 @@ public class Recipe extends Dish{
 		}
 		return copyOfIngredients;
 	}
-	
+
 	private List<Preparation> clonePreparations(List<Preparation> preparations) {
 		List<Preparation> copyOfPreparations = new ArrayList<Preparation>();
 		for (Preparation preparation : preparations) {

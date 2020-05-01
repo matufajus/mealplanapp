@@ -10,44 +10,31 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name="preparation")
+@Table(name = "preparation")
 public class Preparation {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@Column(name="description")
+
+	@Column(name = "description")
 	private String description;
-	
-	public Preparation() {
-	}
-	
-	public Preparation(int id, String description) {
-		this.id = id;
-		this.description = description;
-	}
 
 	public Preparation(Preparation preparation) {
 		this.description = preparation.description;
 	}
-	
-	public int getId(){
-		return id;
-	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
 }
