@@ -27,7 +27,7 @@ public abstract class Dish {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "dish_id", nullable = false)
 	private List<Ingredient> ingredients;
 	

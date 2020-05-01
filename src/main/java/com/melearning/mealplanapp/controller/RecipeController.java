@@ -62,7 +62,7 @@ public class RecipeController {
 	private RecipeService recipeService;
 
 	@Autowired
-	FoodProductService foodService;
+	private FoodProductService foodService;
 	
 	@Autowired
 	private FileService fileService;
@@ -129,7 +129,7 @@ public class RecipeController {
 	public @ResponseBody ResponseEntity<Object> saveRecipe(@Valid @ModelAttribute("recipe") RecipeFormDTO recipeDTO,
 			BindingResult bindingResult, Model model) {
 		Map<String, Object> map = new HashMap<String, Object>();
-		if (bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors() && (recipeDTO.getId() != 0)) {
 			map.put("errors", bindingResult.getAllErrors());
 			return new ResponseEntity<Object>(map, HttpStatus.BAD_REQUEST);
 		} else {

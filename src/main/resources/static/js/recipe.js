@@ -129,7 +129,8 @@ $("#recipes-list-container").on("click", ".recipe-modal-link", function () {
 	    	$("#recipeModal .modal-body .modal-buttons").empty();
 	    	$.get("checkAuthorizationForRecipe",{recipeId}, function(data){
 	    		if (data == true){
-	    			$("#recipeModal .modal-buttons").append("<a class='btn btn-primary mx-1 edit-recipe-btn' data-recipe-id="+recipeId+">Redaguoti</a>");
+	    			$("#recipeModal .modal-buttons").append("<a class='btn btn-primary mx-1 edit-recipe-btn' data-recipe-id="+recipeId+">Redaguoti</a>" +
+	    					"<a class='btn btn-danger mx-1' href='/recipe/delete?recipeId="+recipeId+"'>Ištrinti</a>");
 	    		}
 	    	$.get("hasUserRole", {role: "ROLE_ADMIN"}, function(data){
 	    		if ((data == true) && (recipe.shared && !recipe.inspected)){
