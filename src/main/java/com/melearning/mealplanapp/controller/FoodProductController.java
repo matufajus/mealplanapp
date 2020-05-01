@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +23,12 @@ import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.UnitType;
 import com.melearning.mealplanapp.service.FoodProductService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
 @PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/foodProduct")
+@Slf4j
 public class FoodProductController {
 	
 	@Autowired
@@ -43,8 +47,11 @@ public class FoodProductController {
 	@PostMapping("/addFoodProduct")
 	public String addFoodProduct(@ModelAttribute("foodProduct") FoodProduct foodProduct, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			//TODO:add error message
-			return "food-products";
+			for (Object object : bindingResult.getAllErrors()) {
+				FieldError fieldError = (FieldError) object;
+				logger.error(fieldError.getCode());
+			}
+			return "redirect:/foodProduct/list";
 		}	
 		foodProductService.addFoodProduct(foodProduct);
 		return "redirect:/foodProduct/list";

@@ -114,7 +114,7 @@
 								<input type="hidden"  class="food-product-id form-control" name="ingredients[0].foodProductId"/>
 							</div>
 							<div class = "col-3">
-								<select class="food-product-unit form-control" name="ingredients[0].unit" disabled>
+								<select class="ingredient-unit form-control" name="ingredients[0].unitType">
 									<c:forEach var="unitType" items ="${unitTypes}">
 										<option value="${unitType}">${unitType.label}</option>
 									</c:forEach>

@@ -38,18 +38,24 @@ public class Ingredient {
 
 	@Column(name = "ammount")
 	private float ammount;
+	
+	@Column(name="unit_type")
+	@Enumerated(EnumType.ORDINAL)
+	private UnitType unitType;
 
 	@ManyToOne
 	@JoinColumn(name = "food_product_id")
 	private FoodProduct foodProduct;
 
-	public Ingredient(float ammount, FoodProduct foodProduct) {
+	public Ingredient(float ammount, UnitType unitType, FoodProduct foodProduct) {
 		this.ammount = ammount;
+		this.unitType = unitType;
 		this.foodProduct = foodProduct;
 	}
 
 	public Ingredient(Ingredient ingredient) {
 		this.ammount = ingredient.ammount;
+		this.unitType = ingredient.unitType;
 		this.foodProduct = ingredient.foodProduct;
 	}
 

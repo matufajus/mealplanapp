@@ -13,6 +13,7 @@ import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.SingleDishProduct;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.enumeration.MealType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
 public interface PlanService {
 
@@ -34,7 +35,7 @@ public interface PlanService {
 
 	List<Plan> getAllUserPlansUntil(long userId, LocalDate date);
 
-	public void updateShoppingItems(int planId, String ingredientName, boolean isDone);
+	public void updateShoppingItems(int planId, String ingredientName, boolean isDone, UnitType unitType);
 
 	public Map<String, List<ShoppingItemDTO>> getPreparedShoppingList(int planId);
 

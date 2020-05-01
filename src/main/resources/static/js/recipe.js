@@ -38,9 +38,8 @@ $("#add-ingredient-button").click(function(){
 	ingredient.find(".ingredient-name").val('');
 	ingredient.find(".ammount").attr("name", "ingredients["+i+"].ammount");
 	ingredient.find(".ammount").val(0);
-	ingredient.find(".food-product-unit").attr("name", "ingredients["+i+"].unit");
-	ingredient.find(".food-product-unit").append(loadUnitTypes());
-	ingredient.find(".food-product-unit").val('');
+	ingredient.find(".ingredient-unit").attr("name", "ingredients["+i+"].unitType");
+	ingredient.find(".ingredient-unit").append(loadUnitTypes());
 	ingredient.find(".ingredient-id").attr("name", "ingredients["+i+"].id");
 	ingredient.find(".ingredient-id").val(0);
 	ingredient.find(".food-product-id").attr("name", "ingredients["+i+"].foodProductId");
@@ -121,7 +120,7 @@ $("#recipes-list-container").on("click", ".recipe-modal-link", function () {
 	    	$("#recipeModal .modal-servings").html(recipe.servings);	
 	    	$("#recipeModal .modal-body .modal-ingredients").empty();
 	    	$.each(recipe.ingredients, function(i, ingredient) {
-	    		$("#recipeModal .modal-body .modal-ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ingredient.ammount +" "+ ingredient.foodProduct.unitType.label +"</p>");
+	    		$("#recipeModal .modal-body .modal-ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ingredient.ammount +" "+ ingredient.unitType.label +"</p>");
 	         });
 	    	$("#recipeModal .modal-body .modal-preparations").empty();
 	    	$.each(recipe.preparations, function(i, preparation) {
@@ -202,9 +201,9 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 			ingredient.find(".ingredient-name").val(ingr.foodProduct.name);
 			ingredient.find(".ammount").attr("name", "ingredients["+i+"].ammount");
 			ingredient.find(".ammount").val(ingr.ammount);
-			ingredient.find(".food-product-unit").attr("name", "ingredients["+i+"].unit");
-			ingredient.find(".food-product-unit").append(loadUnitTypes());
-			ingredient.find(".food-product-unit").val(ingr.foodProduct.unitType.name);
+			ingredient.find(".ingredient-unit").attr("name", "ingredients["+i+"].unitType");
+			ingredient.find(".ingredient-unit").append(loadUnitTypes());
+			ingredient.find(".ingredient-unit").val(ingr.unitType.name);
 			ingredient.find(".ingredient-id").attr("name", "ingredients["+i+"].id");
 			ingredient.find(".ingredient-id").val(ingr.id);
 			ingredient.find(".food-product-id").attr("name", "ingredients["+i+"].foodProductId");
@@ -234,7 +233,7 @@ $("#recipeModal").on("click", ".edit-recipe-btn", function(){
 				$("#recipeFormModal .preparation-container").replaceWith(preparation);
 			}
 		});
-//		$("#recipeModal").modal('toggle');
+// $("#recipeModal").modal('toggle');
 		$("#recipeFormModal").modal('show');	
 	});
 });
@@ -251,9 +250,9 @@ $(document).on('hidden.bs.modal', '.modal', function () {
 });
 
 $("#add-recipe-link").click(function (){
-	//reset form because it's using the same form for creating and editing
-	//if editing was done before there would be some info left and we need
-	//a fresh new form for adding new recipe
+	// reset form because it's using the same form for creating and editing
+	// if editing was done before there would be some info left and we need
+	// a fresh new form for adding new recipe
 	$("#recipeFormModal modal-title").html("Sukurti receptą");
 	$("#recipe-form-image").attr("src", "/recipeImages/default.png")
 	document.getElementById("recipe-form").reset();
@@ -266,12 +265,9 @@ function enableIngredientNameAutocomplete(){
 		source : '/recipe/searchProducts',
 		select: function( event, ui ) {
 	    	$.get("/recipe/getFoodProduct", {name: ui.item['value']}, function(foodProduct){
-	    		var unit = $(event.target).parents().siblings().children(".food-product-unit");
-	    		unit.val(foodProduct.unitType.name);
 	    		var foodProductId = $(event.target).parents().siblings().children(".food-product-id");
 	    		foodProductId.val(foodProduct.id);
 	    	});
-	    	
 	    },
 	    change: function(event, ui) {
 	        if (ui.item == null) {

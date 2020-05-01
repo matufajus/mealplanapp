@@ -48,7 +48,7 @@ $('input[name="dates"]').daterangepicker({
 		console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
 });
 
-//--------------------------PLAN MEALS-----------------------------------
+// --------------------------PLAN MEALS-----------------------------------
 
 $(document).ready(function() {
 	if (location.pathname.startsWith("/plan/meals")){
@@ -140,7 +140,7 @@ function loadProducts(){
 
 
 
-//switching section of recipes when choosing a recipe for a meal
+// switching section of recipes when choosing a recipe for a meal
 $(".recipes-section a").click(function(){
 	$(".recipes-section a.active").removeClass("active");
 	$(this).addClass("active");
@@ -305,20 +305,33 @@ $(document).on("click", ".open-add-product-meal-modal",  function(){
 	var productId = $(this).data('product-id');
     var mealId = $(this).data('meal-id');
     $("#editDishModal .modal-body").empty();
-    var html ="";
+    let html ="";
     $.get("/foodProduct/get",{productId}, function(product){
     	console.log(product);
     	html = "<div class='col'>" +
-//					"<div class='row'>Kalorijos:<p class='ml-3'><span id='calories'>"+product.nutrition.calories+"</span> kcal</p></div>"+
-					"<div class='row'><span class='mx-2'>Kiekis: </span><input type='number' id='food-product-ammount' step='0.25' value='1'> "+product.unitType.label+"</div>"+
+// "<div class='row'>Kalorijos:<p class='ml-3'><span
+// id='calories'>"+product.nutrition.calories+"</span> kcal</p></div>"+
+					"<div class='row'><span class='mx-2'>Kiekis: </span>" +
+						"<input type='number' id='ingredient-ammount' step='0.25' value='1'>" +
+						"<select id='ingredient-unit'>"+
+						"</select>"+
+						"</div>"+
 					"<div class='row mt-2' id='buttons'></div>"+
 				"</div>";
         $("#editDishModal .modal-body").append(html);     
     	$("#editDishModal .modal-title").text(product.name);
     	$("#editDishModal .modal-body #buttons").append("<a class='add-product-to-meal btn btn-success' data-product-id="+productId+">Pridėti prie plano</a>");
+    	 html = "";
+    	 $.get("/recipe/getUnitTypes", function(unitTypes){	
+    		 $.each(unitTypes, function(i, unitType) {
+    	    		html += "<option value="+unitType.name+">"+unitType.label+"</option>";
+    	         }); 
+    		 $("#ingredient-unit").append(html);
+    	 });
     	$('#editDishModal').modal("show");
 	})
 });
+	
 
 
 $(document).on("click", ".add-recipe-to-meal", function() {
@@ -335,13 +348,14 @@ $(document).on("click", ".add-recipe-to-meal", function() {
 
 $(document).on("click", ".add-product-to-meal", function() {
 	let foodProductId = $(this).data("product-id");
-	let ammount = $("#food-product-ammount").val();
+	let ammount = $("#ingredient-ammount").val();
+	let unitType = $("#ingredient-unit").val();
 	let date = $("#dishes-container").data("date");
 	let mealType = $("#dishes-container").data("meal-type");
 	let servings = 1;
 	let planId = $("#plan-id").val();
 	
-	$.post("/plan/addDish", {foodProductId, ammount, date, mealType, servings, planId}, function(){
+	$.post("/plan/addDish", {foodProductId, ammount, unitType, date, mealType, servings, planId}, function(){
 		location.reload();
 	});
 });
@@ -388,7 +402,7 @@ function printPlan()
         location.reload();
 }
 
-//-----------------------Shopping List--------------------------------------------------
+// -----------------------Shopping List-----------------------------
 
 function loadShoppingItems(){
 	 $("#shopping-items").empty();
@@ -399,12 +413,12 @@ function loadShoppingItems(){
 				 let html = "<div>"+i;
 				 $.each(foodType, function(i, shoppingItem){
 					 html = html + "<div class='shopping-item' data-plan='"+planId+"' data-name='"+shoppingItem.name+"'" +
-					 		" data-done='"+shoppingItem.done+"'>";
+					 		"data-units='"+shoppingItem.unitType.name+"'  data-done='"+shoppingItem.done+"'>";
 					 if(!shoppingItem.done)
 						html = html + "<img class='icon-sm check-item mr-1 unchecked' src='/images/rectangular.svg'>";
 					 if(shoppingItem.done)
 							html = html + "<img class='icon-sm check-item mr-1 checked' src='/images/rectangular-checked.svg'>";
-					 html = html + shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.units+"</div>";
+					 html = html + shoppingItem.name + ": " + shoppingItem.ammount + " " + shoppingItem.unitType.label+"</div>";
 				 })
 				 html = html + "<hr/></div>";
 				 $("#shopping-items").append(html);
@@ -440,7 +454,8 @@ $("#shopping-list-container").on("click", ".check-item", function(){
 	let planId = $(this).parent("div").data("plan");
 	let name = $(this).parent("div").data("name");
 	let done = $(this).parent("div").data("done");
-	$.post("/plan/updateShoppingItem",{planId: planId, ingredientName: name, isDone: done}, function(){
+	let units = $(this).parent("div").data("units");
+	$.post("/plan/updateShoppingItem",{planId: planId, ingredientName: name, isDone: done, units: units}, function(){
 		item.toggleClass("checked");
 		item.toggleClass("unchecked");
 		if (item.hasClass("checked")){
@@ -460,7 +475,7 @@ function checkKitchenProducts(){
 	$.get("/kitchen/getUserProducts", function(products){
 		$.each(products, function(i, product){
 			$.each(shoppingList, function(j, item){
-				//TODO: add checking if product.ammount > shoppingItem.ammount
+				// TODO: add checking if product.ammount > shoppingItem.ammount
 				if (product.foodProduct.name == $(item).data("name")){
 					$(item).children("img").toggleClass("checked");
 					$(item).children("img").toggleClass("unchecked");

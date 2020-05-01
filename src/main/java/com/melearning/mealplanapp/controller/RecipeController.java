@@ -49,9 +49,11 @@ import com.melearning.mealplanapp.service.FoodProductService;
 import com.melearning.mealplanapp.service.RecipeService;
 import com.melearning.mealplanapp.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.description.field.FieldDescription.InGenericShape;
 import net.bytebuddy.utility.RandomString;
 
+@Slf4j
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -121,18 +123,6 @@ public class RecipeController {
 		recipe.setPublished(false);
 		recipeService.save(recipe);
 		return "redirect:/recipe/sharedList";
-	}
-
-	@GetMapping("/showForm")
-	public String showFormForAdd(Model model) {
-		RecipeFormDTO recipeDTO = new RecipeFormDTO();
-		recipeDTO.setShared(true);
-		if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
-			recipeDTO.setInspected(true);
-			recipeDTO.setPublished(true);
-		}
-		model.addAttribute("recipe", recipeDTO);
-		return "recipe-form";
 	}
 
 	@PostMapping("/saveRecipe")
@@ -214,7 +204,7 @@ public class RecipeController {
 
 	private Recipe convertToEntity(RecipeFormDTO recipeDTO) {
 		Recipe recipe = mapper.map(recipeDTO, Recipe.class);
-		recipe.setOwner(userService.findByUsername(recipeDTO.getOwner()));		
+		recipe.setOwner(userService.findByUsername(recipeDTO.getOwner()));	
 		recipe.setIngredients(convertToEntityList(recipeDTO.getIngredients()));
 		return recipe;
 	}
@@ -222,10 +212,8 @@ public class RecipeController {
 	private List<Ingredient> convertToEntityList(List<IngredientDTO> ingredientDTOs){
 		List<Ingredient> ingredients = new ArrayList<Ingredient>();
 		for (IngredientDTO ingredientDTO : ingredientDTOs) {
-			Ingredient ingredient = new Ingredient();
-			ingredient.setAmmount(ingredientDTO.getAmmount());
 			FoodProduct foodProduct = foodService.getFoodProduct(ingredientDTO.getFoodProductId());
-			ingredient.setFoodProduct(foodProduct);
+			Ingredient ingredient = new Ingredient(ingredientDTO.getAmmount(), ingredientDTO.getUnitType(), foodProduct);
 			ingredients.add(ingredient);
 		}
 		return ingredients;

@@ -31,20 +31,12 @@ public class ShoppingItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToOne
-	@JoinColumn(name = "foodProduct_id")
-	private FoodProduct foodProduct;
-
-	@JoinColumn(name = "ammount")
-	private float ammount;
+	@ManyToOne
+	@JoinColumn(name = "ingredient_id")
+	private Ingredient ingredient;
 
 	@Column(name = "is_done")
 	private boolean done;
-
-	@JsonIgnore
-	@ManyToOne
-	@JoinColumn(name = "dish_id")
-	private Dish dish;
 
 	@JsonIgnore
 	@ManyToOne

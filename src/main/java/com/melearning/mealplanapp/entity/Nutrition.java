@@ -34,18 +34,18 @@ public class Nutrition {
 	private int id;
 
 	@Column(name = "kcal")
-	private Integer kcal;
+	private float kcal;
 
 	@Column(name = "protein")
-	private Integer protein;
+	private float protein;
 
 	@Column(name = "carbs")
-	private Integer carbs;
+	private float carbs;
 
 	@Column(name = "fat")
-	private Integer fat;
+	private float fat;
 
-	public Nutrition(Integer kcal, Integer protein, Integer carbs, Integer fat) {
+	public Nutrition(float kcal, float protein, float carbs, float fat) {
 		this.kcal = kcal;
 		this.protein = protein;
 		this.carbs = carbs;

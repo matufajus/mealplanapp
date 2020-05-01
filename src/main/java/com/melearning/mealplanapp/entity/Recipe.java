@@ -47,10 +47,6 @@ public class Recipe extends Dish {
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "recipe_id", nullable = false)
-	private List<Ingredient> ingredients;
-
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "recipe_id", nullable = false)
 	private List<Preparation> preparations;
 
 	@ElementCollection(targetClass = MealType.class)
@@ -92,9 +88,8 @@ public class Recipe extends Dish {
 	public Recipe(Recipe recipe) {
 		this.title = recipe.title;
 		this.description = recipe.description;
-		this.ingredients = cloneIngredients(recipe.ingredients);
-		;
-		this.preparations = clonePreparations(recipe.preparations);
+		cloneIngredients(recipe.getIngredients());
+		clonePreparations(recipe.getPreparations());
 		this.mealTypes = new ArrayList<MealType>(recipe.mealTypes);
 		this.image = recipe.image;
 		this.owner = recipe.owner;
@@ -105,28 +100,20 @@ public class Recipe extends Dish {
 		this.author = recipe.author;
 	}
 
-	public float getCalories() {
-		float calories = 0;
-		for (Ingredient ingredient : ingredients) {
-			calories = calories + ingredient.getCalories();
-		}
-		return calories;
-	}
-
-	private List<Ingredient> cloneIngredients(List<Ingredient> ingredients) {
+	private void cloneIngredients(List<Ingredient> ingredients) {
 		List<Ingredient> copyOfIngredients = new ArrayList<Ingredient>();
 		for (Ingredient ingredient : ingredients) {
 			copyOfIngredients.add(new Ingredient(ingredient));
 		}
-		return copyOfIngredients;
+		this.setIngredients(copyOfIngredients);
 	}
 
-	private List<Preparation> clonePreparations(List<Preparation> preparations) {
+	private void clonePreparations(List<Preparation> preparations) {
 		List<Preparation> copyOfPreparations = new ArrayList<Preparation>();
 		for (Preparation preparation : preparations) {
 			copyOfPreparations.add(new Preparation(preparation));
 		}
-		return copyOfPreparations;
+		this.setPreparations(copyOfPreparations);
 	}
 
 }

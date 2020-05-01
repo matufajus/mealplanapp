@@ -39,6 +39,7 @@ import com.melearning.mealplanapp.dto.RecipeFormDTO;
 import com.melearning.mealplanapp.dto.ShoppingItemDTO;
 import com.melearning.mealplanapp.entity.Dish;
 import com.melearning.mealplanapp.entity.FoodProduct;
+import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.Meal;
 import com.melearning.mealplanapp.entity.MealDish;
 import com.melearning.mealplanapp.entity.Plan;
@@ -48,6 +49,7 @@ import com.melearning.mealplanapp.entity.SingleDishProduct;
 import com.melearning.mealplanapp.entity.User;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.MealType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 import com.melearning.mealplanapp.exception.DuplicateDishInMealException;
 import com.melearning.mealplanapp.exception.OverlappingPlanDatesExceptions;
 import com.melearning.mealplanapp.service.FoodProductService;
@@ -71,7 +73,7 @@ public class PlanController {
 
 	@Autowired
 	PlanService planService;
-	
+
 	@Autowired
 	FoodProductService foodProductService;
 
@@ -132,26 +134,30 @@ public class PlanController {
 	}
 
 	@PostMapping("/addDish")
-	public String addDishToMeal(Integer recipeId, Integer foodProductId,  Float ammount, String date, String mealType, int servings, int planId, RedirectAttributes redirectAttrs) {
-		MealType type = MealType.valueOf(mealType);
+	public String addDishToMeal(Integer recipeId, Integer foodProductId, Float ammount, String unitType, String date,
+			String mealType, int servings, int planId, RedirectAttributes redirectAttrs) {
+		MealType mealTypeVal = MealType.valueOf(mealType);
 		LocalDate mealDate = LocalDate.parse(date);
 		// get meal if exists by plan id, date and mealType
-		Meal meal = planService.getMeal(planId, mealDate, type);
+		Meal meal = planService.getMeal(planId, mealDate, mealTypeVal);
 		// if meal doesn't exist create new
 		if (meal == null) {
 			Plan plan = planService.getPlanById(planId);
-			meal = new Meal(0, new ArrayList<MealDish>(), type, mealDate, plan);
+			meal = new Meal(0, new ArrayList<MealDish>(), mealTypeVal, mealDate, plan);
 		}
 		try {
 			if (recipeId != null) {
 				Dish dish = recipeService.findById(recipeId);
 				planService.addDishToMeal(meal, dish, servings);
-			}else if (foodProductId != null) {
+			} else if (foodProductId != null) {
+				UnitType ingrUnitType = UnitType.valueOf(unitType);
 				FoodProduct foodProduct = foodProductService.getFoodProduct(foodProductId);
-				SingleDishProduct dish = new SingleDishProduct(0 , foodProduct, ammount);
+				Ingredient ingredient = new Ingredient(ammount, ingrUnitType, foodProduct);
+				SingleDishProduct dish = new SingleDishProduct();
+				dish.setIngredient(ingredient);
 				planService.saveSingleDish(dish);
 				planService.addDishToMeal(meal, dish, servings);
-			}	
+			}
 		} catch (DuplicateDishInMealException e) {
 			logger.warn("User already has this dish in meal the same date and same type");
 			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
@@ -169,7 +175,7 @@ public class PlanController {
 		Plan plan = planService.getPlanByMealId(mealId);
 		return "redirect:/plan/meals?id=" + plan.getId();
 	}
-	
+
 	@GetMapping("/removeSingleDish")
 	public String removeSingleDish(@RequestParam("mealId") int mealId, @RequestParam("singleDishId") int singleDishId) {
 		Meal meal = planService.getMeal(mealId);
@@ -184,14 +190,15 @@ public class PlanController {
 	public @ResponseBody Meal getMeal(@RequestParam("mealId") int id) {
 		return planService.getMeal(id);
 	}
-	
+
 	@GetMapping("/getSingleDish")
 	public @ResponseBody SingleDishProduct getSingleDish(@RequestParam("productId") int id) {
 		return planService.getSingleDishProduct(id);
 	}
-	
+
 	@GetMapping("/getMealDishServings")
-	public @ResponseBody int getMealDish(@RequestParam("mealId") int mealId, @RequestParam("recipeId") Integer recipeId) {
+	public @ResponseBody int getMealDish(@RequestParam("mealId") int mealId,
+			@RequestParam("recipeId") Integer recipeId) {
 		Meal meal = planService.getMeal(mealId);
 		Recipe recipe = recipeService.findById(recipeId);
 		return meal.findMealDish(recipe).getServings();
@@ -214,8 +221,8 @@ public class PlanController {
 
 	@PostMapping("/updateShoppingItem")
 	public @ResponseBody String updateShoppingItem(@RequestParam int planId, @RequestParam String ingredientName,
-			@RequestParam boolean isDone) {
-		planService.updateShoppingItems(planId, ingredientName, isDone);
+			@RequestParam boolean isDone, @RequestParam String units) {
+		planService.updateShoppingItems(planId, ingredientName, isDone, UnitType.valueOf(units));
 		return "updated";
 	}
 

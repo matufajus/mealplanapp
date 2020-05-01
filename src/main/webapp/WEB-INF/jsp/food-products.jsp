@@ -19,7 +19,7 @@
 		      <th scope="col">#</th>
 		      <th scope="col">Pavadinimas</th>
 		       <th scope="col">Kategorija</th>
-		      <th scope="col">Vienetai</th>
+		      <th scope="col">Tankis (g/ml)</th>
 		      <th scope="col">Kalorijos</th>
 		      <th scope="col">Baltymai</th>
 		      <th scope="col">Riebalai</th>
@@ -33,7 +33,7 @@
 					<th>${status.index+1 }</th>
 					<td>${product.name} </td>
 					<td>${product.foodType.label}</td>
-					<td>${product.unitType.label}</td>
+					<td>${product.density}</td>
 					<td>${product.nutrition.kcal}</td>
 					<td>${product.nutrition.protein}</td>
 					<td>${product.nutrition.fat}</td>
@@ -63,18 +63,16 @@
       			<form:select class="form-control" path="foodType" required="true">
 				    <form:options items="${foodTypes}" itemLabel="label" />
 				</form:select>
-				Vienetai:
-				<form:select class="form-control" path="unitType" required="true">
-				    <form:options items="${unitTypes}" itemLabel="label" />
-				</form:select>
+				Tankis (g/ml):
+				<form:input type="number" class="form-control" min="0" step="0.01" path="density" required="true"/>
 				Kalorijos:
-				<form:input type="number" class="form-control" min="0" step="1" path="nutrition.kcal" required="true"/>
+				<form:input type="number" class="form-control" min="0" step="0.1" path="nutrition.kcal" required="true"/>
 				Baltymai:
-				<form:input type="number" class="form-control" min="0" step="1" path="nutrition.protein"/>
+				<form:input type="number" class="form-control" min="0" step="0.1" path="nutrition.protein"/>
 				Riebalai:
-				<form:input type="number" class="form-control" min="0" step="1" path="nutrition.fat"/>
+				<form:input type="number" class="form-control" min="0" step="0.1" path="nutrition.fat"/>
 				Angliavandeniai:
-				<form:input type="number" class="form-control" min="0" step="1" path="nutrition.carbs"/>
+				<form:input type="number" class="form-control" min="0" step="0.1" path="nutrition.carbs"/>
 				<form:button class="btn btn-primary"  type="submit">Išsaugoti</form:button>
   				<button type="button" class="btn btn-secondary" data-dismiss="modal">Atšaukti</button>
 	      	</form:form>	       

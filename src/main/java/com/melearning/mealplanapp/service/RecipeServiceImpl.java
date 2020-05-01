@@ -51,9 +51,6 @@ public class RecipeServiceImpl implements RecipeService {
 	UserRepository userRepository;
 	
 	@Autowired
-	UserService userService;
-	
-	@Autowired
 	ModelMapper mapper;
 
 	Logger logger = LoggerFactory.getLogger(getClass());
@@ -85,18 +82,6 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public void save(Recipe recipe) {
 		// for new recipe set user as author and owner
-		if (recipe.getId() == 0) {
-			User user = userService.getCurrentUser();
-			recipe.setAuthor(user.getUsername());
-			recipe.setOwner(user);
-			if (recipe.getImage() == null) {
-				recipe.setImage("/recipeImages/default.png");
-			}
-			if (userService.hasCurrentUserRole("ROLE_ADMIN")) {
-				recipe.setInspected(true);
-				recipe.setPublished(true);
-			}
-		}
 		recipeRepository.save(recipe);
 	}
 
