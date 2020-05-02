@@ -42,7 +42,7 @@
 						${plan.title} 
 					</td>
 					<td>${plan.startDate} - ${plan.endDate}</td>
-					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.averageCaloriesPerDay}"/></td> 
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getKcal()}"/></td> 
 				</tr>
 			</c:forEach>
 		  </tbody>

@@ -213,7 +213,7 @@ public class RecipeController {
 		List<Ingredient> ingredients = new ArrayList<Ingredient>();
 		for (IngredientDTO ingredientDTO : ingredientDTOs) {
 			FoodProduct foodProduct = foodService.getFoodProduct(ingredientDTO.getFoodProductId());
-			Ingredient ingredient = new Ingredient(ingredientDTO.getAmmount(), ingredientDTO.getUnitType(), foodProduct);
+			Ingredient ingredient = new Ingredient(ingredientDTO.getId(), ingredientDTO.getAmmount(), ingredientDTO.getUnitType(), foodProduct);
 			ingredients.add(ingredient);
 		}
 		return ingredients;

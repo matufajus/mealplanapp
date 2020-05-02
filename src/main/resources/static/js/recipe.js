@@ -6,28 +6,28 @@ $( "#ingredient-container" ).on("click", ".remove-ingredient", function() {
 });
 
 $( "#ingredient-container" ).on("mouseover", ".remove-ingredient", function() {
-	$(this).siblings().children("input").css("border", "3px solid #ced4da");
+	$(this).parent().siblings().children().css("border", "3px solid #ced4da");
 });
 
 $( "#ingredient-container" ).on("mouseout", ".remove-ingredient", function() {
-	$(this).siblings().children("input").css("border", "1px solid #ced4da");
+	$(this).parent().siblings().children().css("border", "1px solid #ced4da");
 });
 
 $( "#preparation-container" ).on("mouseover", ".remove-preparation", function() {
-	$(this).siblings("textarea").css("border", "3px solid #ced4da");
+	$(this).parent().siblings("textarea").css("border", "3px solid #ced4da");
 });
 
 $( "#preparation-container" ).on("mouseout", ".remove-preparation", function() {
-	$(this).siblings("textarea").css("border", "1px solid #ced4da");
+	$(this).parent().siblings("textarea").css("border", "1px solid #ced4da");
 });
 
 $( "#preparation-container" ).on("click", ".remove-preparation", function() {
-	var indexes = $(this).parent().nextAll().find("p.preparation-index");
+	var indexes = $(this).parent().parent().nextAll().find("p.preparation-index");
 	indexes.each(function(){
 		var id = $(this).text() - 1;
 		$(this).text(id);
 	});
-	$(this).parent().remove();
+	$(this).parent().parent().remove();
 });
 
 $("#add-ingredient-button").click(function(){
@@ -171,6 +171,7 @@ $("#recipeFormModal form").submit(function(event){
 });
 
 $("#recipeModal").on("click", ".edit-recipe-btn", function(){
+	document.getElementById("recipe-form").reset();
 	$("#recipeFormModal .ingredient-container.remove-after").remove();
 	$("#recipeFormModal .preparation-container.remove-after").remove();
 	let recipeId = $(this).data("recipe-id");	

@@ -72,16 +72,31 @@ public class Plan {
 				.collect(Collectors.toList());
 	}
 
-	public float getCalories() {
-		float calories = 0;
+	public Nutrition getNutritionForPlan() {
+		float kcal = 0;
+		float carbs = 0;
+		float fat = 0;
+		float protein = 0;
 		for (Meal meal : meals) {
-			calories = calories + meal.getCalories();
+			Nutrition nutrition = meal.getNutritionForMeal();
+			kcal = kcal + nutrition.getKcal();
+			carbs = carbs + nutrition.getCarbs();
+			fat = fat + nutrition.getFat();
+			protein = protein + nutrition.getProtein();
 		}
-		return calories;
+		return new Nutrition(kcal, protein, carbs, fat);
 	}
 
-	public float getAverageCaloriesPerDay() {
-		return getCalories() / getDuration();
+	public Nutrition getAverageNutritionPerDay() {
+		float kcal = 0;
+		float carbs = 0;
+		float fat = 0;
+		float protein = 0;
+		kcal = kcal + this.getNutritionForPlan().getKcal();
+		carbs = carbs + this.getNutritionForPlan().getCarbs();
+		fat = fat + this.getNutritionForPlan().getFat();
+		protein = protein + this.getNutritionForPlan().getProtein();
+	return new Nutrition(kcal, protein, carbs, fat);	
 	}
 
 }

@@ -13,6 +13,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,20 +37,23 @@ public class FoodProduct {
 	@Enumerated(EnumType.ORDINAL)
 	private FoodType foodType;
 
-//	g/cm^3=g/ml 
-	@Column(name = "density")
-	private float density;
-
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@MapsId
 	@JoinColumn(name = "id")
 	private Nutrition nutrition;
 
-	public FoodProduct(String name, FoodType foodType, float density, Nutrition nutrition) {
+	public FoodProduct(String name, FoodType foodType, Nutrition nutrition) {
 		this.name = name;
 		this.foodType = foodType;
-		this.density = density;
 		this.nutrition = nutrition;
 	}
+	
+	public Nutrition getNutritionPerUnitType(UnitType unitType) {
+		return this.getNutrition().getNutritionPerUnitType(unitType);
+	}
+	
+	
+	
+	
 
 }

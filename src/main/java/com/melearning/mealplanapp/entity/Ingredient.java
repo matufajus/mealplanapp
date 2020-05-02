@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "ingredient")
 public class Ingredient {
@@ -47,20 +49,19 @@ public class Ingredient {
 	@JoinColumn(name = "food_product_id")
 	private FoodProduct foodProduct;
 
-	public Ingredient(float ammount, UnitType unitType, FoodProduct foodProduct) {
-		this.ammount = ammount;
-		this.unitType = unitType;
-		this.foodProduct = foodProduct;
-	}
-
 	public Ingredient(Ingredient ingredient) {
 		this.ammount = ingredient.ammount;
 		this.unitType = ingredient.unitType;
 		this.foodProduct = ingredient.foodProduct;
 	}
 
-	public float getCalories() {
-		return foodProduct.getNutrition().getKcal() * ammount;
+	public Nutrition getNutritionForIngredient() {
+		Nutrition nutrition = foodProduct.getNutritionPerUnitType(unitType);
+		nutrition.setKcal(nutrition.getKcal() * ammount);
+		nutrition.setCarbs(nutrition.getCarbs() * ammount);
+		nutrition.setFat(nutrition.getFat() * ammount);
+		nutrition.setProtein(nutrition.getProtein() * ammount);
+		return nutrition;
 	}
 
 }

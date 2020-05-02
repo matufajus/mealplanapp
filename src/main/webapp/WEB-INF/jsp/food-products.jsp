@@ -33,7 +33,7 @@
 					<th>${status.index+1 }</th>
 					<td>${product.name} </td>
 					<td>${product.foodType.label}</td>
-					<td>${product.density}</td>
+					<td>${product.nutrition.density}</td>
 					<td>${product.nutrition.kcal}</td>
 					<td>${product.nutrition.protein}</td>
 					<td>${product.nutrition.fat}</td>
@@ -64,7 +64,7 @@
 				    <form:options items="${foodTypes}" itemLabel="label" />
 				</form:select>
 				Tankis (g/ml):
-				<form:input type="number" class="form-control" min="0" step="0.01" path="density" required="true"/>
+				<form:input type="number" class="form-control" min="0" step="0.01" path="nutrition.density" required="true"/>
 				Kalorijos:
 				<form:input type="number" class="form-control" min="0" step="0.1" path="nutrition.kcal" required="true"/>
 				Baltymai:

@@ -122,7 +122,7 @@
 							</div>
 							<input class="ingredient-id" type="hidden" name="ingredients[0].id" value="0"/>
 							<div class = "col-1 remove-ingredient-btn">
-								<a class ="remove-ingredient d-none"></a><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
+								<a class ="remove-ingredient d-none"><img class="icon-m mr-2" src="/images/minus-black.svg"></a>
 							</div>
 						</div>
 					<div id ="add-ingredient-container"></div>

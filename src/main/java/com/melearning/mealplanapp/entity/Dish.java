@@ -31,12 +31,19 @@ public abstract class Dish {
 	@JoinColumn(name = "dish_id", nullable = false)
 	private List<Ingredient> ingredients;
 	
-	public float getCalories() {
-		float calories = 0;
+	public Nutrition getNutritionForDish() {
+		float kcal = 0;
+		float carbs = 0;
+		float fat = 0;
+		float protein = 0;
 		for (Ingredient ingredient : ingredients) {
-			calories = calories + ingredient.getCalories();
+			Nutrition nutrition = ingredient.getNutritionForIngredient();
+			kcal = kcal + nutrition.getKcal();
+			carbs = carbs + nutrition.getCarbs();
+			fat = fat + nutrition.getFat();
+			protein = protein + nutrition.getProtein();
 		}
-		return calories;
+		return new Nutrition(kcal, protein, carbs, fat);
 	}
 	
 	public abstract String getTitle();

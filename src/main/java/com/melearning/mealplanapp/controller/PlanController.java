@@ -152,7 +152,7 @@ public class PlanController {
 			} else if (foodProductId != null) {
 				UnitType ingrUnitType = UnitType.valueOf(unitType);
 				FoodProduct foodProduct = foodProductService.getFoodProduct(foodProductId);
-				Ingredient ingredient = new Ingredient(ammount, ingrUnitType, foodProduct);
+				Ingredient ingredient = new Ingredient(0, ammount, ingrUnitType, foodProduct);
 				SingleDishProduct dish = new SingleDishProduct();
 				dish.setIngredient(ingredient);
 				planService.saveSingleDish(dish);
@@ -193,7 +193,9 @@ public class PlanController {
 
 	@GetMapping("/getSingleDish")
 	public @ResponseBody SingleDishProduct getSingleDish(@RequestParam("productId") int id) {
-		return planService.getSingleDishProduct(id);
+		SingleDishProduct singleDish = planService.getSingleDishProduct(id);
+		singleDish.getIngredients().size();
+		return singleDish;
 	}
 
 	@GetMapping("/getMealDishServings")

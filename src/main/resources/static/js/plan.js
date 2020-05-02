@@ -214,14 +214,15 @@ $("#plan").on("click", ".open-edit-recipe-modal", function(){
     	$.get("/plan/getMealDishServings", {mealId, recipeId}, function(servings){
     		if (recipe.description == null)
     			recipe.description="-";
-    		let calories = recipe.calories / recipe.servings * servings;
+    		console.log(recipe);
+    		let calories = recipe.nutritionForDish.kcal / recipe.servings * servings;
 			html = "<div class='row'>" +
 					"<div class='col-4'>"+
 						"<img class='modal-img' src='"+recipe.image+"'>"+
 					"</div>"+
 					"<div class='col-8'>"+
 						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
-						"<div class='row'>Kalorijos:<p class='ml-3'>"+calories+" kcal</p></div>"+
+						"<div class='row'>Kalorijos:<p class='ml-3'>"+calories.toFixed(2)+" kcal</p></div>"+
 						"<div class='row'>Porcijos: "+servings+"</div>"+
 						"<div class='row mt-2' id='buttons'></div>"+
 					"</div>"+
@@ -252,12 +253,13 @@ $(document).on("click", ".open-edit-single-dish-modal",  function(){
     $("#editDishModal .modal-body").empty();
     var html ="";
     $.get("/plan/getSingleDish",{productId}, function(dish){
+    	console.log(dish);
     	html = "<div class='col'>" +
-					"<div class='row'><span class='mx-2'>Kiekis: </span>"+ dish.ammount +" "+dish.foodProduct.unitType.label+"</div>"+
+					"<div class='row'><span class='mx-2'>Kiekis: </span>"+ dish.ingredients[0].ammount +" "+dish.ingredients[0].unitType.label+"</div>"+
 					"<div class='row mt-2' id='buttons'></div>"+
 				"</div>";
         $("#editDishModal .modal-body").append(html);     
-    	$("#editDishModal .modal-title").text(dish.foodProduct.name);
+    	$("#editDishModal .modal-title").text(dish.ingredients[0].foodProduct.name);
 		$("#editDishModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/removeSingleDish?mealId="+mealId+"&singleDishId="+dish.id+"'>Pašalinti iš plano</a>");	
     	$('#editDishModal').modal("show");
 	})
@@ -271,13 +273,14 @@ $(document).on("click", ".open-add-recipe-meal-modal",  function(){
     $.get("/recipe/getRecipe",{recipeId}, function(recipe){
     	if (recipe.description == null)
 			recipe.description="-";
+    	console.log(recipe);
     	html = "<div class='row'>" +
     				"<div class='col-4'>"+
 						"<img class='modal-img' src='"+recipe.image+"'>"+
 					"</div>"+
 					"<div class='col-8'>"+
 						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
-						"<div class='row'>Kalorijos:<p class='ml-3'><span id='calories'>"+recipe.calories+"</span> kcal</p></div>"+
+						"<div class='row'>Kalorijos:<p class='ml-3'><span id='calories'>"+recipe.nutritionForDish.kcal.toFixed(2)+"</span> kcal</p></div>"+
     					"<div class='row'>Porcijos:<input type='number' id='numberOfServings' min='1' max='100' value='"+recipe.servings+"' " +
     							"data-servings='"+recipe.servings+"'></div>"+
     					"<div class='row mt-2' id='buttons'></div>"+
@@ -291,7 +294,7 @@ $(document).on("click", ".open-add-recipe-meal-modal",  function(){
     	$("#editDishModal .modal-title").text(recipe.title);
     	$.each(recipe.ingredients, function(i, ingredient) {
     		$("#editDishModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": " +
-    				"<span class='ingredient-ammount'>"+ ingredient.ammount +"</span></p>");
+    				"<span class='ingredient-ammount'>"+ ingredient.ammount.toFixed(2) +"</span> "+ingredient.unitType.label+"</p>");
          });
     	$.each(recipe.preparations, function(i, preparation) {
     		$("#editDishModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
@@ -363,16 +366,16 @@ $(document).on("click", ".add-product-to-meal", function() {
 function changeIngredientsAmmounts(oldServings, newServings){
 	$(".ingredient-ammount").each(function(i, ingredient){
 		let newAmmount = (parseFloat($(ingredient).text()) / oldServings) * newServings;
-		$(ingredient).text(newAmmount);
+		$(ingredient).text(newAmmount.toFixed(2));
 	});
 }
 
 function changeCalories(oldServings, newServings){
 	let newCalories = (parseFloat($("#calories").text()) / oldServings) * newServings;
-	$("#calories").text(newCalories);
+	$("#calories").text(newCalories.toFixed(2));
 }
 
-$("#addDishModal").on("change", "#numberOfServings", function(){
+$("#editDishModal").on("change", "#numberOfServings", function(){
 	let newServings = $(this).val();
 	let oldServings= $(this).data("servings");
 	$(this).data("servings", newServings);
@@ -380,7 +383,7 @@ $("#addDishModal").on("change", "#numberOfServings", function(){
 	changeCalories(oldServings, newServings);
 })
 
-$('#addDishModal').on('hidden.bs.modal', function () {
+$('#editDishModal').on('hidden.bs.modal', function () {
 	$('#chooseMealComponentModal').modal("show");
 });
 
