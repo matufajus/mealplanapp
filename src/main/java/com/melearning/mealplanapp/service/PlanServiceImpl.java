@@ -24,6 +24,7 @@ import com.melearning.mealplanapp.entity.Dish;
 import com.melearning.mealplanapp.entity.FoodProduct;
 import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.Meal;
+import com.melearning.mealplanapp.entity.MealDish;
 import com.melearning.mealplanapp.entity.Plan;
 import com.melearning.mealplanapp.entity.Recipe;
 import com.melearning.mealplanapp.entity.ShoppingItem;
@@ -106,7 +107,6 @@ public class PlanServiceImpl implements PlanService {
 	@Override
 	public void removeDishFromMeal(Meal meal, Dish dish) {
 		meal.removeDish(dish);
-		removeDishIngredientsFromShoppingList(meal, dish);
 		mealRepository.save(meal);
 	}
 
@@ -169,7 +169,12 @@ public class PlanServiceImpl implements PlanService {
 		// group by foodType
 		for (ShoppingItem item : shoppingItems) {
 			String name = item.getIngredient().getFoodProduct().getName();
-			float ammount = item.getIngredient().getAmmount();
+			MealDish mealDish = item.getMealDish();
+			// calculate amount by ingredient amount in recipe divided by recipe servings
+			// and multiplied by dish servings in a meal
+			float ammount = (item.getIngredient().getAmmount() / mealDish.getDish().getServings())
+					* mealDish.getServings();
+			;
 			UnitType units = item.getIngredient().getUnitType();
 			boolean isDone = item.isDone();
 			FoodType foodType = item.getIngredient().getFoodProduct().getFoodType();
@@ -210,17 +215,10 @@ public class PlanServiceImpl implements PlanService {
 	}
 
 	public void addDishIngredientsToShoppingList(Meal meal, Dish dish, int servings) {
+		MealDish mealdish = meal.findMealDish(dish);
 		for (Ingredient ingredient : dish.getIngredients()) {
-			float ammount = (ingredient.getAmmount() / dish.getServings()) * servings;
-			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient, false, meal.getPlan());
+			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient, false, mealdish, meal.getPlan());
 			shoppingRepository.save(shoppingItem);
-		}
-	}
-
-	public void removeDishIngredientsFromShoppingList(Meal meal, Dish dish) {
-		for (Ingredient ingredient : dish.getIngredients()) {
-			shoppingRepository.deleteByPlanIdAndIngredientId(meal.getPlan().getId(),
-					ingredient.getFoodProduct().getId());
 		}
 	}
 

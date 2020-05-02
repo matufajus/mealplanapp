@@ -37,6 +37,10 @@ public class ShoppingItem {
 
 	@Column(name = "is_done")
 	private boolean done;
+	
+	@ManyToOne
+	@JoinColumn(name = "meal_dish_id")
+	private MealDish mealDish;
 
 	@JsonIgnore
 	@ManyToOne
