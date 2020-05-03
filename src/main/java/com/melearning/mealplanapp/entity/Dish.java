@@ -19,18 +19,20 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name="dish")
+@Table(name = "dish")
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Dish {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-	
+	private int id;
+
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "dish_id", nullable = false)
 	private List<Ingredient> ingredients;
-	
+
+	// nutrition for dish is calculated for servings provided in recipe(just adding
+	// nutrition of ingredients)
 	public Nutrition getNutritionForDish() {
 		float kcal = 0;
 		float carbs = 0;
@@ -45,9 +47,9 @@ public abstract class Dish {
 		}
 		return new Nutrition(kcal, protein, carbs, fat);
 	}
-	
+
 	public abstract String getTitle();
-	
+
 	public abstract int getServings();
-	
+
 }

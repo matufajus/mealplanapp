@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.melearning.mealplanapp.enumeration.FoodType;
 import com.melearning.mealplanapp.enumeration.UnitType;
 import com.sun.xml.fastinfoset.algorithm.IntegerEncodingAlgorithm;
@@ -34,10 +35,12 @@ public class MealDish implements Comparable<MealDish> {
 
 	@ManyToOne
 	@JoinColumn(name = "meal_id")
+	@JsonIgnore
 	private Meal meal;
 
 	@ManyToOne
 	@JoinColumn(name = "dish_id")
+	@JsonIgnore
 	private Dish dish;
 
 	@Column(name = "servings")
@@ -57,6 +60,17 @@ public class MealDish implements Comparable<MealDish> {
 	@Override
 	public int compareTo(MealDish o) {
 		return Integer.compare(this.getId(), o.getId());
+	}
+	
+	public Nutrition getNutritionForMealDish() {
+		Nutrition nutrition = getDish().getNutritionForDish();
+		//ratio between servings for meal dish and recipe servings  
+		float ratio =  (float)this.getServings() / (float)this.getDish().getServings();
+		float kcal = nutrition.getKcal() * ratio;
+		float carbs = nutrition.getCarbs() * ratio;
+		float fat = nutrition.getFat() * ratio;
+		float protein = nutrition.getProtein() * ratio;
+		return new Nutrition(kcal, protein, carbs, fat);
 	}
 
 }

@@ -194,7 +194,6 @@ function showPageNumbers(n, current){
 		}else{
 			html += "<li class='page-item'><a class='page-link'>"+(parseInt(i)+1)+"</a></li>"
 		}
-		
 	}
 	nav.append(html);
 }
@@ -204,163 +203,43 @@ $("#pagination-nav").on("click", ".page-link", function() {
 	loadRecipes(page, 16);
 })
 
-
-$("#plan").on("click", ".open-edit-recipe-modal", function(){
-	var recipeId = $(this).data('dish-id');
-    var mealId = $(this).data('meal-id');
-    $("#editDishModal .modal-body").empty();
-    var html ="";
-    $.get("/recipe/getRecipe",{recipeId}, function(recipe){
-    	$.get("/plan/getMealDishServings", {mealId, recipeId}, function(servings){
-    		if (recipe.description == null)
-    			recipe.description="-";
-    		console.log(recipe);
-    		let calories = recipe.nutritionForDish.kcal / recipe.servings * servings;
-			html = "<div class='row'>" +
-					"<div class='col-4'>"+
-						"<img class='modal-img' src='"+recipe.image+"'>"+
-					"</div>"+
-					"<div class='col-8'>"+
-						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
-						"<div class='row'>Kalorijos:<p class='ml-3'>"+calories.toFixed(2)+" kcal</p></div>"+
-						"<div class='row'>Porcijos: "+servings+"</div>"+
-						"<div class='row mt-2' id='buttons'></div>"+
-					"</div>"+
-				"</div>"+
-				"<div class='row'>" +
-		    		"<div class='col' id='ingredients'>Reikės:</div>"+    
-		    		"<div class='col' id='preparations'>Paruošimo būdas:</div>"+  
-				"</div>";
-		$("#editDishModal .modal-body").append(html);       
-		$("#editDishModal .modal-title").text(recipe.title);    	    	
-		$.each(recipe.ingredients, function(i, ingredient) {
-			let ammount = (ingredient.ammount / recipe.servings) * servings;
-			$("#editDishModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ammount +"</p>");
-		 });
-		$.each(recipe.preparations, function(i, preparation) {
-			$("#editDishModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
-		 });   	 	
-		$("#editDishModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/removeRecipe?mealId="+mealId+"&recipeId="+recipe.id+"'>Pašalinti iš plano</a>");	
-		})
-		$('#editDishModal').modal("show");
-    });
-    	
-});
-
-$(document).on("click", ".open-edit-single-dish-modal",  function(){
-	var productId = $(this).data('dish-id');
-    var mealId = $(this).data('meal-id');
-    $("#editDishModal .modal-body").empty();
-    var html ="";
-    $.get("/plan/getSingleDish",{productId}, function(dish){
-    	console.log(dish);
-    	html = "<div class='col'>" +
-					"<div class='row'><span class='mx-2'>Kiekis: </span>"+ dish.ingredients[0].ammount +" "+dish.ingredients[0].unitType.label+"</div>"+
-					"<div class='row mt-2' id='buttons'></div>"+
-				"</div>";
-        $("#editDishModal .modal-body").append(html);     
-    	$("#editDishModal .modal-title").text(dish.ingredients[0].foodProduct.name);
-		$("#editDishModal .modal-body #buttons").append("<a class='btn btn-danger' href='/plan/removeSingleDish?mealId="+mealId+"&singleDishId="+dish.id+"'>Pašalinti iš plano</a>");	
-    	$('#editDishModal').modal("show");
-	})
-});
-
+//open modal to add RECIPE to meal plan
 $(document).on("click", ".open-add-recipe-meal-modal",  function(){
-	var recipeId = $(this).data('recipe-id');
-    var mealId = $(this).data('meal-id');
-    $("#editDishModal .modal-body").empty();
-    var html ="";
+	let recipeId = $(this).data('recipe-id');
+    let mealId = $(this).data('meal-id');
+	 //clear preparations, ingredients and buttons containers
+    $("#recipeDishModal .modal-body #preparations").empty();
+    $("#recipeDishModal .modal-body #ingredients").empty();
     $.get("/recipe/getRecipe",{recipeId}, function(recipe){
-    	if (recipe.description == null)
-			recipe.description="-";
-    	console.log(recipe);
-    	html = "<div class='row'>" +
-    				"<div class='col-4'>"+
-						"<img class='modal-img' src='"+recipe.image+"'>"+
-					"</div>"+
-					"<div class='col-8'>"+
-						"<div class='row'>Aprašymas:<p class='ml-3'>"+recipe.description+"</p></div>"+
-						"<div class='row'>Kalorijos:<p class='ml-3'><span id='calories'>"+recipe.nutritionForDish.kcal.toFixed(2)+"</span> kcal</p></div>"+
-    					"<div class='row'>Porcijos:<input type='number' id='numberOfServings' min='1' max='100' value='"+recipe.servings+"' " +
-    							"data-servings='"+recipe.servings+"'></div>"+
-    					"<div class='row mt-2' id='buttons'></div>"+
-					"</div>"+
-				"</div>"+
-	    		"<div class='row'>" +
-		    		"<div class='col' id='ingredients'>Reikės:</div>"+    
-		    		"<div class='col' id='preparations'>Paruošimo būdas:</div>"+  
-	    		"</div>";
-        $("#editDishModal .modal-body").append(html);     
-    	$("#editDishModal .modal-title").text(recipe.title);
+    	//set title, image, servings, description
+		$("#recipeDishModal .modal-title").text(recipe.title);  
+		$("#recipeDishModal .modal-img").attr("src", recipe.image);
+		if (recipe.description != null)
+			$("#recipeDishModal #description span").html(recipe.description);
+		//enable input for servings
+		$("#recipeDishModal #servings input").attr('disabled', false);
+		$("#recipeDishModal #servings input").val(recipe.servings);
+		$("#recipeDishModal #servings input").data('servings', recipe.servings);
+		//set nutrition
+		$("#recipeDishModal #kcal span").html(recipe.nutritionForDish.kcal.toFixed(2));
+		$("#recipeDishModal #carbs span").html(recipe.nutritionForDish.carbs.toFixed(2));
+		$("#recipeDishModal #protein span").html(recipe.nutritionForDish.protein.toFixed(2));
+		$("#recipeDishModal #fat span").html(recipe.nutritionForDish.fat.toFixed(2)); 
+		//add ingredients and preparations   
     	$.each(recipe.ingredients, function(i, ingredient) {
-    		$("#editDishModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name + ": " +
-    				"<span class='ingredient-ammount'>"+ ingredient.ammount.toFixed(2) +"</span> "+ingredient.unitType.label+"</p>");
+    		$("#recipeDishModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name +
+    				": " + "<span class='ingredient-ammount'>"+ ingredient.ammount.toFixed(2) +"</span> "+ingredient.unitType.label+"</p>");
          });
     	$.each(recipe.preparations, function(i, preparation) {
-    		$("#editDishModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
-         });   	
-    	$("#editDishModal .modal-body #buttons").append("<a class='add-recipe-to-meal btn btn-success' data-recipe-id="+recipeId+">Pridėti prie plano</a>");
-    	$('#editDishModal').modal("show");
+    		$("#recipeDishModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
+         }); 
+    	//set buttons
+		$("#recipeDishModal .modal-body #buttons .remove").addClass('d-none');
+		$("#recipeDishModal .modal-body #buttons .add").removeClass('d-none');
+    	$("#recipeDishModal .modal-body #buttons .add").data("recipe-id", recipe.id);
+    	//show modal
+    	$('#recipeDishModal').modal("show");
 	})
-});
-
-$(document).on("click", ".open-add-product-meal-modal",  function(){
-	var productId = $(this).data('product-id');
-    var mealId = $(this).data('meal-id');
-    $("#editDishModal .modal-body").empty();
-    let html ="";
-    $.get("/foodProduct/get",{productId}, function(product){
-    	console.log(product);
-    	html = "<div class='col'>" +
-// "<div class='row'>Kalorijos:<p class='ml-3'><span
-// id='calories'>"+product.nutrition.calories+"</span> kcal</p></div>"+
-					"<div class='row'><span class='mx-2'>Kiekis: </span>" +
-						"<input type='number' id='ingredient-ammount' step='0.25' value='1'>" +
-						"<select id='ingredient-unit'>"+
-						"</select>"+
-						"</div>"+
-					"<div class='row mt-2' id='buttons'></div>"+
-				"</div>";
-        $("#editDishModal .modal-body").append(html);     
-    	$("#editDishModal .modal-title").text(product.name);
-    	$("#editDishModal .modal-body #buttons").append("<a class='add-product-to-meal btn btn-success' data-product-id="+productId+">Pridėti prie plano</a>");
-    	 html = "";
-    	 $.get("/recipe/getUnitTypes", function(unitTypes){	
-    		 $.each(unitTypes, function(i, unitType) {
-    	    		html += "<option value="+unitType.name+">"+unitType.label+"</option>";
-    	         }); 
-    		 $("#ingredient-unit").append(html);
-    	 });
-    	$('#editDishModal').modal("show");
-	})
-});
-	
-
-
-$(document).on("click", ".add-recipe-to-meal", function() {
-	let recipeId = $(this).data("recipe-id");
-	let date = $("#dishes-container").data("date");
-	let mealType = $("#dishes-container").data("meal-type");
-	let servings = $("#numberOfServings").val();
-	let planId = $("#plan-id").val()
-	
-	$.post("/plan/addDish", {recipeId, date, mealType, servings, planId}, function(){
-		location.reload();
-	});
-});
-
-$(document).on("click", ".add-product-to-meal", function() {
-	let foodProductId = $(this).data("product-id");
-	let ammount = $("#ingredient-ammount").val();
-	let unitType = $("#ingredient-unit").val();
-	let date = $("#dishes-container").data("date");
-	let mealType = $("#dishes-container").data("meal-type");
-	let servings = 1;
-	let planId = $("#plan-id").val();
-	
-	$.post("/plan/addDish", {foodProductId, ammount, unitType, date, mealType, servings, planId}, function(){
-		location.reload();
-	});
 });
 
 function changeIngredientsAmmounts(oldServings, newServings){
@@ -370,20 +249,149 @@ function changeIngredientsAmmounts(oldServings, newServings){
 	});
 }
 
-function changeCalories(oldServings, newServings){
-	let newCalories = (parseFloat($("#calories").text()) / oldServings) * newServings;
-	$("#calories").text(newCalories.toFixed(2));
+function changeNutrition(oldServings, newServings){
+	let kcal = (parseFloat($("#recipeDishModal #kcal span").text()) / oldServings) * newServings;
+	let protein = (parseFloat($("#recipeDishModal #protein span").text()) / oldServings) * newServings;
+	let fat = (parseFloat($("#recipeDishModal #fat span").text()) / oldServings) * newServings;
+	let carbs = (parseFloat($("#recipeDishModal #carbs span").text()) / oldServings) * newServings;
+	$("#recipeDishModal #kcal span").text(kcal.toFixed(2));
+	$("#recipeDishModal #protein span").text(protein.toFixed(2));
+	$("#recipeDishModal #fat span").text(fat.toFixed(2));
+	$("#recipeDishModal #carbs span").text(carbs.toFixed(2));
 }
 
-$("#editDishModal").on("change", "#numberOfServings", function(){
+$("#recipeDishModal").on("change", "#servingsInput", function(){
 	let newServings = $(this).val();
 	let oldServings= $(this).data("servings");
 	$(this).data("servings", newServings);
 	changeIngredientsAmmounts(oldServings, newServings);
-	changeCalories(oldServings, newServings);
+	changeNutrition(oldServings, newServings);
 })
 
-$('#editDishModal').on('hidden.bs.modal', function () {
+//open modal for editing(for now just deleting) RECIPE
+$("#plan").on("click", ".open-edit-recipe-modal", function(){
+	let recipeId = $(this).data('dish-id');
+    let mealId = $(this).data('meal-id');
+    //clear preparations, ingredients
+    $("#recipeDishModal .modal-body #preparations").empty();
+    $("#recipeDishModal .modal-body #ingredients").empty();
+    
+    $.get("/recipe/getRecipe",{recipeId}, function(recipe){
+    	$.get("/plan/getMealDish", {mealId, recipeId}, function(mealDish){
+        	//set title, image, description
+    		$("#recipeDishModal .modal-title").text(recipe.title);  
+    		$("#recipeDishModal .modal-img").attr("src", recipe.image);
+    		if (recipe.description != null)
+    			$("#recipeDishModal #description span").html(recipe.description);
+    		//show and disable input for servings
+    		$("#recipeDishModal #servings input").val(mealDish.servings);  
+    		$("#recipeDishModal #servings input").attr('disabled', true);
+    		//set nutrition
+    		$("#recipeDishModal #kcal span").html(mealDish.nutritionForMealDish.kcal.toFixed(2));
+    		$("#recipeDishModal #carbs span").html(mealDish.nutritionForMealDish.carbs.toFixed(2));
+    		$("#recipeDishModal #protein span").html(mealDish.nutritionForMealDish.protein.toFixed(2));
+    		$("#recipeDishModal #fat span").html(mealDish.nutritionForMealDish.fat.toFixed(2));  
+  	    	//add ingredients and preparations
+			$.each(recipe.ingredients, function(i, ingredient) {
+				let ammount = (ingredient.ammount / recipe.servings) * mealDish.servings;
+				$("#recipeDishModal .modal-body #ingredients").append("<p>"+ ingredient.foodProduct.name +
+						": "+ ammount.toFixed(2) +" "+ingredient.unitType.label+"</p>");
+			 });
+			$.each(recipe.preparations, function(i, preparation) {
+				$("#recipeDishModal .modal-body #preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
+			 });   
+			//set buttons
+			$("#recipeDishModal .modal-body #buttons .remove").removeClass('d-none');
+			$("#recipeDishModal .modal-body #buttons .add").addClass('d-none');
+			$("#recipeDishModal .modal-body #buttons .remove").attr("href", '/plan/removeRecipe?mealId='+mealId+'&recipeId='+recipe.id);
+		})
+		//show modal
+		$('#recipeDishModal').modal("show");
+    });
+    	
+});
+
+//open modal to add SINGLE dish to meal plan
+$(document).on("click", ".open-add-product-meal-modal",  function(){
+	var productId = $(this).data('product-id');
+    var mealId = $(this).data('meal-id');
+    $.get("/foodProduct/getWithNutrition",{productId}, function(product){
+    	console.log(product);
+    	$("#singleDishModal .modal-title").text(product.name);
+    	//enable input for amount and unit type of the ingriedient/food product
+    	$("#singleDishModal #amount input").attr('disabled', false);
+    	$("#singleDishModal #amount select").attr('disabled', false);
+    	//set nutrition for 100g
+    	$("#singleDishModal #nutrition #label").html("(100g)");
+		$("#singleDishModal #kcal span").html(product.nutrition.kcal.toFixed(2));
+		$("#singleDishModal #carbs span").html(product.nutrition.carbs.toFixed(2));
+		$("#singleDishModal #protein span").html(product.nutrition.protein.toFixed(2));
+		$("#singleDishModal #fat span").html(product.nutrition.fat.toFixed(2));   
+    	//set buttons
+    	$("#singleDishModal .modal-body #buttons .remove").addClass('d-none');
+		$("#singleDishModal .modal-body #buttons .add").removeClass('d-none');
+    	$("#singleDishModal .modal-body #buttons .add").data("product-id", product.id);
+    	//show modal
+    	$('#singleDishModal').modal("show");
+	})
+});
+	
+
+//open modal for editing(for now just deleting) SINGLE dish
+$(document).on("click", ".open-edit-single-dish-modal",  function(){
+	var productId = $(this).data('dish-id');
+    var mealId = $(this).data('meal-id');
+    //get single dish info
+    $.get("/plan/getSingleDish",{productId}, function(dish){
+    	//set title, amount
+    	$("#singleDishModal .modal-title").text(dish.ingredients[0].foodProduct.name);
+		$("#singleDishModal #amount input").val(dish.ingredients[0].ammount);
+		$("#singleDishModal #amount span").html(dish.ingredients[0].unitType.label);   
+		$("#singleDishModal #amount input").attr('disabled', true);
+		$("#singleDishModal #amount select").attr('disabled', true);
+		//set nutrition for meal dish
+		$("#singleDishModal #nutrition #label").html("(pasirinkto kiekio)");
+		$("#singleDishModal #kcal span").html(dish.nutritionForDish.kcal.toFixed(2));
+		$("#singleDishModal #carbs span").html(dish.nutritionForDish.carbs.toFixed(2));
+		$("#singleDishModal #protein span").html(dish.nutritionForDish.protein.toFixed(2));
+		$("#singleDishModal #fat span").html(dish.nutritionForDish.fat.toFixed(2));   
+		//set buttons
+		$("#singleDishModal .modal-body #buttons .remove").removeClass('d-none');
+		$("#singleDishModal .modal-body #buttons .add").addClass('d-none');
+		$("#singleDishModal .modal-body #buttons .remove").attr("href", '/plan/removeSingleDish?mealId='+mealId+'&singleDishId='+dish.id);
+		//show modal
+		$('#singleDishModal').modal("show");
+	})
+});
+
+
+//send RECIPE dish data to be added to the plan
+$(document).on("click", "#recipeDishModal .add", function() {
+	let date = $("#dishes-container").data("date");
+	let mealType = $("#dishes-container").data("meal-type");
+	let planId = $("#plan-id").val();
+	let recipeId = $(this).data("recipe-id");	
+	let servings = $("#servingsInput").val();
+	$.post("/plan/addDish", {recipeId, date, mealType, servings, planId}, function(){
+		location.reload();
+	});
+});
+
+//send SINGLE dish data to be added to the plan
+$(document).on("click", "#singleDishModal .add", function() {
+	let date = $("#dishes-container").data("date");
+	let mealType = $("#dishes-container").data("meal-type");
+	let planId = $("#plan-id").val();
+	let foodProductId = $(this).data("product-id");
+	let ammount = $("#amountInput").val();
+	let unitType = $("#unitInput").val();
+	let servings = 1;
+	$.post("/plan/addDish", {foodProductId, ammount, unitType, date, mealType, servings, planId}, function(){
+		location.reload();
+	});
+});
+
+$('.dish-modal').on('hidden.bs.modal', function () {
 	$('#chooseMealComponentModal').modal("show");
 });
 

@@ -108,6 +108,7 @@ public class PlanController {
 		}
 		model.addAttribute("planStyle", user.getPlanStyle());
 		model.addAttribute("mealTypes", MealType.values());
+		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("plan", plan);
 		return "plan-meals";
 	}
@@ -199,11 +200,19 @@ public class PlanController {
 	}
 
 	@GetMapping("/getMealDishServings")
-	public @ResponseBody int getMealDish(@RequestParam("mealId") int mealId,
+	public @ResponseBody int getMealDishServings(@RequestParam("mealId") int mealId,
 			@RequestParam("recipeId") Integer recipeId) {
 		Meal meal = planService.getMeal(mealId);
 		Recipe recipe = recipeService.findById(recipeId);
 		return meal.findMealDish(recipe).getServings();
+	}
+	
+	@GetMapping("/getMealDish")
+	public @ResponseBody MealDish getMealDish(@RequestParam("mealId") int mealId,
+			@RequestParam("recipeId") Integer recipeId) {
+		Meal meal = planService.getMeal(mealId);
+		Recipe recipe = recipeService.findById(recipeId);
+		return meal.findMealDish(recipe);
 	}
 
 	@GetMapping("/getMealsForToday")

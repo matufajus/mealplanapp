@@ -75,7 +75,7 @@
 	
 	<!-- Modals -->
 		
-	<div class="modal" id="chooseDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal dish-modal" id="chooseDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -103,8 +103,8 @@
 	    </div>
 	  </div>
 	</div>
-	
-	<div class="modal fade" id="addDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		
+	<div class="modal dish-modal" id="recipeDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -114,13 +114,55 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	      	 
+	      	 <div class='row'>
+	      	 	<div class='col-4'>
+	      	 		<img class='modal-img'>
+      	 		</div>
+      	 		<div class='col-8'>
+						<div id='description' class='row my-2'>
+							<div class="col">
+								Aprašymas:<span class='ml-3'></span>
+							</div>
+						</div>
+						<div id='servings' class='row my-2'>
+							<div class="col">
+								Porcijos: <input type='number' id='servingsInput' min='1' max='100' class='ml-3'></input>
+								<span class='ml-3'></span>
+							</div>
+						</div>
+						<div id="nutrition" class='row my-2'>
+							<div class="col-4">Maistingumas:</div>
+							<div class="col">
+								<div id='kcal' class = "row">
+									Kalorijos: <span class='mx-3'></span> kcal
+								</div>
+								<div id='protein' class = "row">
+									Baltymai: <span class='mx-3'></span> g
+								</div>
+								<div id='fat' class = "row">
+									Riebalai: <span class='mx-3'></span> g
+								</div>
+								<div id='carbs' class = "row">
+									Angliavandeniai: <span class='mx-3'></span> g
+								</div>
+							</div>
+						</div>
+						<div id='buttons' class='row m-2'>
+							<a class='remove btn btn-danger'>Pašalinti iš plano</a>
+							<a class='add btn btn-success'>Pridėti prie plano</a>
+						</div>
+					</div>
+				</div>
+				<div class='row'>
+		    		<div class='col' id='ingredients'></div>
+		    		<div class='col' id='preparations'></div> 
+				</div>
 	      </div>
 	    </div>
 	  </div>
 	</div>
-		
-	<div class="modal" id="editDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	
+	<div class="modal" id="singleDishModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	  <div class="modal-dialog modal-lg" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
@@ -130,7 +172,41 @@
 	        </button>
 	      </div>
 	      <div class="modal-body">
-	      	 
+	      	 <div class='row'>
+      	 		<div class='col-8'>
+						<div id='amount' class='row my-2'>
+							<div class="col">
+								Kiekis: <input type='number' id='amountInput' step='0.25' value='1' class='ml-3'></input>
+								<select id="unitInput">
+									<c:forEach var='unitType' items="${unitTypes}">
+										<option value="${unitType.name}">${unitType.label}</option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
+						<div id="nutrition" class='row my-2'>
+							<div class="col-4">Maistingumas: <span id="label"></span></div>
+							<div class="col">
+								<div id='kcal' class = "row">
+									Kalorijos: <span class='mx-3'></span> kcal
+								</div>
+								<div id='protein' class = "row">
+									Baltymai: <span class='mx-3'></span> g
+								</div>
+								<div id='fat' class = "row">
+									Riebalai: <span class='mx-3'></span> g
+								</div>
+								<div id='carbs' class = "row">
+									Angliavandeniai: <span class='mx-3'></span> g
+								</div>
+							</div>
+						</div>
+						<div id='buttons' class='row m-2'>
+							<a class='remove btn btn-danger'>Pašalinti iš plano</a>
+							<a class='add btn btn-success'>Pridėti prie plano</a>
+						</div>
+					</div>
+				</div>
 	      </div>
 	    </div>
 	  </div>

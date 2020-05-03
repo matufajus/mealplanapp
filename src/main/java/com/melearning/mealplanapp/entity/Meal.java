@@ -67,11 +67,11 @@ public class Meal {
 		float fat = 0;
 		float protein = 0;
 		for (MealDish mealDish : mealDishes) {
-			Nutrition nutrition = mealDish.getDish().getNutritionForDish();
-			kcal = kcal + (nutrition.getKcal() / mealDish.getDish().getServings()) * mealDish.getServings();
-			carbs = carbs + (nutrition.getCarbs() / mealDish.getDish().getServings()) * mealDish.getServings();
-			fat = fat + (nutrition.getFat() / mealDish.getDish().getServings()) * mealDish.getServings();
-			protein = protein + (nutrition.getProtein() / mealDish.getDish().getServings()) * mealDish.getServings();
+			Nutrition nutrition = mealDish.getNutritionForMealDish();
+			kcal = kcal + nutrition.getKcal();
+			carbs = carbs + nutrition.getCarbs();
+			fat = fat + nutrition.getFat();
+			protein = protein + nutrition.getProtein();
 		}
 		return new Nutrition(kcal, protein, carbs, fat);
 	}

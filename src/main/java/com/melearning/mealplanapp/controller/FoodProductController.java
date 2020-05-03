@@ -73,6 +73,13 @@ public class FoodProductController {
 		return foodProductService.getFoodProduct(id);
 	}
 	
+	@GetMapping("/getWithNutrition")
+	public @ResponseBody FoodProduct getFoodProductNotLazy(@RequestParam(name="productId") int id) {
+		FoodProduct foodProduct = foodProductService.getFoodProduct(id);
+		foodProduct.getNutrition().getKcal();
+		return foodProduct;
+	}
+	
 	
 
 }
