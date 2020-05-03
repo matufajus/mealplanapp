@@ -142,6 +142,9 @@ public class RecipeController {
 					recipeDTO.setImage("/recipeImages/default.png");
 				}
 			}
+			//delete removed/empty ingredients and preparations
+			recipeDTO.getIngredients().removeIf(i -> i.getAmmount() == 0);
+			recipeDTO.getPreparations().removeIf(i -> i.getDescription() == null);
 			Recipe recipe = convertToEntity(recipeDTO);
 			// for new recipe set user as author and owner
 			if (recipe.getId() == 0) {

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.melearning.mealplanapp.dao.DishRepository;
 import com.melearning.mealplanapp.dao.FoodProductRepository;
 import com.melearning.mealplanapp.dao.MealRepository;
 import com.melearning.mealplanapp.dao.PlanRepository;
@@ -53,6 +54,9 @@ public class PlanServiceImpl implements PlanService {
 
 	@Autowired
 	SingleDishProductRepository singleDishProductRepository;
+	
+	@Autowired
+	DishRepository dishRepository;
 
 	Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -148,7 +152,9 @@ public class PlanServiceImpl implements PlanService {
 
 	@Override
 	public void deleteSingleDish(SingleDishProduct singleDishProduct) {
-		singleDishProductRepository.delete(singleDishProduct);
+		//using dish repository because of orphanRemovals=true for ingredients in Dish(parent) class
+		//so ingredients would be also removed when deleting dish and avoid: Hibernate AssertionFailure: collection owner not associated with session..
+		dishRepository.delete(singleDishProduct);
 	};
 
 	// --------------SHOPPING LIST-------------

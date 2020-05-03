@@ -2,7 +2,7 @@
 //------------------------------------RECIPE MODALS-------------------------------------
 
 $( "#ingredient-container" ).on("click", ".remove-ingredient", function() {
-	$(this).parent().remove();
+	$(this).parent().parent().remove();
 });
 
 $( "#ingredient-container" ).on("mouseover", ".remove-ingredient", function() {

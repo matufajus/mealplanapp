@@ -198,14 +198,6 @@ public class PlanController {
 		singleDish.getIngredients().size();
 		return singleDish;
 	}
-
-	@GetMapping("/getMealDishServings")
-	public @ResponseBody int getMealDishServings(@RequestParam("mealId") int mealId,
-			@RequestParam("recipeId") Integer recipeId) {
-		Meal meal = planService.getMeal(mealId);
-		Recipe recipe = recipeService.findById(recipeId);
-		return meal.findMealDish(recipe).getServings();
-	}
 	
 	@GetMapping("/getMealDish")
 	public @ResponseBody MealDish getMealDish(@RequestParam("mealId") int mealId,

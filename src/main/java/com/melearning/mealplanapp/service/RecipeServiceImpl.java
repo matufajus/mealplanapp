@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.melearning.mealplanapp.dao.DishRepository;
 import com.melearning.mealplanapp.dao.FoodProductRepository;
 import com.melearning.mealplanapp.dao.IngredientRepository;
 import com.melearning.mealplanapp.dao.RecipeRepository;
@@ -49,6 +50,9 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	DishRepository dishRepository;
 	
 	@Autowired
 	ModelMapper mapper;
@@ -81,13 +85,14 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	public void save(Recipe recipe) {
-		// for new recipe set user as author and owner
 		recipeRepository.save(recipe);
 	}
 
 	@Override
 	public void deleteById(int id) {
-		recipeRepository.deleteById(id);
+		//using dish repository because of orphanRemovals=true for ingredients in Dish(parent) class
+		//so ingredients would be also removed when deleting dish and avoid: Hibernate AssertionFailure: collection owner not associated with session..
+		dishRepository.deleteById(id);
 	}
 
 	@Override
