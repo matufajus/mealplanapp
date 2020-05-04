@@ -1,5 +1,7 @@
 package com.melearning.mealplanapp.entity;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -92,5 +94,34 @@ public class Nutrition {
 		nutrition.setFat(this.getFat() * conversionCoeff);
 		return nutrition;
 	}
+	
+	public static Nutrition sumNutritions(List<Nutrition> nutritions) {
+		float kcal = 0, carbs = 0, fat = 0, protein = 0;
+		for (Nutrition nutrition : nutritions) {
+			kcal = kcal + nutrition.getKcal();
+			carbs = carbs + nutrition.getCarbs();
+			fat = fat + nutrition.getFat();
+			protein = protein + nutrition.getProtein();
+		}
+		return new Nutrition(kcal, protein, carbs, fat);
+	}
+	
+	public static Nutrition multiplyNutritionsByFloat(Nutrition nutrition, float arg) {
+		nutrition.setKcal(nutrition.getKcal() * arg);
+		nutrition.setCarbs(nutrition.getCarbs() * arg);
+		nutrition.setFat(nutrition.getFat() * arg);
+		nutrition.setProtein(nutrition.getProtein() * arg);
+		return nutrition;
+	}
+	
+	public static Nutrition divideNutritionsByLong(Nutrition nutrition, long arg) {
+		nutrition.setKcal(nutrition.getKcal() / arg);
+		nutrition.setCarbs(nutrition.getCarbs() / arg);
+		nutrition.setFat(nutrition.getFat() / arg);
+		nutrition.setProtein(nutrition.getProtein() / arg);
+		return nutrition;
+	}
+	
+	
 
 }

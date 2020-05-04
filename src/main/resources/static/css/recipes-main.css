@@ -590,3 +590,7 @@ ul.ui-autocomplete {
 	background-color:grey;
 	cursor: pointer;
 }
+
+#plan #nutritionInfo{
+	font-size: 50%;
+}

@@ -63,14 +63,9 @@ public class MealDish implements Comparable<MealDish> {
 	}
 	
 	public Nutrition getNutritionForMealDish() {
-		Nutrition nutrition = getDish().getNutritionForDish();
 		//ratio between servings for meal dish and recipe servings  
 		float ratio =  (float)this.getServings() / (float)this.getDish().getServings();
-		float kcal = nutrition.getKcal() * ratio;
-		float carbs = nutrition.getCarbs() * ratio;
-		float fat = nutrition.getFat() * ratio;
-		float protein = nutrition.getProtein() * ratio;
-		return new Nutrition(kcal, protein, carbs, fat);
+		return Nutrition.multiplyNutritionsByFloat(getDish().getNutritionForDish(), ratio);
 	}
 
 }

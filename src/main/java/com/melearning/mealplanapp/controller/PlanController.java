@@ -110,6 +110,7 @@ public class PlanController {
 		model.addAttribute("mealTypes", MealType.values());
 		model.addAttribute("unitTypes", UnitType.values());
 		model.addAttribute("plan", plan);
+		model.addAttribute("dailyNutrition", plan.getIndividualDatesNutrition());
 		return "plan-meals";
 	}
 

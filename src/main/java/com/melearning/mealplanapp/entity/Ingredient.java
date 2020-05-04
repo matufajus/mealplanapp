@@ -56,12 +56,7 @@ public class Ingredient {
 	}
 
 	public Nutrition getNutritionForIngredient() {
-		Nutrition nutrition = foodProduct.getNutritionPerUnitType(unitType);
-		nutrition.setKcal(nutrition.getKcal() * ammount);
-		nutrition.setCarbs(nutrition.getCarbs() * ammount);
-		nutrition.setFat(nutrition.getFat() * ammount);
-		nutrition.setProtein(nutrition.getProtein() * ammount);
-		return nutrition;
+		return Nutrition.multiplyNutritionsByFloat(foodProduct.getNutritionPerUnitType(unitType), ammount);
 	}
 
 }

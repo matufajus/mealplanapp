@@ -13,7 +13,7 @@
 </head>
 <body>
 	<%@ include file="navbar.jsp"%>
-	<div id="plan-container" class="container-fluid top-container blue-bg">		
+	<div id="plan-container" class="container-fluid top-container">		
 		<div class="row">
 			<div class="col">
 				<div class="link-to-settings m-4">

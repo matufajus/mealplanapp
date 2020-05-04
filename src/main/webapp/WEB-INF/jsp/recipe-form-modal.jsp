@@ -91,7 +91,7 @@
 			  </div>
 			  <div class="row">
 			  	<div id="ingredient-container" class ="col-md-8 col-lg-6">
-			  	  <label for="ingredients">Ingredientai</label>
+			  	  <label for="ingredients">Ingredientai</label><br> <span class="alert alert-warning d-none">Įveskite ir pasirinkite iš sąrašo</span>
 			  	  <div class="row">
 			  	  	<div class="col-5">
 			  	  		Pavadinimas

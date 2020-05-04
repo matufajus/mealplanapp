@@ -2,6 +2,7 @@ package com.melearning.mealplanapp.entity;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -73,30 +74,25 @@ public class Plan {
 	}
 
 	public Nutrition getNutritionForPlan() {
-		float kcal = 0;
-		float carbs = 0;
-		float fat = 0;
-		float protein = 0;
-		for (Meal meal : meals) {
-			Nutrition nutrition = meal.getNutritionForMeal();
-			kcal = kcal + nutrition.getKcal();
-			carbs = carbs + nutrition.getCarbs();
-			fat = fat + nutrition.getFat();
-			protein = protein + nutrition.getProtein();
-		}
-		return new Nutrition(kcal, protein, carbs, fat);
+		List<Nutrition> nutritions = meals.stream().map(i -> i.getNutritionForMeal())
+				.collect(Collectors.toList());
+		return Nutrition.sumNutritions(nutritions);
 	}
 
 	public Nutrition getAverageNutritionPerDay() {
-		float kcal = 0;
-		float carbs = 0;
-		float fat = 0;
-		float protein = 0;
-		kcal = kcal + this.getNutritionForPlan().getKcal();
-		carbs = carbs + this.getNutritionForPlan().getCarbs();
-		fat = fat + this.getNutritionForPlan().getFat();
-		protein = protein + this.getNutritionForPlan().getProtein();
-	return new Nutrition(kcal, protein, carbs, fat);	
+		return Nutrition.divideNutritionsByLong(this.getNutritionForPlan(), getDuration());	
 	}
+	
+	public HashMap<LocalDate, Nutrition> getIndividualDatesNutrition(){
+		HashMap<LocalDate, Nutrition> nutritionOfDays = new HashMap<LocalDate, Nutrition>();
+		for (LocalDate date : getDates()) {
+			List<Meal> mealsForDate = meals.stream().filter(m -> m.getDate().equals(date)).collect(Collectors.toList());
+			List<Nutrition> nutritionOfMeals = mealsForDate.stream().map(m -> m.getNutritionForMeal()).collect(Collectors.toList());
+			Nutrition nutrition = Nutrition.sumNutritions(nutritionOfMeals);
+			nutritionOfDays.put(date, nutrition);
+		}
+		return nutritionOfDays;
+	}
+	
 
 }

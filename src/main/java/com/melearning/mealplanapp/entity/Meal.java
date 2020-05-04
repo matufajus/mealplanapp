@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,18 +63,9 @@ public class Meal {
 	private Plan plan;
 
 	public Nutrition getNutritionForMeal() {
-		float kcal = 0;
-		float carbs = 0;
-		float fat = 0;
-		float protein = 0;
-		for (MealDish mealDish : mealDishes) {
-			Nutrition nutrition = mealDish.getNutritionForMealDish();
-			kcal = kcal + nutrition.getKcal();
-			carbs = carbs + nutrition.getCarbs();
-			fat = fat + nutrition.getFat();
-			protein = protein + nutrition.getProtein();
-		}
-		return new Nutrition(kcal, protein, carbs, fat);
+		List<Nutrition> nutritions = mealDishes.stream().map(i -> i.getNutritionForMealDish())
+				.collect(Collectors.toList());
+		return Nutrition.sumNutritions(nutritions);
 	}
 
 	public void addDish(Dish dish, int servings) {

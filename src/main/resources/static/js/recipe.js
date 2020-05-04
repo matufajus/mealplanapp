@@ -273,7 +273,8 @@ function enableIngredientNameAutocomplete(){
 	    },
 	    change: function(event, ui) {
 	        if (ui.item == null) {
-	          event.currentTarget.value = ''; 
+	          event.currentTarget.value = '';
+	          $("#ingredient-container .alert").removeClass("d-none");
 	          event.currentTarget.focus();
 	        }
 	    }

@@ -25,13 +25,26 @@
 			</div>
 		</c:if>
 		<h2>Ateinantys planai:</h2>
-		<table class="table">
+		<table class="table table-bordered">
 		  <thead>
+		     <tr>
+		      <th rowspan="3" scope="col">#</th>
+		      <th rowspan="3" scope="col">Pavadinimas</th>
+		      <th rowspan="3" scope="col">Nuo</th>
+		      <th rowspan="3" scope="col">Iki</th>
+		      <th colspan="4" scope="col">Vidutinis maistingumas per dieną</th>
+		    </tr>
 		    <tr>
-		      <th scope="col">#</th>
-		      <th scope="col">Pavadinimas</th>
-		      <th scope="col">Nuo - Iki</th>
-		      <th scope="col">Kalorijos per dieną</th>
+		      <th scope="col">Kalorijos (kcal) </th>
+		      <th scope="col">Baltymai (g)</th>
+		      <th scope="col">Riebalai (g)</th>
+		      <th scope="col">Angliavandeniai (g)</th>
+		    </tr>
+		      <tr>
+		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">2000</span></th>
+		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">50</span></th>
+		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">70</span></th>
+		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">310</span></th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -41,8 +54,12 @@
 					<td>
 						${plan.title} 
 					</td>
-					<td>${plan.startDate} - ${plan.endDate}</td>
+					<td>${plan.startDate}</td>
+					<td>${plan.endDate}</td>
 					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getKcal()}"/></td> 
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getProtein()}"/></td> 
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getFat()}"/></td> 
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getCarbs()}"/></td> 				
 				</tr>
 			</c:forEach>
 		  </tbody>
@@ -50,11 +67,24 @@
 		<h2>Praėję planai:</h2>
 		<table class="table">
 		  <thead>
+		     <tr>
+		      <th rowspan="3" scope="col">#</th>
+		      <th rowspan="3" scope="col">Pavadinimas</th>
+		      <th rowspan="3" scope="col">Nuo</th>
+		      <th rowspan="3" scope="col">Iki</th>
+		      <th colspan="4" scope="col">Vidutinis maistingumas per dieną</th>
+		    </tr>
 		    <tr>
-		      <th scope="col">#</th>
-		      <th scope="col">Pavadinimas</th>
-		      <th scope="col">Nuo - Iki</th>
-		      <th scope="col">Kalorijos per dieną</th>
+		      <th scope="col">Kalorijos (kcal) </th>
+		      <th scope="col">Baltymai (g)</th>
+		      <th scope="col">Riebalai (g)</th>
+		      <th scope="col">Angliavandeniai (g)</th>
+		    </tr>
+		      <tr>
+		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">2000</span></th>
+		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">50</span></th>
+		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">70</span></th>
+		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">310</span></th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -64,8 +94,12 @@
 					<td>
 						${plan.title} 
 					</td>
-					<td>${plan.startDate} - ${plan.endDate}</td>
-					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.averageCaloriesPerDay}"/></td> 
+					<td>${plan.startDate}</td>
+					<td>${plan.endDate}</td>
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getKcal()}"/></td> 
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getProtein()}"/></td> 
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getFat()}"/></td> 
+					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getCarbs()}"/></td> 				
 				</tr>
 			</c:forEach>
 		  </tbody>

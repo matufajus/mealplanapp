@@ -1,6 +1,7 @@
 package com.melearning.mealplanapp.entity;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -31,21 +32,10 @@ public abstract class Dish {
 	@JoinColumn(name = "dish_id", nullable = false)
 	private List<Ingredient> ingredients;
 
-	// nutrition for dish is calculated for servings provided in recipe(just adding
-	// nutrition of ingredients)
 	public Nutrition getNutritionForDish() {
-		float kcal = 0;
-		float carbs = 0;
-		float fat = 0;
-		float protein = 0;
-		for (Ingredient ingredient : ingredients) {
-			Nutrition nutrition = ingredient.getNutritionForIngredient();
-			kcal = kcal + nutrition.getKcal();
-			carbs = carbs + nutrition.getCarbs();
-			fat = fat + nutrition.getFat();
-			protein = protein + nutrition.getProtein();
-		}
-		return new Nutrition(kcal, protein, carbs, fat);
+		List<Nutrition> nutritions = ingredients.stream().map(i -> i.getNutritionForIngredient())
+				.collect(Collectors.toList());
+		return Nutrition.sumNutritions(nutritions);
 	}
 
 	public abstract String getTitle();

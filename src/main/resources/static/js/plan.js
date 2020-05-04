@@ -346,7 +346,7 @@ $(document).on("click", ".open-edit-single-dish-modal",  function(){
     	//set title, amount
     	$("#singleDishModal .modal-title").text(dish.ingredients[0].foodProduct.name);
 		$("#singleDishModal #amount input").val(dish.ingredients[0].ammount);
-		$("#singleDishModal #amount span").html(dish.ingredients[0].unitType.label);   
+		$("#singleDishModal #amount select").val(dish.ingredients[0].unitType.name);   
 		$("#singleDishModal #amount input").attr('disabled', true);
 		$("#singleDishModal #amount select").attr('disabled', true);
 		//set nutrition for meal dish

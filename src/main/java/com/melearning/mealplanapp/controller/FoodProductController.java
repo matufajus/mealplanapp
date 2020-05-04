@@ -26,7 +26,6 @@ import com.melearning.mealplanapp.service.FoodProductService;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@PreAuthorize("hasRole('ADMIN')")
 @RequestMapping("/foodProduct")
 @Slf4j
 public class FoodProductController {
@@ -44,6 +43,7 @@ public class FoodProductController {
 		return "food-products";
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/addFoodProduct")
 	public String addFoodProduct(@ModelAttribute("foodProduct") FoodProduct foodProduct, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
@@ -57,6 +57,7 @@ public class FoodProductController {
 		return "redirect:/foodProduct/list";
 	}
 	
+	@PreAuthorize("hasRole('ADMIN')")
 	@GetMapping("/deleteFoodProduct")
 	public String deleteFoodProduct(@RequestParam(name="id") int id) {
 		foodProductService.deleteFoodProduct(id);
