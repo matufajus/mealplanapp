@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -157,6 +158,28 @@ public class PlanServiceImpl implements PlanService {
 		dishRepository.delete(singleDishProduct);
 	};
 
+	@Override
+	public void copyPlanMealsToPlan(Plan planWithMeals, Plan newPlan) {
+		long i = 0;
+		LocalDate newDate;
+		List<Meal> newMeals = new ArrayList<Meal>();
+		for (LocalDate oldDate : planWithMeals.getDates()) {
+			List<Meal> meals = planWithMeals.getMealsForDate(oldDate);
+			newDate = newPlan.getStartDate().plusDays(i);
+			if (newDate.isAfter(newPlan.getEndDate()))
+				break;
+			for (Meal meal : meals) {
+				Meal newMeal = new Meal(meal);
+				newMeal.setDate(newDate);
+				newMeal.setPlan(newPlan);
+				newMeals.add(newMeal);
+			}
+			i++;
+		}
+		newPlan.setMeals(newMeals);
+		addIngredientsToShoppingListForNewPlan(newPlan);
+	}
+
 	// --------------SHOPPING LIST-------------
 
 	@Override
@@ -226,6 +249,19 @@ public class PlanServiceImpl implements PlanService {
 			ShoppingItem shoppingItem = new ShoppingItem(0, ingredient, false, mealdish, meal.getPlan());
 			shoppingRepository.save(shoppingItem);
 		}
+	}
+	
+	private void addIngredientsToShoppingListForNewPlan(Plan plan) {
+		List<ShoppingItem> shoppingItems = new ArrayList<ShoppingItem>();
+		for (Meal meal : plan.getMeals()) {
+			for(MealDish mealDish : meal.getMealDishes()) {
+				for (Ingredient ingredient : mealDish.getDish().getIngredients()) {
+					ShoppingItem shoppingItem = new ShoppingItem(0, ingredient, false, mealDish, meal.getPlan());
+					shoppingItems.add(shoppingItem);
+				}			
+			}
+		}
+		plan.setShoppingItems(shoppingItems);
 	}
 
 }

@@ -24,7 +24,6 @@
 				${errorMessage}
 			</div>
 		</c:if>
-		<h2>Ateinantys planai:</h2>
 		<table class="table table-bordered">
 		  <thead>
 		     <tr>
@@ -48,6 +47,11 @@
 		    </tr>
 		  </thead>
 		  <tbody>
+		  	<tr>
+				<th colspan="8" scope="col">
+					Ateinantys planai:
+				</th>
+			</tr>
 	 		<c:forEach var="plan" items="${upcomingPlans}" varStatus="status">
 				<tr class="clickable-row" data-href="meals?id=${plan.id}">
 					<th>${status.index+1 }</th>
@@ -62,34 +66,13 @@
 					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getCarbs()}"/></td> 				
 				</tr>
 			</c:forEach>
-		  </tbody>
-		</table>
-		<h2>Praėję planai:</h2>
-		<table class="table">
-		  <thead>
-		     <tr>
-		      <th rowspan="3" scope="col">#</th>
-		      <th rowspan="3" scope="col">Pavadinimas</th>
-		      <th rowspan="3" scope="col">Nuo</th>
-		      <th rowspan="3" scope="col">Iki</th>
-		      <th colspan="4" scope="col">Vidutinis maistingumas per dieną</th>
-		    </tr>
-		    <tr>
-		      <th scope="col">Kalorijos (kcal) </th>
-		      <th scope="col">Baltymai (g)</th>
-		      <th scope="col">Riebalai (g)</th>
-		      <th scope="col">Angliavandeniai (g)</th>
-		    </tr>
-		      <tr>
-		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">2000</span></th>
-		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">50</span></th>
-		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">70</span></th>
-		      <th scope="col"><span data-toggle="tooltip" data-placement="top" title="Rekomenduojama paros vertė vienam žmogui">310</span></th>
-		    </tr>
-		  </thead>
-		  <tbody>
-	 		<c:forEach var="plan" items="${previousPlans}" varStatus="status">
-				<tr>
+			<tr>
+				<th colspan="8" scope="col">
+					Praėję planai:
+				</th>
+			</tr>
+			<c:forEach var="plan" items="${previousPlans}" varStatus="status">
+				<tr class="clickable-row" data-href="meals?id=${plan.id}">
 					<th>${status.index+1 }</th>
 					<td>
 						${plan.title} 
@@ -102,6 +85,11 @@
 					<td><fmt:formatNumber type="number" maxFractionDigits="2" value="${plan.getAverageNutritionPerDay().getCarbs()}"/></td> 				
 				</tr>
 			</c:forEach>
+			<tr>
+				<th colspan="8" scope="col">
+					Rekomenduojami planai:
+				</th>
+			</tr>
 		  </tbody>
 		</table>
 	</div>
@@ -124,6 +112,27 @@
 					<div class="form-group">
 						<label for="">Laikotarpis</label>
 						<input type="text" class="form-control" name="dates"/>
+					</div>
+					<div class="form-group">
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" name="copyPlan" id="emptyPlan" value="empty" checked>
+						  <label class="form-check-label" for="emptyPlan">Tuščias</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" name="copyPlan" id="oldPlan" value="old">
+						  <label class="form-check-label" for="oldPlan">Kopijuoti praėjusį planą</label>
+						</div>
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" name="copyPlan" id="recomPlan" value="recom" disabled>
+						  <label class="form-check-label" for="recom">Pasirinkti rekomenduojamą planą</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<select id="selectOldPlan" name="planId" class="d-none">
+							<c:forEach var='plan' items="${previousPlans}">
+								<option value="${plan.id}">${plan.title}</option>
+							</c:forEach>
+						</select>
 					</div>
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input class="btn btn-primary"  type="submit" value="Sukurti"/>

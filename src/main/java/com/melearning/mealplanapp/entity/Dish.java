@@ -1,5 +1,6 @@
 package com.melearning.mealplanapp.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,5 +42,13 @@ public abstract class Dish {
 	public abstract String getTitle();
 
 	public abstract int getServings();
+	
+	public List<Ingredient> cloneIngredients(List<Ingredient> ingredients) {
+		List<Ingredient> copyOfIngredients = new ArrayList<Ingredient>();
+		for (Ingredient ingredient : ingredients) {
+			copyOfIngredients.add(new Ingredient(ingredient));
+		}
+		return copyOfIngredients;
+	}
 
 }

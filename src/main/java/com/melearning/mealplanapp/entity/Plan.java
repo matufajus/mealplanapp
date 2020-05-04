@@ -25,6 +25,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.bytebuddy.asm.Advice.Return;
 
 @Getter
 @Setter
@@ -62,10 +63,14 @@ public class Plan {
 	}
 
 	public List<Meal> getMealsForToday() {
+		return getMealsForDate(LocalDate.now());
+	}
+	
+	public List<Meal> getMealsForDate(LocalDate localDate) {
 		if (meals == null) {
 			return null;
 		}
-		return getMeals().stream().filter(meal -> (meal.getDate().equals(LocalDate.now()))).collect(Collectors.toList());
+		return getMeals().stream().filter(meal -> (meal.getDate().equals(localDate))).collect(Collectors.toList());
 	}
 
 	public List<LocalDate> getDates() {
@@ -93,6 +98,5 @@ public class Plan {
 		}
 		return nutritionOfDays;
 	}
-	
 
 }

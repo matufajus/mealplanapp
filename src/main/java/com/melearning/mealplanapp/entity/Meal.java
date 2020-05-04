@@ -62,6 +62,21 @@ public class Meal {
 	@JsonIgnore
 	private Plan plan;
 
+	// copy constructor for copying meals between plans
+	public Meal(Meal meal) {
+		this.mealDishes = copyMealDishes(meal.getMealDishes());
+		this.mealType = meal.mealType;
+
+	}
+	 
+	public List<MealDish> copyMealDishes(List<MealDish> mealDishes) {
+		List<MealDish> newMealDishes = new ArrayList<MealDish>();
+		for (MealDish mealDish : mealDishes) {
+			newMealDishes.add(new MealDish(mealDish, this));
+		}
+		return newMealDishes;
+	}
+
 	public Nutrition getNutritionForMeal() {
 		List<Nutrition> nutritions = mealDishes.stream().map(i -> i.getNutritionForMealDish())
 				.collect(Collectors.toList());
@@ -93,4 +108,5 @@ public class Meal {
 		else
 			return false;
 	}
+
 }

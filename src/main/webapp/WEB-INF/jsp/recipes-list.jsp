@@ -76,7 +76,7 @@
 						<security:authorize access="!hasRole('ADMIN')">
 								<div class="btn-group my-4 mx-5" role="group" aria-label="Basic example">
 									<a href="myList" class="btn btn-light"> Mano receptai</a>
-									<a href="list" class="btn btn-light">Kiti receptai</a>									
+									<a href="list" class="btn btn-light">Visų receptai</a>									
 								</div>
 							</security:authorize>
 							<br>

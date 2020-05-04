@@ -115,19 +115,23 @@ public class PlanController {
 	}
 
 	@PostMapping("/createPlan")
-	public String saveNewPlan(String title, String dates, RedirectAttributes redirectAttrs) {
+	public String saveNewPlan(String title, String dates, String copyPlan, int planId, RedirectAttributes redirectAttrs) {
 		try {
-			Plan plan = new Plan();
-			plan.setTitle(title);
+			Plan newPlan = new Plan();
+			newPlan.setTitle(title);
 			String[] datesArray = dates.split(" - ");
-			plan.setStartDate(LocalDate.parse(datesArray[0]));
-			plan.setEndDate(LocalDate.parse(datesArray[1]));
-			plan.setUser(userService.getCurrentUser());
-			logger.info("Creating plan name: " + plan.getTitle() + ", from: " + plan.getStartDate() + ", to: "
-					+ plan.getEndDate() + ", for user with id: ", plan.getUser().getId());
-			planService.save(plan);
-			logger.info("Plan created with id: " + plan.getId());
-			return "redirect:/plan/meals?id=" + plan.getId();
+			newPlan.setStartDate(LocalDate.parse(datesArray[0]));
+			newPlan.setEndDate(LocalDate.parse(datesArray[1]));
+			newPlan.setUser(userService.getCurrentUser());
+			logger.info("Creating plan name: " + newPlan.getTitle() + ", from: " + newPlan.getStartDate() + ", to: "
+					+ newPlan.getEndDate() + ", for user with id: ", newPlan.getUser().getId());
+			if (copyPlan.contentEquals("old")) {
+				Plan planWithMeals = planService.getPlanById(planId);
+				planService.copyPlanMealsToPlan(planWithMeals, newPlan);
+			}
+			planService.save(newPlan);
+			logger.info("Plan created with id: " + newPlan.getId());
+			return "redirect:/plan/meals?id=" + newPlan.getId();
 		} catch (OverlappingPlanDatesExceptions e) {
 			logger.warn("User already has a plan for specified dates");
 			redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());

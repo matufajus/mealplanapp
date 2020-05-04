@@ -48,5 +48,7 @@ public interface PlanService {
 	SingleDishProduct getSingleDishProduct(int id);
 
 	void deleteSingleDish(SingleDishProduct singleDishProduct);
+
+	void copyPlanMealsToPlan(Plan planWithMeals, Plan newPlan);
 	
 }

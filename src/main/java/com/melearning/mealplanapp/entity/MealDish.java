@@ -2,6 +2,7 @@ package com.melearning.mealplanapp.entity;
 
 import java.util.Comparator;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -38,7 +39,7 @@ public class MealDish implements Comparable<MealDish> {
 	@JsonIgnore
 	private Meal meal;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "dish_id")
 	@JsonIgnore
 	private Dish dish;
@@ -55,6 +56,15 @@ public class MealDish implements Comparable<MealDish> {
 	public MealDish(Meal meal, Dish dish) {
 		this.meal = meal;
 		this.dish = dish;
+	}
+	
+	public MealDish(MealDish mealDish, Meal meal) {
+		this.meal = meal;
+		this.servings = mealDish.getServings();
+		if (mealDish.getDish().getClass().equals(Recipe.class))
+			this.dish = mealDish.getDish();
+		else if (mealDish.getDish().getClass().equals(SingleDishProduct.class))
+			this.dish = new SingleDishProduct(mealDish.getDish());
 	}
 
 	@Override

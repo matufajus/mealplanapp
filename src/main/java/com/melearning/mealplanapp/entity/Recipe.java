@@ -88,8 +88,8 @@ public class Recipe extends Dish {
 	public Recipe(Recipe recipe) {
 		this.title = recipe.title;
 		this.description = recipe.description;
-		cloneIngredients(recipe.getIngredients());
-		clonePreparations(recipe.getPreparations());
+		this.setIngredients(cloneIngredients(recipe.getIngredients()));;
+		this.setPreparations(clonePreparations(recipe.getPreparations()));
 		this.mealTypes = new ArrayList<MealType>(recipe.mealTypes);
 		this.image = recipe.image;
 		this.owner = recipe.owner;
@@ -100,20 +100,12 @@ public class Recipe extends Dish {
 		this.author = recipe.author;
 	}
 
-	private void cloneIngredients(List<Ingredient> ingredients) {
-		List<Ingredient> copyOfIngredients = new ArrayList<Ingredient>();
-		for (Ingredient ingredient : ingredients) {
-			copyOfIngredients.add(new Ingredient(ingredient));
-		}
-		this.setIngredients(copyOfIngredients);
-	}
-
-	private void clonePreparations(List<Preparation> preparations) {
+	private List<Preparation> clonePreparations(List<Preparation> preparations) {
 		List<Preparation> copyOfPreparations = new ArrayList<Preparation>();
 		for (Preparation preparation : preparations) {
 			copyOfPreparations.add(new Preparation(preparation));
 		}
-		this.setPreparations(copyOfPreparations);
+		return copyOfPreparations;
 	}
 
 }

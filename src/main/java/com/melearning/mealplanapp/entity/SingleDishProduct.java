@@ -35,12 +35,13 @@ public class SingleDishProduct extends Dish {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-//	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-//	@JoinColumn(name = "ingredient_id", nullable = false)
-//	private Ingredient ingredient;
-
 	@Transient
 	private final int servings = 1;
+	
+	public SingleDishProduct(Dish singleDish) {
+		this.setId(0);
+		this.setIngredients(cloneIngredients(singleDish.getIngredients()));
+	}
 
 	@Override
 	public String getTitle() {

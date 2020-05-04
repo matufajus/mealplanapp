@@ -48,6 +48,15 @@ $('input[name="dates"]').daterangepicker({
 		console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
 });
 
+$("#newPlanModal input[type=radio][name=copyPlan]").change(function(){
+	if (this.value == 'empty') {
+        $("#newPlanModal #selectOldPlan").addClass("d-none");
+    }
+    else if (this.value == 'old') {
+    	 $("#newPlanModal #selectOldPlan").removeClass("d-none");
+    }
+});
+
 // --------------------------PLAN MEALS-----------------------------------
 
 $(document).ready(function() {
