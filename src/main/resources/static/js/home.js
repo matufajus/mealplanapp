@@ -67,6 +67,7 @@ function loadAvailableRecipes(){
 	return new Promise((resolve) => {
 		$.get("/kitchen/getAvailableRecipes", function(recipes){
 			container = $("#available-recipes");
+			container.empty();
 			$.each(recipes, function(i, recipe){
 				container.append("<div class = 'recipe-thmbnl'>"+
 						"<a class='recipe-modal-link' data-toggle='modal' href='#recipeModal' data-recipe-id='"+recipe.id+"'>"+
@@ -92,10 +93,38 @@ $("#kitchen-products").on("click", ".product", function(){
 	}
 	$.get(url, {foodProductId:id}, function(){
 		element.toggleClass("active");
+		loadAvailableRecipes();
 	});
-	loadAvailableRecipes();
 })
 
 function makeFirstFoodGroupActive(){
 	$(".list-group-item").first().click();
 }
+
+$("#available-recipes, #plan-today").on("click", ".recipe-modal-link", function () {
+	var recipeId = $(this).data('recipe-id');
+    $.get("recipe/getRecipe",{recipeId}, function(recipe){
+    	$("#recipeModal .modal-title").text(recipe.title);
+    	$("#recipeModal .modal-img").attr("src", recipe.image);
+    	if (recipe.description != null){
+    		$("#recipeModal .modal-description").html(recipe.description);	
+    	}else{
+    		$("#recipeModal .modal-description").addClass("d-none");	
+    	}
+    	$("#recipeModal .modal-mealTypes").empty();
+    	$.each(recipe.mealTypes, function(i, mealType){
+			$("#recipeModal .modal-mealTypes").append("<p>"+mealType.label+"</p>");
+		})
+    	$("#recipeModal .modal-servings").html(recipe.servings);	
+    	$("#recipeModal .modal-body .modal-ingredients").empty();
+    	$.each(recipe.ingredients, function(i, ingredient) {
+    		$("#recipeModal .modal-body .modal-ingredients").append("<p>"+ ingredient.foodProduct.name + ": "+ ingredient.ammount +" "+ ingredient.unitType.label +"</p>");
+         });
+    	$("#recipeModal .modal-body .modal-preparations").empty();
+    	$.each(recipe.preparations, function(i, preparation) {
+    		$("#recipeModal .modal-preparations").append("<p>" + (i+1)  +". "+ preparation.description +"</p>");
+         });   	
+    	$("#recipeModal .modal-body .modal-buttons").empty();
+	});
+})
+

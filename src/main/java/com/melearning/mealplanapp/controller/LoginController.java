@@ -18,8 +18,11 @@ import com.melearning.mealplanapp.enumeration.MealType;
 import com.melearning.mealplanapp.service.PlanService;
 import com.melearning.mealplanapp.service.UserService;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @Controller
+@Slf4j
 public class LoginController {
 	
 	@Autowired
@@ -37,8 +40,11 @@ public class LoginController {
 	public String showHome(Model model) {
 		User user = userService.getCurrentUser();
 		Plan plan = planService.getCurrentPlan(user);
+		if (plan == null)
+			log.debug("User doesn't have an active plan");
 		if (plan != null) {
 			model.addAttribute("meals", plan.getMealsForToday());
+			model.addAttribute("planId", plan.getId());
 		}
 		model.addAttribute("mealTypes", MealType.values());	
 		return "home";

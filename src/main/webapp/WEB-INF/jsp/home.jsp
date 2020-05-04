@@ -23,26 +23,30 @@
 			</div>
 			<div class="row">
 				<c:forEach var="mealType" items="${mealTypes}">
-					<c:set var="hasMeal" value="false"/>
+					<div class="col text-center">
 					<c:forEach var="meal" items="${meals}">
 						<c:if test="${mealType == meal.mealType}">
-							<div class="col text-center">
-								<img class='img-thmbnl' src="${meal.recipe.image}">
-								<h3 class="text-center">${meal.recipe.title}</h3>
-							</div>
-							<c:set var="hasMeal" value="true"/>
+							<c:forEach var="mealDish" items="${meal.mealDishes}">
+								<c:if test="${mealDish.dish['class'].simpleName == 'Recipe'}">
+									<a class='recipe-modal-link' data-toggle='modal' href='#recipeModal' data-recipe-id='${mealDish.dish.id}'><h3 class="text-center">${mealDish.dish.title}</h3></a>
+								</c:if>
+								<c:if test="${mealDish.dish['class'].simpleName == 'SingleDishProduct'}">
+									<h4 class="text-center">${mealDish.dish.title}</h4>	
+								</c:if>
+							</c:forEach>
 						</c:if>
 					</c:forEach>
-					<c:if test="${hasMeal == false}">
-						<div class="col">
-						</div>
-					</c:if>
+					</div>
 				</c:forEach>
+			</div>
+			<div class="w-100 text-center">
+				<a class="btn btn-primary px-5 mt-5" href='plan/meals?id=${planId}'>Žiūrėti visą planą</a>
 			</div>
 			<br>
 		</div>
 	</div>
 	<%@ include file="kitchen.jsp"%>
+	<%@ include file="recipe-modal.jsp" %>
 	<%@ include file="footer.jsp"%>
 	
 	<script src="/js/home.js"></script>

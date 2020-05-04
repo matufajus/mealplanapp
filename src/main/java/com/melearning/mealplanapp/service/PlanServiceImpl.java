@@ -62,7 +62,7 @@ public class PlanServiceImpl implements PlanService {
 
 	@Override
 	public Plan getCurrentPlan(User user) {
-		return planRepository.findByUserIdAndStartDateAfterAndEndDateBefore(user, LocalDate.now());
+		return planRepository.findByUserIdAndStartDateBeforeAndEndDateAfter(user, LocalDate.now());
 	}
 
 	@Override

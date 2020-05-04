@@ -65,7 +65,7 @@ public class Plan {
 		if (meals == null) {
 			return null;
 		}
-		return getMeals().stream().filter(meal -> (meal.getDate() == LocalDate.now())).collect(Collectors.toList());
+		return getMeals().stream().filter(meal -> (meal.getDate().equals(LocalDate.now()))).collect(Collectors.toList());
 	}
 
 	public List<LocalDate> getDates() {

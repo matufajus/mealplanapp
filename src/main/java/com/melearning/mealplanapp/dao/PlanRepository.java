@@ -11,8 +11,8 @@ import com.melearning.mealplanapp.entity.User;
 
 public interface PlanRepository extends JpaRepository<Plan, Integer>{
 	
-	@Query("select p from Plan p where p.user = ?1 AND p.startDate >= ?1 AND p.endDate <= ?1")
-	Plan findByUserIdAndStartDateAfterAndEndDateBefore(User user, LocalDate today);
+	@Query("select p from Plan p where p.user = ?1 AND p.startDate <= ?2 AND p.endDate >= ?2")
+	Plan findByUserIdAndStartDateBeforeAndEndDateAfter(User user, LocalDate today);
 
 	List<Plan> findAllByUserId(long userId);
 
