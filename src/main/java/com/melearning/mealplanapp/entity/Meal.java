@@ -1,95 +1,112 @@
 package com.melearning.mealplanapp.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.MealType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "meal")
 public class Meal {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private User user;
-	
-	@ManyToOne
-	@JoinColumn(name = "recipe_id")
+
+	@OneToMany(mappedBy = "meal", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonIgnore
-	private Recipe recipe;
-	
+	private List<MealDish> mealDishes;
+
 	@Column(name = "meal_type")
 	@Enumerated(EnumType.ORDINAL)
 	private MealType mealType;
-	
+
 	@Column(name = "date")
 	private LocalDate date;
 
-	public int getId() {
-		return id;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "plan_id", nullable = false)
+	@JsonIgnore
+	private Plan plan;
+
+	// copy constructor for copying meals between plans
+	public Meal(Meal meal) {
+		this.mealDishes = copyMealDishes(meal.getMealDishes());
+		this.mealType = meal.mealType;
+
+	}
+	 
+	public List<MealDish> copyMealDishes(List<MealDish> mealDishes) {
+		List<MealDish> newMealDishes = new ArrayList<MealDish>();
+		for (MealDish mealDish : mealDishes) {
+			newMealDishes.add(new MealDish(mealDish, this));
+		}
+		return newMealDishes;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public Nutrition getNutritionForMeal() {
+		List<Nutrition> nutritions = mealDishes.stream().map(i -> i.getNutritionForMealDish())
+				.collect(Collectors.toList());
+		return Nutrition.sumNutritions(nutritions);
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void addDish(Dish dish, int servings) {
+		MealDish mealDish = new MealDish(this, dish, servings);
+		mealDishes.add(mealDish);
 	}
 
-	public Recipe getRecipe() {
-		return recipe;
+	public void removeDish(Dish dish) {
+		MealDish mealDish = findMealDish(dish);
+		mealDishes.remove(mealDish);
 	}
 
-	public void setRecipe(Recipe recipe) {
-		this.recipe = recipe;
+	public MealDish findMealDish(Dish dish) {
+		for (MealDish mealDish : mealDishes) {
+			if (mealDish.getDish().equals(dish)) {
+				return mealDish;
+			}
+		}
+		return null;
 	}
 
-	public MealType getMealType() {
-		return mealType;
-	}
-
-	public void setMealType(MealType mealType) {
-		this.mealType = mealType;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public Meal(int id, User user, Recipe recipe, MealType mealType, LocalDate date) {
-		this.id = id;
-		this.user = user;
-		this.recipe = recipe;
-		this.mealType = mealType;
-		this.date = date;
-	}
-	
-	public Meal() {
-		
+	public boolean hasDish(Dish dish) {
+		if (findMealDish(dish) != null)
+			return true;
+		else
+			return false;
 	}
 
 }

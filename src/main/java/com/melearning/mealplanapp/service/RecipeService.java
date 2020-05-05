@@ -4,9 +4,14 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import com.melearning.mealplanapp.dto.RecipeFormDTO;
+import com.melearning.mealplanapp.entity.FoodProduct;
+import com.melearning.mealplanapp.entity.Ingredient;
 import com.melearning.mealplanapp.entity.KitchenProduct;
-import com.melearning.mealplanapp.entity.MealType;
 import com.melearning.mealplanapp.entity.Recipe;
+import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.MealType;
 
 public interface RecipeService {
 	
@@ -22,8 +27,25 @@ public interface RecipeService {
 	
 	public List<Recipe> getRecipesForUserProducts(List<KitchenProduct> products);
 	
-	public List<Recipe> getRecipesByMealTypes(List<MealType> mealTypes);
-	
 	public Page<Recipe> getRecipesByPage(int pageId, int pageSize);
+	
+	public List<String> getNamesLike(String keyword);
+
+	public List<Recipe> findByOwnerIdDesc(long currentUserId);
+
+	public List<Recipe> getRecipesWaitingForInspection();
+
+	public List<Recipe> getPublicRecipes();
+
+	public void makeRecipePublic(int recipeId, User publisher);
+	
+	public void makeRecipePrivate(int recipeId);
+
+	public List<Recipe> filterRecipesByMealTypesAndSearchProducts(List<Recipe> recipes,
+			List<MealType> selectedMealtypes, List<String> products);
+
+	public Page<Recipe> getPublicRecipes(int pageId, int pageSize);
+
+	public Page<Recipe> findByOwnerId(long currentUserId, int pageId, int pageSize);
 
 }

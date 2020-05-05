@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
 		user.setUsername(userDTO.getUsername());
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setEmail(userDTO.getEmail());
-		user.setPlanDays(7);
 
 		// give user default role of "user"
 		user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
@@ -73,6 +72,18 @@ public class UserServiceImpl implements UserService {
 	public long getCurrentUserId() {
 		User user = getCurrentUser();
 		return user.getId();
+	}
+	
+	@Override
+	public boolean hasCurrentUserRole(String role) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		boolean hasUserRole = authentication.getAuthorities().stream().anyMatch(r -> r.getAuthority().equals(role));
+		return hasUserRole;
+	}
+
+	@Override
+	public String getCurrentUserName() {
+		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 
 }

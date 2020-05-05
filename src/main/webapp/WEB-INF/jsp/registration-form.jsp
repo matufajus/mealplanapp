@@ -2,10 +2,13 @@
     pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>  
+<%@ taglib uri="http://www.springframework.org/security/tags"
+	prefix="security"%>
 <!doctype html>
 <html lang="en">
   	<head>
 		<%@ include file="header.jsp" %>
+		<%@ include file="navbar.jsp" %>
 		<title></title>
 	</head>
 	<body>
@@ -16,17 +19,17 @@
 				  <div class="card-header">
 				    <ul class="nav nav-tabs card-header-tabs">
 				      <li class="nav-item">
-				        <a class="nav-link" href="${pageContext.request.contextPath}/showLogin">Login</a>
+				        <a class="nav-link" href="${pageContext.request.contextPath}/showLogin">Prisijungti</a>
 				      </li>
 				      <li class="nav-item">
 				        <a class="nav-link active" href="${pageContext.request.contextPath}/register/showRegistrationForm">
-				        Register</a>
+				        Registruotis</a>
 				      </li>
 				    </ul>
 				  </div>
 				  <div class="card-body">
 				  		<c:if test="${param.error == null && param.logout == null}">
-				    		<h5 class="card-title">Hello!</h5>
+				    		<h5 class="card-title">Sveiki!</h5>
 				    	</c:if>
 				    	
 				    	<form:form action="${pageContext.request.contextPath}/register/processRegistrationForm"
@@ -37,18 +40,18 @@
 							</c:if>
 							
 							<form:errors path="username" cssClass="error" />
-							<form:input path="username" placeholder="Username" class="form-control"/>
+							<form:input path="username" placeholder="Vartotojo vardas" class="form-control"/>
 							
 							<form:errors path="email" cssClass="error" />
-							<form:input path="email" placeholder="Email" class="form-control" />
+							<form:input path="email" placeholder="El. paštas" class="form-control" />
 							
 							<form:errors path="password" cssClass="error" />
-							<form:password path="password" placeholder="Password" class="form-control" autocomplete="new-password"/>
+							<form:password path="password" placeholder="Slaptažodis" class="form-control" autocomplete="new-password"/>
 							
 							<form:errors path="matchingPassword" cssClass="error" />
-							<form:password path="matchingPassword" placeholder="Repeat password" class="form-control" />
+							<form:password path="matchingPassword" placeholder="Pakartoti slaptažodį" class="form-control" />
 			
-							<button class="btn btn-primary"  type="submit">Register </button>
+							<button class="btn btn-primary"  type="submit">Registruotis </button>
 						</form:form>
 				  </div>
 				</div>	

@@ -9,95 +9,54 @@ import javax.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.melearning.mealplanapp.entity.Ingredient;
-import com.melearning.mealplanapp.entity.MealType;
+import com.melearning.mealplanapp.entity.Nutrition;
 import com.melearning.mealplanapp.entity.Preparation;
+import com.melearning.mealplanapp.entity.User;
+import com.melearning.mealplanapp.enumeration.MealType;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class RecipeFormDTO {
-	
+
 	private int id;
-	
-	@NotNull(message = "The title is required")
-	@Size(min = 1, message = "The title is required")
+
+	@NotNull(message = "Įveskite recepto pavadinimą")
+	@Size(min = 1, message = "Įveskite recepto pavadinimą")
 	private String title;
-	
-	@NotNull(message = "At least one ingredient must be added")
-	private List<Ingredient> ingredients;
-	
-	@NotNull(message = "At least one instruction must be added")
+
+	@NotNull(message = "Recepte turi būti bent vienas ingredientas")
+	private List<IngredientDTO> ingredients;
+
+	@NotNull(message = "Recepte turi būti paruošimo instrukcija")
 	private List<Preparation> preparations;
-	
-	@NotNull(message = "At least one meal type must be chosen")
-	@Size(min = 1, message = "At least one meal type must be chosen")
+
+	@NotNull(message = "Pasirinkite bent vieną patiekalo tipą")
+	@Size(min = 1, message = "Pasirinkite bent vieną patiekalo tipą")
 	private List<MealType> mealTypes;
-	
+
 	private String image;
-	
+
 	private MultipartFile imageFile;
 
+	private String owner;
 
-	public String getTitle() {
-		return title;
-	}
+	private String author;
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+	private String description;
 
-	public List<Ingredient> getIngredients() {
-		return ingredients;
-	}
+	private boolean shared;
 
-	public void setIngredients(List<Ingredient> ingredients) {
-		this.ingredients = ingredients;
-	}
+	private boolean inspected;
 
-	public List<Preparation> getPreparations() {
-		return preparations;
-	}
+	private boolean published;
 
-	public void setPreparations(List<Preparation> preparations) {
-		this.preparations = preparations;
-	}
+	private int servings;
 
-	public String getImage() {
-		return image;
-	}
+	private Nutrition nutritionForDish;
 
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public MultipartFile getImageFile() {
-		return imageFile;
-	}
-
-	public void setImageFile(MultipartFile imageFile) {
-		this.imageFile = imageFile;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public List<MealType> getMealTypes() {
-		return mealTypes;
-	}
-
-	public void setMealTypes(List<MealType> mealTypes) {
-		this.mealTypes = mealTypes;
-	}
-
-	public RecipeFormDTO() {
-		this.ingredients = new ArrayList<Ingredient>();
-		this.ingredients.add(new Ingredient());
-		this.preparations = new ArrayList<Preparation>();
-		this.preparations.add(new Preparation());
-	}
-	
-	
-	
 }

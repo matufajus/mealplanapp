@@ -14,90 +14,36 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "kitchen_product")
 public class KitchenProduct {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
-	
-	@Column(name="name")
-	private String name;
-	
-	@Column(name="quantity")
-	private String quantity;
-	
-	@Column(name="expiration_date")
+
+	@ManyToOne
+	@JoinColumn(name = "food_product_id")
+	private FoodProduct foodProduct;
+
+	@Column(name = "ammount")
+	private float ammount;
+
+	@Column(name = "expiration_date")
 	private Date expirationDate;
-	
-	@Column(name="food_type")
-	@Enumerated(EnumType.ORDINAL)
-	private FoodType foodType;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
-	}
-
-	public String getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(String quantity) {
-		this.quantity = quantity;
-	}
-
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
-	public FoodType getFoodType() {
-		return foodType;
-	}
-
-	public void setFoodType(FoodType foodType) {
-		this.foodType = foodType;
-	}
-	
-	public KitchenProduct() {
-		
-	}
-
-	public KitchenProduct(User user, String name, String quantity, Date expirationDate, String location,
-			FoodType foodType) {
-		this.user = user;
-		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
-		this.quantity = quantity;
-		this.expirationDate = expirationDate;
-		this.foodType = foodType;
-	}
 
 }

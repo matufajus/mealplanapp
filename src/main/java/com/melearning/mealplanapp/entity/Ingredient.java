@@ -2,96 +2,61 @@ package com.melearning.mealplanapp.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.Polymorphism;
+import org.hibernate.annotations.PolymorphismType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.melearning.mealplanapp.enumeration.FoodType;
+import com.melearning.mealplanapp.enumeration.UnitType;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "ingredient")
 public class Ingredient {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
 	private int id;
-	
-	@Column(name = "name")
-	private String name;
-	
+
 	@Column(name = "ammount")
-	private String ammount;
+	private float ammount;
 	
-//	@Column(name = "unit")
-//	private String unit;
-	
+	@Column(name="unit_type")
+	@Enumerated(EnumType.ORDINAL)
+	private UnitType unitType;
+
 	@ManyToOne
-	@JoinColumn(name = "recipe_id")
-	@JsonIgnore
-	private Recipe recipe;
+	@JoinColumn(name = "food_product_id")
+	private FoodProduct foodProduct;
 
-	public String getName() {
-		return name;
+	public Ingredient(Ingredient ingredient) {
+		this.ammount = ingredient.ammount;
+		this.unitType = ingredient.unitType;
+		this.foodProduct = ingredient.foodProduct;
 	}
 
-	public void setName(String name) {
-		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);
+	public Nutrition getNutritionForIngredient() {
+		return Nutrition.multiplyNutritionsByFloat(foodProduct.getNutritionPerUnitType(unitType), ammount);
 	}
-
-	public String getAmmount() {
-		return ammount;
-	}
-
-	public void setAmmount(String ammount) {
-		this.ammount = ammount;
-	}
-
-//	public String getUnit() {
-//		return unit;
-//	}
-//
-//	public void setUnit(String unit) {
-//		this.unit = unit;
-//	}
-
-	public Recipe getRecipe() {
-		return recipe;
-	}
-
-	public void setRecipe(Recipe recipe) {
-		this.recipe = recipe;
-	}
-	
-	public Ingredient() {
-		
-	}
-
-	public Ingredient(int id, String name, String ammount, String unit, Recipe recipe) {
-		this.id = id;
-		this.name = name.substring(0, 1).toUpperCase()+name.substring(1);;
-		this.ammount = ammount;
-//		this.unit = unit;
-		this.recipe = recipe;
-	}
-
-	@Override
-	public String toString() {
-		return "Ingredient [id=" + id + ", name=" + name + ", ammount=" + ammount + ", recipe=" + recipe + "]";
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
-	
 
 }
