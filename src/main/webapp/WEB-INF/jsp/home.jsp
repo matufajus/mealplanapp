@@ -14,7 +14,11 @@
 	<%@ include file="navbar.jsp"%>
 	<div class="container-fluid top-container mx-auto">
 		<div id="plan-today">
-			<img id="home-cover" src="/images/calendar.jpg">
+			<picture id="home-cover">
+		  		<source srcset="/images/calendar.webp" type="image/webp">
+		  		<source srcset="/images/calendar.jpg" type="image/jpeg"> 
+		  		<img src="/images/calendar.jpg" alt="Alt Text!">
+			</picture>
 			<h1 class="text-center my-5">Dienos planas</h1>
 			<div class="row">
 				<c:forEach var="mealType" items="${mealTypes}">

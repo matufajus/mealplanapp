@@ -13,7 +13,8 @@
 	<body>
 		<div id="landing-cover" class="container-fluid p-0">
 			<div id="landing-page-title">
-				Maisto planavimo programa <a href="/showLogin"><span class="badge badge-secondary"> Prisijungti</span></a>	
+				Maisto planavimo programa 	<br>
+				Bandomoji versija <a href="/showLogin"><span class="badge badge-secondary"> Prisijungti</span></a>
 			</div>			
 			<div id="landing-page-login">
 					
@@ -71,21 +72,30 @@
 			  </ol>
 			  <div class="carousel-inner">
 			    <div class="carousel-item active">
-			      <img src="/images/screenshot-recipes.PNG" class="d-block w-100">
+				<picture class="d-block w-100">
+					 <source type="image/webp" srcset="/images/screenshot-recipes.webp">
+					 <img src="/images/screenshot-recipes.PNG" >
+				</picture>
 			      <div class="carousel-caption d-none d-md-block">
 			        <h5>First slide label</h5>
 			        <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
 			      </div>
 			    </div>
 			    <div class="carousel-item">
-			      <img src="/images/screenshot-plan.PNG" class="d-block w-100">
+			    <picture class="d-block w-100">
+					 <source type="image/webp" srcset="/images/screenshot-plan.webp" >
+					 <img src="/images/screenshot-plan.PNG"  >
+				</picture>
 			      <div class="carousel-caption d-none d-md-block">
 			        <h5>Second slide label</h5>
 			        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
 			      </div>
 			    </div>
 			    <div class="carousel-item">
-			      <img src="/images/screenshot-choose-meal.PNG" class="d-block w-100">
+			    <picture class="d-block w-100">
+					 <source type="image/webp" srcset="/images/screenshot-choose-meal.webp" >
+					 <img src="/images/screenshot-choose-meal.PNG"  >
+				</picture>
 			      <div class="carousel-caption d-none d-md-block">
 			        <h5>Third slide label</h5>
 			        <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>

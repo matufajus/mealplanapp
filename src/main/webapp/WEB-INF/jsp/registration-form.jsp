@@ -28,31 +28,32 @@
 				    </ul>
 				  </div>
 				  <div class="card-body">
-				  		<c:if test="${param.error == null && param.logout == null}">
-				    		<h5 class="card-title">Sveiki!</h5>
-				    	</c:if>
+				  Šiuo metu naujų vartotojų registracija išjungta.
+<%-- 				  		<c:if test="${param.error == null && param.logout == null}"> --%>
+<!-- 				    		<h5 class="card-title">Sveiki!</h5> -->
+<%-- 				    	</c:if> --%>
 				    	
-				    	<form:form action="${pageContext.request.contextPath}/register/processRegistrationForm"
-							modelAttribute="userDTO">
+<%-- 				    	<form:form action="${pageContext.request.contextPath}/register/processRegistrationForm" --%>
+<%-- 							modelAttribute="userDTO"> --%>
 							
-							<c:if test="${registrationError != null}">
-								<i>${registrationError}</i>
-							</c:if>
+<%-- 							<c:if test="${registrationError != null}"> --%>
+<%-- 								<i>${registrationError}</i> --%>
+<%-- 							</c:if> --%>
 							
-							<form:errors path="username" cssClass="error" />
-							<form:input path="username" placeholder="Vartotojo vardas" class="form-control"/>
+<%-- 							<form:errors path="username" cssClass="error" /> --%>
+<%-- 							<form:input path="username" placeholder="Vartotojo vardas" class="form-control"/> --%>
 							
-							<form:errors path="email" cssClass="error" />
-							<form:input path="email" placeholder="El. paštas" class="form-control" />
+<%-- 							<form:errors path="email" cssClass="error" /> --%>
+<%-- 							<form:input path="email" placeholder="El. paštas" class="form-control" /> --%>
 							
-							<form:errors path="password" cssClass="error" />
-							<form:password path="password" placeholder="Slaptažodis" class="form-control" autocomplete="new-password"/>
+<%-- 							<form:errors path="password" cssClass="error" /> --%>
+<%-- 							<form:password path="password" placeholder="Slaptažodis" class="form-control" autocomplete="new-password"/> --%>
 							
-							<form:errors path="matchingPassword" cssClass="error" />
-							<form:password path="matchingPassword" placeholder="Pakartoti slaptažodį" class="form-control" />
+<%-- 							<form:errors path="matchingPassword" cssClass="error" /> --%>
+<%-- 							<form:password path="matchingPassword" placeholder="Pakartoti slaptažodį" class="form-control" /> --%>
 			
-							<button class="btn btn-primary"  type="submit">Registruotis </button>
-						</form:form>
+<!-- 							<button class="btn btn-primary"  type="submit">Registruotis </button> -->
+<%-- 						</form:form> --%>
 				  </div>
 				</div>	
 			</div>
