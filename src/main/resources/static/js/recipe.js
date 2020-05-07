@@ -161,10 +161,12 @@ $("#recipeFormModal form").submit(function(event){
 			window.location.replace("/recipe/myList");
         },
 		error: function(result){
-			console.log(result.responseJSON);
-			$.each(result.responseJSON.errors, function(i, error){	
+			console.log(result);
+			if (result.responseJSON != 'undefined'){
+				$.each(result.responseJSON.errors, function(i, error){	
 					$("#"+error.field+"-error").html(error.defaultMessage);
-			});
+				});
+			}
 	           
 	    }
     });
