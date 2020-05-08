@@ -132,3 +132,7 @@ $("#available-recipes, #plan-today").on("click", ".recipe-modal-link", function 
 	});
 })
 
+$("#list-tab").on("click", ".list-group-item", function () {
+	var elem = document.getElementById("list-of-products");
+	window.scroll(0, elem.offsetTop - 56);
+});

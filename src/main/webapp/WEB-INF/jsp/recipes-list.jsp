@@ -96,8 +96,7 @@
 										 <img src="/images/foodProducts/onion.jpg"  >
 									</picture>
 	                    		</div>
-								
-	               				<span>Daugiau:</span>
+								<span>Daugiau:</span>
 	                    		<input type="text" value="" id="tags" name="products" class="form-control">
 	                    		
 	                    		<input type="hidden" name="section">
