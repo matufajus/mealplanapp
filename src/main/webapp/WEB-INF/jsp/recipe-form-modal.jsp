@@ -36,7 +36,12 @@
 	                    			<input type="checkbox" id="${mealType}-modal-checkbox" name="mealTypes" class="mealType-checkbox d-none" value="${mealType}"/>
 	                    			<label class="mealType-image" for="${mealType}-modal-checkbox" >
 		                    			<span>${mealType.label}</span>
-		                    			<img src="/images/${mealType}.jpg" />
+		                    			<picture>
+									  		<source srcset="/images/${mealType}.webp" type="image/webp">
+									  		<source srcset="/images/${mealType}.jpg" type="image/jpeg"> 
+									  		<img src="/images/${mealType}.jpg" />
+										</picture>
+		                    			
 	                    			</label> 
                     			</div>
                     		</c:forEach>

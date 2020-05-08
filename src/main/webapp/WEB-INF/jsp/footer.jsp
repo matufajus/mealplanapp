@@ -13,4 +13,6 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 
+<!-- modernizer for detecting webp feature -->
+<script src="/js/modernizr-custom.js"></script>
 <script src="/js/main.js"></script>

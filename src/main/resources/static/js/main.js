@@ -140,3 +140,16 @@ $('#tags').on('itemAdded itemRemoved', function(event) {
 	$("#recipe-side-nav-form").submit();
 })
 
+
+
+Modernizr.on('webp', function (result) {
+    if (result) {
+    	$("#login-background").addClass("webp");
+    	$("#landing-cover").addClass("webp");
+    	$("#kitchen-products").addClass("webp");
+    } else {
+    	$("#login-background").addClass("no-webp");
+    	$("#landing-cover").addClass("no-webp");
+    	$("#kitchen-products").addClass("no-webp");
+    }
+});

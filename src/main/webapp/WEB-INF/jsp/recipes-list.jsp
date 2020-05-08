@@ -24,40 +24,79 @@
 		                    			<input id="${mealType}-checkbox" class="mealType-checkbox d-none" type="checkbox" name="type" value="${mealType}">
 		                    			<label class="mealType-image" for="${mealType}-checkbox" >
 			                    			<span>${mealType.label}</span>
-			                    			<img src="/images/${mealType}.jpg" />
+			                    			<picture>
+												 <source type="image/webp" srcset="/images/${mealType}.webp" >
+												 <source type="image/jpeg" srcset="/images/${mealType}.jpg" >
+												 <img src="/images/${mealType}.jpg"  >
+											</picture>
 		                    			</label> 
 	                    			</div>
 	                    		</c:forEach>
 	                    		<h3>Produktai</h3>
 	                    		<div class="food-product" data-food="Avokad">
-	                    			<img src="/images/foodProducts/avocado.jpg">
+	                    			 <picture>
+										 <source type="image/webp" srcset="/images/foodProducts/avocado.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/avocado.jpg" >
+										 <img src="/images/foodProducts/avocado.jpg"  >
+									</picture>
 	                    		</div>
 	                    		<div class="food-product" data-food="Brokol">
-	                    			<img src="/images/foodProducts/broccoli.jpg">
+	                    			<picture>
+										 <source type="image/webp" srcset="/images/foodProducts/broccoli.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/broccoli.jpg" >
+										 <img src="/images/foodProducts/broccoli.jpg"  >
+									</picture>
 	                    		</div>
 	                    		<div class="food-product" data-food="Mork">
-	                    			<img src="/images/foodProducts/carrot.jpg">
+	                    			<picture>
+										 <source type="image/webp" srcset="/images/foodProducts/carrot.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/carrot.jpg" >
+										 <img src="/images/foodProducts/carrot.jpg"  >
+									</picture>
 	                    		</div>
 	                    		<div class="food-product" data-food="Kalafijor">
-	                    			<img src="/images/foodProducts/cauliflower.jpg">
+	                    			<picture>
+										 <source type="image/webp" srcset="/images/foodProducts/cauliflower.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/cauliflower.jpg" >
+										 <img src="/images/foodProducts/cauliflower.jpg"  >
+									</picture>
 	                    		</div>
 	                    		<div class="food-product" data-food="Baklažan">
-	                    			<img src="/images/foodProducts/eggplant.jpg">
+	                    			<picture>
+										 <source type="image/webp" srcset="/images/foodProducts/eggplant.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/eggplant.jpg" >
+										 <img src="/images/foodProducts/eggplant.jpg"  >
+									</picture>
 	                    		</div>
 	                    		<div class="food-product" data-food="Pomidor">
-	                    			<img src="/images/foodProducts/tomato.jpg">
+	                    			<picture>
+										 <source type="image/webp" srcset="/images/foodProducts/tomato.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/tomato.jpg" >
+										 <img src="/images/foodProducts/tomato.jpg"  >
+									</picture>
 	                    		</div>
 	                    		<div class="food-product" data-food="Moliūg">
-	                    			<img src="/images/foodProducts/pumpkin.jpg">
+	                    			<picture>
+										 <source type="image/webp" srcset="/images/foodProducts/pumpkin.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/pumpkin.jpg" >
+										 <img src="/images/foodProducts/pumpkin.jpg"  >
+									</picture>
 	                    		</div>
 	                    		<div class="food-product" data-food="Gryb">
-	                    			<img src="/images/foodProducts/mushroom.jpg">
+	                    			<picture>
+										 <source type="image/webp" srcset="/images/foodProducts/mushroom.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/mushroom.jpg" >
+										 <img src="/images/foodProducts/mushroom.jpg"  >
+									</picture>
 	                    		</div>
 	                    		<div class="food-product" data-food="Svogūn">
-	                    			<img src="/images/foodProducts/onion.jpg">
+	                    			<picture>
+										 <source type="image/webp" srcset="/images/foodProducts/onion.webp" >
+										 <source type="image/jpeg" srcset="/images/foodProducts/onion.jpg" >
+										 <img src="/images/foodProducts/onion.jpg"  >
+									</picture>
 	                    		</div>
-								
-	               				<span>Daugiau:</span>
+								<span>Daugiau:</span>
 	                    		<input type="text" value="" id="tags" name="products" class="form-control">
 	                    		
 	                    		<input type="hidden" name="section">

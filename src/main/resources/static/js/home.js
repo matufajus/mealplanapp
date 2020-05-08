@@ -19,9 +19,13 @@ function loadFoodTypes(){
 			foodTypes = result;
 			let container = $("#kitchen-products .list-group");
 			$.each(foodTypes, function(i, foodType){
+				let background = "url('/images/foodTypes/"+foodType.value+".jpg')";
+				if ($("#kitchen-products").hasClass("webp")){
+					background = "url('/images/foodTypes/"+foodType.value+".webp')";
+				}
 				$("<a>").attr({class:"list-group-item list-group-item-action", 'data-toggle': "list",
 		    		href:"#list-"+foodType.value, role:"tab", "aria-controls":foodType.label,
-		    		style:"background-image: url('/images/foodTypes/"+foodType.value+".jpg');"})
+		    		style:"background-image:"+ background+";"})
 		    		.html("<div class='blurry'></div><span>"+foodType.label+"</span>")
 		    		.appendTo(container);
 			})
@@ -128,3 +132,7 @@ $("#available-recipes, #plan-today").on("click", ".recipe-modal-link", function 
 	});
 })
 
+$("#list-tab").on("click", ".list-group-item", function () {
+	var elem = document.getElementById("list-of-products");
+	window.scroll(0, elem.offsetTop - 56);
+});
